@@ -1,24 +1,26 @@
 package com.epam.carrental.dto;
 
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.time.LocalTime;
 
 public class ServerInfoDTO implements Serializable {
-    private String time;
-    private String ipAddress;
+    private LocalTime time;
+    private InetAddress ipAddress;
 
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
-    public String getIpAddress() {
+    public InetAddress getIpAddress() {
         return ipAddress;
     }
 
-    public void setIpAddress(String ipAddress) {
+    public void setIpAddress(InetAddress ipAddress) {
         this.ipAddress = ipAddress;
     }
 }

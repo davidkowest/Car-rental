@@ -11,10 +11,10 @@ import org.testng.annotations.Test;
 public class ClientConfigTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    ApplicationContext context;
+    private ApplicationContext context;
 
     @Test
-    public void notNullAppliactionContextTest() throws Exception {
+    public void notNullApplicationContextTest() throws Exception {
         Assert.assertNotNull(context);
     }
 

@@ -29,7 +29,7 @@ public class ServerConfig {
 
     @Bean
     public SimpleHttpServerFactoryBean serverFactory() {
-        Map<String, HttpHandler> contexts = new HashMap<String, HttpHandler>();
+        Map<String, HttpHandler> contexts = new HashMap<>();
         contexts.put("/serverInfo", serviceExporter());
         SimpleHttpServerFactoryBean serverFactory = new SimpleHttpServerFactoryBean();
         serverFactory.setContexts(contexts);
