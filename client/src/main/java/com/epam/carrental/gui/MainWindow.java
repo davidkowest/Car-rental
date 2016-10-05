@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 
 @Component
-public class MainWindow extends JFrame {
+public class MainWindow {
 
     private static final int WINDOW_WIDTH = 500;
     private static final int WINDOW_HEIGHT = 600;
@@ -17,27 +17,29 @@ public class MainWindow extends JFrame {
     @Autowired
     private MessageGenerator messageGenerator;
 
+    private JFrame jFrame = new JFrame();
+
     @PostConstruct
     public void init() {
         initGUI();
     }
 
     private void initGUI() {
-        setTitle("Car-rental");
-        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        jFrame.setTitle("Car-rental");
+        jFrame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
         JButton testConnectionButton = new JButton("Test connection");
         testConnectionButton.addActionListener(getListenerForTestConnectionButton());
         panel.add(testConnectionButton);
-        add(panel);
-        setVisible(true);
+        jFrame.add(panel);
+        jFrame.setVisible(true);
     }
 
-   private ActionListener getListenerForTestConnectionButton() {
+    private ActionListener getListenerForTestConnectionButton() {
         return e -> {
             String message = messageGenerator.getMessageForTestConnectionButton();
-            JOptionPane.showMessageDialog(getComponent(0), message);
+            JOptionPane.showMessageDialog(jFrame.getComponent(0), message);
         };
     }
 }

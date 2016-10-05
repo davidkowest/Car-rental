@@ -3,8 +3,10 @@ package com.epam.carrental.config;
 import com.epam.carrental.services.ServerInfo;
 import com.epam.carrental.services.ServerInfoImpl;
 import com.sun.net.httpserver.HttpHandler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter;
 import org.springframework.remoting.support.SimpleHttpServerFactoryBean;
 
@@ -12,7 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@PropertySource({"classpath:application.properties"})
 public class ServerConfig {
+
+    @Value("${remote.service.info}")
+    private String serviceInfoMapping;
+
+    @Value("${remote.port}")
+    private String port;
 
     @Bean
     public ServerInfo serverInfo() {
@@ -30,10 +39,10 @@ public class ServerConfig {
     @Bean
     public SimpleHttpServerFactoryBean serverFactory() {
         Map<String, HttpHandler> contexts = new HashMap<>();
-        contexts.put("/serverInfo", serviceExporter());
+        contexts.put("/"+serviceInfoMapping, serviceExporter());
         SimpleHttpServerFactoryBean serverFactory = new SimpleHttpServerFactoryBean();
         serverFactory.setContexts(contexts);
-        serverFactory.setPort(8080);
+        serverFactory.setPort(Integer.parseInt(port));
         return serverFactory;
     }
 }
