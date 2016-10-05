@@ -1,5 +1,7 @@
+package com.epam.carrental;
+
 import com.epam.carrental.config.Config;
-import gui.MainWindow;
+import com.epam.carrental.gui.MainWindow;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

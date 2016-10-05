@@ -4,7 +4,6 @@ import com.epam.carrental.services.ServerInfo;
 import com.epam.carrental.services.ServerInfoImpl;
 import com.sun.net.httpserver.HttpHandler;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter;
 import org.springframework.remoting.support.SimpleHttpServerFactoryBean;
@@ -13,13 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ComponentScan
 public class AppConfig {
 
     @Bean
     public ServerInfo serverInfo() {
         return new ServerInfoImpl();
     }
+
     @Bean
     public SimpleHttpInvokerServiceExporter serviceExporter() {
         SimpleHttpInvokerServiceExporter exporter = new SimpleHttpInvokerServiceExporter();
@@ -27,6 +26,7 @@ public class AppConfig {
         exporter.setServiceInterface(ServerInfo.class);
         return exporter;
     }
+
     @Bean
     public SimpleHttpServerFactoryBean serverFactory() {
         Map<String, HttpHandler> contexts = new HashMap<String, HttpHandler>();
