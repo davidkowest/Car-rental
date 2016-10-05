@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
 
 @Configuration
-public class Config {
+public class ClientConfig {
     @Bean
     public HttpInvokerProxyFactoryBean serverInfoService() {
         HttpInvokerProxyFactoryBean proxy = new HttpInvokerProxyFactoryBean();
