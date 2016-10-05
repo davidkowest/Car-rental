@@ -1,5 +1,7 @@
 package com.epam.carrental.services;
 
+import com.epam.carrental.dto.ServerInfoDTO;
+
 public interface ServerInfo {
-    String getServerInfo();
+    ServerInfoDTO getServerInfo();
 }

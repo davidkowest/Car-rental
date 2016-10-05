@@ -1,5 +1,7 @@
 package com.epam.carrental.services;
 
+import com.epam.carrental.dto.ServerInfoDTO;
+
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,17 +9,31 @@ import java.util.Date;
 public class ServerInfoImpl implements ServerInfo {
 
     @Override
-    public String getServerInfo() {
+    public ServerInfoDTO getServerInfo() {
+        String time = getCurrentTime();
+        String ipAddress = getIPAddress();
+
+        ServerInfoDTO serverInfoDTO=new ServerInfoDTO();
+        serverInfoDTO.setIpAddress(ipAddress);
+        serverInfoDTO.setTime(time);
+
+        return serverInfoDTO;
+    }
+
+    private String getCurrentTime() {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        String time = "Time now is " + timeFormat.format(new Date());
-        String ipAddress = "";
+        return timeFormat.format(new Date());
+    }
+
+    private String getIPAddress() {
+        String ipAddress = null;
         try {
             InetAddress ip;
             ip = InetAddress.getLocalHost();
-            ipAddress = "Current IP address : " + ip.getHostAddress();
+            ipAddress = ip.getHostAddress();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return time +". "+ ipAddress;
+        return ipAddress;
     }
 }

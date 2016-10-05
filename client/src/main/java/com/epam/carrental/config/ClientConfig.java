@@ -20,4 +20,5 @@ public class ClientConfig {
     public MainWindow mainWindow(){
         return new MainWindow();
     }
+
 }

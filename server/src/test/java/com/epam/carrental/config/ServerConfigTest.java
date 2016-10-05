@@ -17,5 +17,6 @@ public class ServerConfigTest extends AbstractTestNGSpringContextTests {
     public void notNullAppliactionContextTest() throws Exception {
         Assert.assertNotNull(context);
     }
+
 }
 

@@ -1,5 +1,6 @@
 package com.epam.carrental.gui;
 
+import com.epam.carrental.dto.ServerInfoDTO;
 import com.epam.carrental.services.ServerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,6 +11,10 @@ public class MainWindow extends JFrame {
 
     @Autowired
     ServerInfo serverInfo;
+
+    public MainWindow(){
+        initGUI();
+    }
 
     public void initGUI() {
         setTitle("Car-rental");
@@ -26,9 +31,10 @@ public class MainWindow extends JFrame {
 
     public ActionListener getListener() {
         return e -> {
-            String message = null;
+            String message;
             try {
-                message = serverInfo.getServerInfo();
+                ServerInfoDTO serverInfoDTO = serverInfo.getServerInfo();
+                message="Server returned " + serverInfoDTO.getIpAddress() + " IP address. Server time is " + serverInfoDTO.getTime();
             } catch (Exception exc) {
                 message = "There is no connection to server!";
             }
