@@ -21,15 +21,16 @@
         <spring.version>4.3.3.RELEASE</spring.version>
         <spring.httpinvoker>2.0.6.RELEASE</spring.httpinvoker>
         <testng.version>6.8</testng.version>
+        <maven.plugin.compile.version>3.5.1</maven.plugin.compile.version>
+        <maven.shade.plugin>2.4.3</maven.shade.plugin>
     </properties>
-
-
     <build>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.plugin.compile.version}</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
@@ -62,7 +63,6 @@
                 <version>${testng.version}</version>
                 <scope>test</scope>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 

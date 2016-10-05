@@ -18,6 +18,7 @@ public class ServerConfig {
     public ServerInfo serverInfo() {
         return new ServerInfoImpl();
     }
+
     @Bean
     public SimpleHttpInvokerServiceExporter serviceExporter() {
         SimpleHttpInvokerServiceExporter exporter = new SimpleHttpInvokerServiceExporter();
@@ -25,6 +26,7 @@ public class ServerConfig {
         exporter.setServiceInterface(ServerInfo.class);
         return exporter;
     }
+
     @Bean
     public SimpleHttpServerFactoryBean serverFactory() {
         Map<String, HttpHandler> contexts = new HashMap<String, HttpHandler>();
