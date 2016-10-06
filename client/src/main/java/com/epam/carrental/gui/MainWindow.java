@@ -6,13 +6,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 @Component
 public class MainWindow {
-
-    private static final int WINDOW_WIDTH = 500;
-    private static final int WINDOW_HEIGHT = 600;
 
     @Autowired
     private MessageGenerator messageGenerator;
@@ -26,14 +24,21 @@ public class MainWindow {
 
     private void initGUI() {
         jFrame.setTitle("Car-rental");
-        jFrame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        jFrame.setLayout(new FlowLayout());
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        jFrame.add(preparePanel());
+        jFrame.pack();
+        //set component relativeTo null so that window will be shown in the center of the screen
+        jFrame.setLocationRelativeTo(null);
+        jFrame.setVisible(true);
+    }
+
+    private JPanel preparePanel() {
         JPanel panel = new JPanel();
         JButton testConnectionButton = new JButton("Test connection");
         testConnectionButton.addActionListener(getListenerForTestConnectionButton());
         panel.add(testConnectionButton);
-        jFrame.add(panel);
-        jFrame.setVisible(true);
+        return panel;
     }
 
     private ActionListener getListenerForTestConnectionButton() {

@@ -4,12 +4,13 @@ import com.epam.carrental.dto.ServerInfoDTO;
 
 import java.net.InetAddress;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 
 public class ServerInfoImpl implements ServerInfo {
 
     @Override
     public ServerInfoDTO getServerInfo() {
-        LocalTime time = getCurrentTime();
+        ZonedDateTime time = getCurrentTime();
         InetAddress ipAddress = getIPAddress();
 
         ServerInfoDTO serverInfoDTO = new ServerInfoDTO();
@@ -19,8 +20,8 @@ public class ServerInfoImpl implements ServerInfo {
         return serverInfoDTO;
     }
 
-    private LocalTime getCurrentTime() {
-        return LocalTime.now();
+    private ZonedDateTime getCurrentTime() {
+        return ZonedDateTime.now();
     }
 
     private InetAddress getIPAddress() {
