@@ -1,6 +1,6 @@
 package com.epam.carrental.gui;
 
-import com.epam.carrental.gui.listener_actions.MessageGenerator;
+import com.epam.carrental.gui.util.MessageGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,10 +41,11 @@ public class MainWindow {
         return panel;
     }
 
-    private ActionListener getListenerForTestConnectionButton() {
+    ActionListener getListenerForTestConnectionButton() {
+
         return e -> {
-            String message = messageGenerator.getMessageForTestConnectionButton();
-            JOptionPane.showMessageDialog(jFrame.getComponent(0), message);
+             messageGenerator.getMessageForTestConnectionButton();
         };
     }
+
 }

@@ -3,7 +3,6 @@ package com.epam.carrental.services;
 import com.epam.carrental.dto.ServerInfoDTO;
 
 import java.net.InetAddress;
-import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
 public class ServerInfoImpl implements ServerInfo {
@@ -17,6 +16,11 @@ public class ServerInfoImpl implements ServerInfo {
         serverInfoDTO.setIpAddress(ipAddress);
         serverInfoDTO.setTime(time);
 
+        try {
+            Thread.sleep(10000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return serverInfoDTO;
     }
 
