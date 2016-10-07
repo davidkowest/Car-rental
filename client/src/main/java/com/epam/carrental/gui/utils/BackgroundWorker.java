@@ -1,10 +1,13 @@
-package com.epam.carrental.gui.util;
+package com.epam.carrental.gui.utils;
+
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
+@Component
 public class BackgroundWorker {
 
     public <Result> void execute(Callable<Result> task,

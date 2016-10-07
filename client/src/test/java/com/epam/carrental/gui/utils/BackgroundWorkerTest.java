@@ -1,4 +1,4 @@
-package com.epam.carrental.gui.util;
+package com.epam.carrental.gui.utils;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
