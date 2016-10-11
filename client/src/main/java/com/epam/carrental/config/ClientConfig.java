@@ -1,5 +1,6 @@
 package com.epam.carrental.config;
 
+import com.epam.carrental.services.CarService;
 import com.epam.carrental.services.ServerInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,14 +18,23 @@ public class ClientConfig {
     private String url;
 
     @Value("${remote.service.info}")
-    private String serviceInfoMapping;
+    private String serviceInfoPath;
+
+    @Value("${remote.service.car}")
+    private String carServicePath;
 
     @Bean
     public HttpInvokerProxyFactoryBean serverInfoService() {
         HttpInvokerProxyFactoryBean proxy = new HttpInvokerProxyFactoryBean();
-        proxy.setServiceUrl(url+"/"+serviceInfoMapping);
+        proxy.setServiceUrl(url+"/"+ serviceInfoPath);
         proxy.setServiceInterface(ServerInfo.class);
         return proxy;
     }
-
+    @Bean
+    public HttpInvokerProxyFactoryBean carRepositoryService() {
+        HttpInvokerProxyFactoryBean proxy = new HttpInvokerProxyFactoryBean();
+        proxy.setServiceUrl(url+"/"+ carServicePath);
+        proxy.setServiceInterface(CarService.class);
+        return proxy;
+    }
 }

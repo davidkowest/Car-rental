@@ -1,14 +1,14 @@
 package com.epam.carrental.gui.controller;
 
 import com.epam.carrental.gui.utils.BackgroundWorker;
-import com.epam.carrental.gui.utils.MessageFormater;
+import com.epam.carrental.gui.utils.MessageFormatter;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.services.ServerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MessageController {
+public class ServerInfoController {
 
     @Autowired
     private ServerInfo serverInfo;
@@ -17,13 +17,13 @@ public class MessageController {
     private MessageView messageView;
 
     @Autowired
-    BackgroundWorker inBackgroundWorker;
+    private BackgroundWorker inBackgroundWorker;
 
     public void getMessageForTestConnectionButton() {
         inBackgroundWorker.execute(
                 serverInfo::getServerInfo,
-                serverInfoDTO -> messageView.showMessage(MessageFormater.prepareMessageFromServerInfoDTO(serverInfoDTO)),
-                exception -> messageView.showErrorMessage("There is no connection to server!")
+                serverInfoDTO -> messageView.showMessage(MessageFormatter.prepareMessageFromServerInfoDTO(serverInfoDTO)),
+                exception -> messageView.showErrorMessage(exception.getCause().getMessage())
         );
     }
 }

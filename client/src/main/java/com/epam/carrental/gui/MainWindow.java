@@ -1,36 +1,40 @@
 package com.epam.carrental.gui;
 
-import com.epam.carrental.gui.view.builders.TestConnectionViewBuilder;
+import com.epam.carrental.gui.view.builders.impl.FleetViewBuilder;
+import com.epam.carrental.gui.view.builders.impl.TestConnectionViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
-import java.awt.*;
 
 @Component
 public class MainWindow {
 
     @Autowired
-    TestConnectionViewBuilder testConnectionViewBuilder;
+    private TestConnectionViewBuilder testConnectionViewBuilder;
 
-    private JFrame jFrame = new JFrame();
+    @Autowired
+    private FleetViewBuilder fleetViewBuilder;
+
+    private final JFrame mainFrame = new JFrame();
+    private final JTabbedPane jTabbedPane = new JTabbedPane();
 
     @PostConstruct
     public void init() {
-        SwingUtilities.invokeLater(() ->initGUI() );
+        SwingUtilities.invokeLater(this::initGUI);
     }
 
     private void initGUI() {
-        jFrame.setTitle("Car-rental");
-        jFrame.setLayout(new FlowLayout());
-        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        jFrame.add(testConnectionViewBuilder.build());
+        mainFrame.setTitle("Car-rental");
+        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        jFrame.pack();
+        jTabbedPane.addTab("Other", null, testConnectionViewBuilder.build(), "Do you want to test connection");
+        jTabbedPane.addTab("Fleet", null, fleetViewBuilder.build(), "Fleet");
+        mainFrame.add(jTabbedPane);
+        mainFrame.pack();
         //set component relativeTo null so that window will be shown in the center of the screen
-        jFrame.setLocationRelativeTo(null);
-        jFrame.setVisible(true);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setVisible(true);
     }
-
 }

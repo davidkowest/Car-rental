@@ -13,8 +13,8 @@ import static org.testng.Assert.assertTrue;
 
 public class BackgroundWorkerTest {
 
-    volatile boolean isEventDispatchThread;
-    volatile CountDownLatch latch;
+    private boolean isEventDispatchThread;
+    private CountDownLatch latch;
 
     @BeforeMethod
     public void preparationBeforeTestsMethod() {
@@ -26,7 +26,7 @@ public class BackgroundWorkerTest {
     public void taskIsNotInEDT() throws InterruptedException {
         //given
         BackgroundWorker backgroundWorker = new BackgroundWorker();
-        Callable<Boolean> task = () -> SwingUtilities.isEventDispatchThread();
+        Callable<Boolean> task = SwingUtilities::isEventDispatchThread;
 
         Consumer<Boolean> successHandler = aBoolean -> {
             isEventDispatchThread = aBoolean;
@@ -45,7 +45,7 @@ public class BackgroundWorkerTest {
     public void successHandlerIsInEDT() throws InterruptedException {
         //given
         BackgroundWorker backgroundWorker = new BackgroundWorker();
-        Callable<Object> task = () ->new Object();
+        Callable<Object> task = Object::new;
 
         Consumer<Object> successHandler = o -> {
             isEventDispatchThread = SwingUtilities.isEventDispatchThread();

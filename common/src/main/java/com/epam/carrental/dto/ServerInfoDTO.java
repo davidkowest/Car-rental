@@ -2,7 +2,6 @@ package com.epam.carrental.dto;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
 public class ServerInfoDTO implements Serializable {
