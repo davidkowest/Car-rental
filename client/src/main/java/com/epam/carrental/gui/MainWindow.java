@@ -1,5 +1,7 @@
 package com.epam.carrental.gui;
 
+import com.epam.carrental.gui.controller.FleetController;
+import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.gui.view.builders.impl.FleetViewBuilder;
 import com.epam.carrental.gui.view.builders.impl.TestConnectionViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ public class MainWindow {
     @Autowired
     private TestConnectionViewBuilder testConnectionViewBuilder;
 
-    @Autowired
     private FleetViewBuilder fleetViewBuilder;
 
     private final JFrame mainFrame = new JFrame();
@@ -26,6 +27,7 @@ public class MainWindow {
     }
 
     private void initGUI() {
+        fleetViewBuilder = new FleetViewBuilder("Fleet",new FleetController());
         mainFrame.setTitle("Car-rental");
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 

@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.concurrent.Callable;
 
 @Component
-public class FleetController {
+public class FleetController implements DAOController{
 
     private final Object[] columnNames = {"Car Number", "CarModel"};
     @Autowired
@@ -26,8 +26,8 @@ public class FleetController {
         return new DefaultTableModel(allCars, columnNames);
     }
 
-    public void addCarToDB(String model,String registrationNumber) {
-        CarDTO carDTO=new CarDTO(model,registrationNumber);
+    public void addCarToDB(String ... dtoFields) {
+        CarDTO carDTO=new CarDTO(dtoFields[0],dtoFields[1]);
 
         Callable<Boolean> task = () -> carService.create(carDTO);
 

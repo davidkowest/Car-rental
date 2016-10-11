@@ -1,10 +1,9 @@
 package com.epam.carrental.gui.view.builders.impl;
 
-import com.epam.carrental.gui.controller.FleetController;
+import com.epam.carrental.gui.controller.DAOController;
+import com.epam.carrental.gui.view.GUITitleConstants;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.gui.view.builders.ViewBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,15 +12,24 @@ import java.awt.*;
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.SpringLayout.NORTH;
 
-@Component
 public class FleetViewBuilder implements ViewBuilder {
 
-    @Autowired
-    private MessageView messageView;
-    @Autowired
-    private FleetController fleetController;
     private final JPanel jPanel = new JPanel();
+
+    private MessageView messageView;
+
+    private DAOController daoController;
+
+    private GUITitleConstants guiTitles = new GUITitleConstants();
+
+    private String tabName;
     private JTable table;
+
+    public FleetViewBuilder(String tabName, DAOController controller) {
+        this.tabName = tabName;
+        this.daoController = controller;
+        this.messageView = new MessageView();
+    }
 
     @Override
     public JPanel build() {
@@ -38,7 +46,7 @@ public class FleetViewBuilder implements ViewBuilder {
     private JPanel prepareTablePanel() {
         table = new JTable(getModel());
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JLabel("Fleet of cars"), NORTH);
+        panel.add(new JLabel(guiTitles.getTitleFor(tabName)), NORTH);
         panel.add(new JScrollPane(table), CENTER);
         return panel;
     }
@@ -67,7 +75,7 @@ public class FleetViewBuilder implements ViewBuilder {
 
         if (result == JOptionPane.OK_OPTION) {
             try {
-                fleetController.addCarToDB(carModelField.getText(), carNumberField.getText());
+                daoController.addCarToDB(carModelField.getText(), carNumberField.getText());
             } catch (Exception e) {
                 messageView.showErrorMessage(e.getMessage());
                 e.printStackTrace();
@@ -91,9 +99,9 @@ public class FleetViewBuilder implements ViewBuilder {
 
     private DefaultTableModel getModel() {
         DefaultTableModel model = new DefaultTableModel();
-        try {
-            model = fleetController.getModel();
-        } catch (Exception e) {
+       try {
+            model = daoController.getModel();
+        } catch (Throwable e) {
             messageView.showErrorMessage(e.getCause().getMessage());
         }
         return model;
