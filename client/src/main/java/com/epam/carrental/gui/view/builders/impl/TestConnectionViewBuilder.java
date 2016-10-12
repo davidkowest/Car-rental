@@ -1,6 +1,6 @@
 package com.epam.carrental.gui.view.builders.impl;
 
-import com.epam.carrental.gui.controller.ServerInfoController;
+import com.epam.carrental.controller.ServerInfoController;
 import com.epam.carrental.gui.view.builders.ViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

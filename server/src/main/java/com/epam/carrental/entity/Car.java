@@ -1,18 +1,18 @@
-package com.epam.carrental.model;
+package com.epam.carrental.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.*;
 
 @Entity
-public class Car implements Serializable {
+public class Car{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable=false)
     private String model;
+
+    @Column(unique = true,nullable=false)
     private String registrationNumber;
 
     public Long getId() {

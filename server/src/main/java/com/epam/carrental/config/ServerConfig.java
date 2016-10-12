@@ -1,12 +1,13 @@
 package com.epam.carrental.config;
 
-import com.epam.carrental.services.CarService;
-import com.epam.carrental.services.CarServiceImpl;
-import com.epam.carrental.services.ServerInfo;
-import com.epam.carrental.services.ServerInfoImpl;
+import com.epam.carrental.services.*;
 import com.sun.net.httpserver.HttpHandler;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter;
 import org.springframework.remoting.support.SimpleHttpServerFactoryBean;
 
@@ -24,6 +25,9 @@ public class ServerConfig {
     @Value("${remote.service.car}")
     private String carServicePath;
 
+    @Value("${remote.service.customer}")
+    private String customerServicePath;
+
     @Value("${remote.port}")
     private String port;
 
@@ -33,7 +37,15 @@ public class ServerConfig {
     }
 
     @Bean
-    public CarService carRepositoryService(){return  new CarServiceImpl();}
+    public CarService carService(){return  new CarServiceImpl();}
+
+    @Bean
+    public CustomerService customerService(){return  new CustomerServiceImpl();}
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 
     @Bean
     public SimpleHttpInvokerServiceExporter serverInfoServiceExporter() {
@@ -43,17 +55,25 @@ public class ServerConfig {
         return exporter;
     }
     @Bean
-    public SimpleHttpInvokerServiceExporter carRepositoryServiceExporter() {
+    public SimpleHttpInvokerServiceExporter carServiceExporter() {
         SimpleHttpInvokerServiceExporter exporter = new SimpleHttpInvokerServiceExporter();
-        exporter.setService(this.carRepositoryService());
+        exporter.setService(this.carService());
         exporter.setServiceInterface(CarService.class);
+        return exporter;
+    }
+    @Bean
+    public SimpleHttpInvokerServiceExporter customerServiceExporter() {
+        SimpleHttpInvokerServiceExporter exporter = new SimpleHttpInvokerServiceExporter();
+        exporter.setService(this.customerService());
+        exporter.setServiceInterface(CustomerService.class);
         return exporter;
     }
     @Bean
     public SimpleHttpServerFactoryBean serverFactory() {
         Map<String, HttpHandler> contexts = new HashMap<>();
         contexts.put("/"+ serviceInfoPath, serverInfoServiceExporter());
-        contexts.put("/"+ carServicePath, carRepositoryServiceExporter());
+        contexts.put("/"+ carServicePath, carServiceExporter());
+        contexts.put("/"+ customerServicePath, customerServiceExporter());
         SimpleHttpServerFactoryBean serverFactory = new SimpleHttpServerFactoryBean();
         serverFactory.setContexts(contexts);
         serverFactory.setPort(Integer.parseInt(port));

@@ -7,7 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-@ContextConfiguration(classes = ClientConfig.class)
+@ContextConfiguration(classes = HttpInvokerConfig.class)
 public class ClientConfigTest extends AbstractTestNGSpringContextTests {
 
     @Autowired

@@ -1,10 +1,17 @@
 package com.epam.carrental.dto;
 
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class CarDTO implements Serializable {
 
+    @NotNull
+    @NotEmpty
     private String model;
+    @NotEmpty
     private String registrationNumber;
 
     public CarDTO() {

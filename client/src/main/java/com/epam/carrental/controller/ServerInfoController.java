@@ -1,4 +1,4 @@
-package com.epam.carrental.gui.controller;
+package com.epam.carrental.controller;
 
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.utils.MessageFormatter;
