@@ -1,7 +1,8 @@
 package com.epam.carrental.gui.view.builders.impl;
 
-import com.epam.carrental.gui.view.hanlders.UserInputHandler;
+import com.epam.carrental.controller.TableController;
 import com.epam.carrental.gui.view.builders.ViewBuilder;
+import com.epam.carrental.gui.view.hanlders.UserInputHandler;
 import com.epam.carrental.models.AbstractCarRentalTableModel;
 
 import javax.swing.*;
@@ -11,17 +12,18 @@ import static java.awt.BorderLayout.CENTER;
 import static javax.swing.SpringLayout.NORTH;
 
 
-public class TableTabViewBuilder implements ViewBuilder {
+public class TableTabViewBuilder<DTO> implements ViewBuilder {
 
     private final AbstractCarRentalTableModel tableModel;
 
     private final UserInputHandler userInputHandler;
 
+    private final TableController<DTO> tableController;
 
-
-    public TableTabViewBuilder(AbstractCarRentalTableModel tableModel, UserInputHandler userInputHandler) {
+    public TableTabViewBuilder(AbstractCarRentalTableModel tableModel, UserInputHandler userInputHandler,TableController<DTO> tableController ) {
         this.tableModel = tableModel;
-        this.userInputHandler=userInputHandler;
+        this.userInputHandler = userInputHandler;
+        this.tableController = tableController;
     }
 
     @Override
@@ -48,11 +50,16 @@ public class TableTabViewBuilder implements ViewBuilder {
     private JToolBar prepareToolBar() {
         JToolBar toolBar = new JToolBar();
         JButton refreshButton = new JButton("Refresh table");
-        refreshButton.addActionListener(e -> tableModel.fireTableDataChanged());
+        refreshButton.addActionListener(e -> refreshTable());
         JButton addNewCarButton = new JButton("Add new item");
         addNewCarButton.addActionListener(e -> userInputHandler.saveInput());
         toolBar.add(refreshButton);
         toolBar.add(addNewCarButton);
         return toolBar;
+    }
+
+    private void refreshTable(){
+        tableController.refreshTableModel();
+        tableModel.fireTableDataChanged();
     }
 }

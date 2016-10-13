@@ -15,7 +15,7 @@ import javax.validation.Validator;
 import java.util.Set;
 
 @Component
-public class FleetController {
+public class FleetController implements  TableController<CarDTO> {
 
     @Autowired
     private BackgroundWorker inBackgroundWorker;
@@ -27,7 +27,8 @@ public class FleetController {
     private CarTableModel carTableModel;
 
     @PostConstruct
-    public void setInitialFleetTableModel(){
+    @Override
+    public void refreshTableModel() {
         try {
             carTableModel.setData(carService.readAll());
         }catch (Exception e){

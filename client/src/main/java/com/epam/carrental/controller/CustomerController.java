@@ -15,7 +15,7 @@ import javax.validation.Validator;
 import java.util.Set;
 
 @Component
-public class CustomerController {
+public class CustomerController implements TableController<CustomerDTO> {
 
     @Autowired
     private BackgroundWorker inBackgroundWorker;
@@ -27,6 +27,7 @@ public class CustomerController {
     private CustomerTableModel customerTableModel;
 
     @PostConstruct
+    @Override
     public void refreshTableModel(){
         try {
             customerTableModel.setData(customerService.readAll());
@@ -34,6 +35,8 @@ public class CustomerController {
             e.printStackTrace();
         }
     }
+
+    @Override
     public void save(CustomerDTO customerDTO) {
 
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
