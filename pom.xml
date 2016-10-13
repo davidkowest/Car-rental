@@ -23,10 +23,10 @@
         <spring.data.version>1.10.4.RELEASE</spring.data.version>
         <testng.version>6.8</testng.version>
         <maven.plugin.compile.version>3.5.1</maven.plugin.compile.version>
-        <maven.shade.plugin>2.4.3</maven.shade.plugin>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
+        <spring.boot.compile.version>1.4.1.RELEASE</spring.boot.compile.version>
     </properties>
 
     <dependencyManagement>
@@ -40,24 +40,6 @@
                 <groupId>org.springframework.integration</groupId>
                 <artifactId>spring-integration-httpinvoker</artifactId>
                 <version>${spring.httpinvoker}</version>
-                <exclusions>
-                    <exclusion>  <!-- declare the exclusion here -->
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-aop</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-beans</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>aopalliance</groupId>
-                        <artifactId>aopalliance</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -74,20 +56,6 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-jpa</artifactId>
                 <version>${spring.data.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-aop</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-beans</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-core</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
