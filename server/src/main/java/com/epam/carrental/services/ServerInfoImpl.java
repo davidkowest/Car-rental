@@ -1,10 +1,11 @@
 package com.epam.carrental.services;
 
 import com.epam.carrental.dto.ServerInfoDTO;
+import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.time.ZonedDateTime;
-
+@Component
 public class ServerInfoImpl implements ServerInfo {
 
     @Override

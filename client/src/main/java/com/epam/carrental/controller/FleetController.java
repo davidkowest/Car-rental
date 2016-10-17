@@ -3,52 +3,49 @@ package com.epam.carrental.controller;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
-import com.epam.carrental.models.CarTableModel;
+import com.epam.carrental.gui.view.hanlders.impl.CarUserInputHandler;
+import com.epam.carrental.models.AbstractSwingTableModel;
 import com.epam.carrental.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.util.Set;
-
 @Component
-public class FleetController implements  TableController<CarDTO> {
+public class FleetController implements TableController<CarDTO> {
 
     @Autowired
     private BackgroundWorker inBackgroundWorker;
     @Autowired
-    private CarService carService;
-    @Autowired
     private MessageView messageView;
-    @Autowired
-    private CarTableModel carTableModel;
 
-    @PostConstruct
+    @Autowired
+    private AbstractSwingTableModel<CarDTO> carTableModel;
+    @Autowired
+    private CarUserInputHandler carUserInputHandler;
+    @Autowired
+    private CarService carService;
+
+
     @Override
-    public void refreshTableModel() {
-        try {
-            carTableModel.setData(carService.readAll());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    public void refreshTableView() {
+        inBackgroundWorker.execute(
+                () -> (carService.readAll()),
+                carDTOs -> {
+                    carTableModel.setData(carDTOs);
+                    carTableModel.fireTableDataChanged();
+                },
+                e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
     public void save(CarDTO carDTO) {
-
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<CarDTO>> violations = validator.validate(carDTO);
-
-        if (!violations.isEmpty()) {
-            throw new IllegalArgumentException("Input fields cannot be empty");
-        }
-
         inBackgroundWorker.execute(
                 () -> carService.create(carDTO),
-                o -> carTableModel.setData(carService.readAll()),
+                o -> refreshTableView(),
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
+    }
+
+    @Override
+    public void handleUserInput() {
+        carUserInputHandler.handleInput();
     }
 }
 

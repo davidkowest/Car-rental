@@ -1,6 +1,5 @@
 package com.epam.carrental.gui.view.hanlders.impl;
 
-
 import com.epam.carrental.controller.CustomerController;
 import com.epam.carrental.dto.CustomerDTO;
 import com.epam.carrental.gui.view.MessageView;
@@ -12,15 +11,17 @@ import javax.swing.*;
 import java.awt.*;
 
 @Component
-public class CustomerUserInputHandler implements UserInputHandler {
+public class CustomerInputHandler implements UserInputHandler {
 
     @Autowired
     private CustomerController customerController;
     @Autowired
     private MessageView messageView;
 
-    @Override
-    public void saveInput() {
+    public CustomerInputHandler() {
+    }
+
+    public void handleInput() {
         JTextField userNameField = new JTextField();
         JTextField userEmailField = new JTextField();
         JPanel inputPanel = new JPanel();
@@ -32,13 +33,7 @@ public class CustomerUserInputHandler implements UserInputHandler {
                 "Enter your name and email", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
-            try {
-
-                customerController.save(new CustomerDTO(userNameField.getText(),userEmailField.getText()));
-            } catch (Exception e) {
-                messageView.showErrorMessage(e.getMessage());
-                e.printStackTrace();
-            }
+            customerController.save(new CustomerDTO(userNameField.getText(), userEmailField.getText()));
         }
     }
 }

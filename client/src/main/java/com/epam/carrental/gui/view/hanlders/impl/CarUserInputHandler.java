@@ -18,8 +18,7 @@ public class CarUserInputHandler implements UserInputHandler {
     @Autowired
     private MessageView messageView;
 
-    @Override
-    public void saveInput() {
+    public void handleInput() {
         JTextField carModelField = new JTextField();
         JTextField carNumberField = new JTextField();
         JPanel inputPanel = new JPanel();
@@ -31,12 +30,7 @@ public class CarUserInputHandler implements UserInputHandler {
                 "Enter Car number and model", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
-            try {
-                fleetController.save(new CarDTO(carModelField.getText(), carNumberField.getText()));
-            } catch (Exception e) {
-                messageView.showErrorMessage(e.getMessage());
-                e.printStackTrace();
-            }
+            fleetController.save(new CarDTO(carModelField.getText(), carNumberField.getText()));
         }
     }
 }

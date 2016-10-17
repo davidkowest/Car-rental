@@ -2,7 +2,7 @@ package com.epam.carrental.gui.view.builders;
 
 import javax.swing.*;
 
-public interface ViewBuilder {
+public interface TabView {
 
-    JPanel build();
+    JPanel initView();
 }

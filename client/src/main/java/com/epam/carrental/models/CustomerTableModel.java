@@ -3,26 +3,36 @@ package com.epam.carrental.models;
 import com.epam.carrental.dto.CustomerDTO;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
-public class CustomerTableModel extends AbstractCarRentalTableModel<CustomerDTO> {
+public class CustomerTableModel extends AbstractSwingTableModel<CustomerDTO> {
 
-    public CustomerTableModel() {
-        tableName = "Customers";
-        columnNames.add("Customer Name");
-        columnNames.add("Customer Email");
-        data = new ArrayList<>();
+    public CustomerTableModel(String tableName, List<String> columnNames) {
+        super(tableName,columnNames);
     }
 
     @Override
-    public void setData (List<CustomerDTO> data) {
-        this.data=data
-                .stream()
-                .map(d -> Arrays.asList(d.getName(),d.getEmail()))
-                .collect(Collectors.toList());
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        CustomerDTO customerDTO = data.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                return customerDTO.getName();
+            case 1:
+                return customerDTO.getEmail();
+
+        }
+        return null;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return String.class;
+            case 1:
+                return String.class;
+        }
+        return null;
     }
 }

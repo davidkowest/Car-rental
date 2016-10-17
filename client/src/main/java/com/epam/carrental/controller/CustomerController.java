@@ -3,16 +3,11 @@ package com.epam.carrental.controller;
 import com.epam.carrental.dto.CustomerDTO;
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
-import com.epam.carrental.models.CustomerTableModel;
+import com.epam.carrental.gui.view.hanlders.impl.CustomerInputHandler;
+import com.epam.carrental.models.AbstractSwingTableModel;
 import com.epam.carrental.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.util.Set;
 
 @Component
 public class CustomerController implements TableController<CustomerDTO> {
@@ -20,35 +15,37 @@ public class CustomerController implements TableController<CustomerDTO> {
     @Autowired
     private BackgroundWorker inBackgroundWorker;
     @Autowired
-    private CustomerService customerService;
-    @Autowired
     private MessageView messageView;
-    @Autowired
-    private CustomerTableModel customerTableModel;
 
-    @PostConstruct
+    @Autowired
+    private AbstractSwingTableModel<CustomerDTO> customerTableModel;
+    @Autowired
+    private CustomerInputHandler customerInputHandler;
+    @Autowired
+    private CustomerService customerService;
+
     @Override
-    public void refreshTableModel(){
-        try {
-            customerTableModel.setData(customerService.readAll());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void refreshTableView() {
+        inBackgroundWorker.execute(
+                () -> customerService.readAll(),
+                customerDTOs -> {
+                    customerTableModel.setData(customerDTOs);
+                    customerTableModel.fireTableDataChanged();
+                },
+                e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
     @Override
     public void save(CustomerDTO customerDTO) {
-
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<CustomerDTO>> violations = validator.validate(customerDTO);
-
-        if (!violations.isEmpty()) {
-            throw new IllegalArgumentException("Empty fields or incorrect email address");
-        }
-        inBackgroundWorker.execute(
+       inBackgroundWorker.execute(
                 () -> customerService.create(customerDTO),
-                o -> customerTableModel.setData(customerService.readAll()),
+                o -> refreshTableView(),
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
+    }
+
+    @Override
+    public void handleUserInput() {
+        customerInputHandler.handleInput();
     }
 }
 

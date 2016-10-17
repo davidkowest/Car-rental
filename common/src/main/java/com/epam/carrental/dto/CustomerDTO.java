@@ -1,23 +1,11 @@
 package com.epam.carrental.dto;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class CustomerDTO implements Serializable {
-    @NotNull
-    @NotEmpty
-    private String name;
 
-    @NotNull
-    @NotEmpty
-    @Email
-    private String email;
-
-    public CustomerDTO() {
-    }
+    private final String name;
+    private final String email;
 
     public CustomerDTO(String name, String email) {
         this.name = name;
@@ -27,17 +15,8 @@ public class CustomerDTO implements Serializable {
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Override

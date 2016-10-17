@@ -5,11 +5,12 @@ import com.epam.carrental.entity.Customer;
 import com.epam.carrental.repository.CustomerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Component
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired

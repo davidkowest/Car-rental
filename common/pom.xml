@@ -10,11 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>common</artifactId>
 
-    <properties>
-        <hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
-        <javax.el-api.version>3.0.0</javax.el-api.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -23,16 +18,6 @@
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>${javax.el-api.version}</version>
         </dependency>
     </dependencies>
 </project>

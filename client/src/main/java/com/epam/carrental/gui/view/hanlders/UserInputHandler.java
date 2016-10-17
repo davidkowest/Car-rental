@@ -3,9 +3,7 @@ package com.epam.carrental.gui.view.hanlders;
 import javax.swing.*;
 import java.awt.*;
 
-public interface  UserInputHandler {
-
-    void saveInput();
+public interface UserInputHandler {
 
     default JPanel prepareInputPanel(JTextField field, String name) {
         JLabel label = new JLabel(name);

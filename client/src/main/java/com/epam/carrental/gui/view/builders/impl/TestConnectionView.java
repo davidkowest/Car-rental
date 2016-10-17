@@ -1,21 +1,21 @@
 package com.epam.carrental.gui.view.builders.impl;
 
 import com.epam.carrental.controller.ServerInfoController;
-import com.epam.carrental.gui.view.builders.ViewBuilder;
+import com.epam.carrental.gui.view.builders.TabView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 
 @Component
-public class TestConnectionViewBuilder implements ViewBuilder {
+public class TestConnectionView implements TabView {
 
     private final JPanel panel;
 
     @Autowired
     private ServerInfoController serverInfoController;
 
-    public TestConnectionViewBuilder(){
+    public TestConnectionView(){
         this.panel = new JPanel();
         JButton testConnectionButton = new JButton("Test connection");
         testConnectionButton.addActionListener(e ->  serverInfoController.getMessageForTestConnectionButton());
@@ -23,7 +23,7 @@ public class TestConnectionViewBuilder implements ViewBuilder {
     }
 
     @Override
-    public JPanel build(){
+    public JPanel initView(){
         return this.panel;
     }
 
