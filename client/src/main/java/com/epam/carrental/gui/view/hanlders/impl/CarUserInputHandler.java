@@ -13,6 +13,10 @@ import java.awt.*;
 @Component
 public class CarUserInputHandler implements UserInputHandler {
 
+    private final String CAR_MODEL_LABEL= "Car model:";
+    private final String CAR_REG_NUMBER_LABEL= "Car model:";
+    private final String MESSAGE="Enter Car number and model";
+
     @Autowired
     private FleetController fleetController;
     @Autowired
@@ -23,11 +27,11 @@ public class CarUserInputHandler implements UserInputHandler {
         JTextField carNumberField = new JTextField();
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());
-        inputPanel.add(prepareInputPanel(carModelField, "Car model:"), BorderLayout.NORTH);
-        inputPanel.add(prepareInputPanel(carNumberField, "Car number:"), BorderLayout.CENTER);
+        inputPanel.add(prepareInputPanel(carModelField, CAR_MODEL_LABEL), BorderLayout.NORTH);
+        inputPanel.add(prepareInputPanel(carNumberField, CAR_REG_NUMBER_LABEL), BorderLayout.CENTER);
 
         int result = JOptionPane.showConfirmDialog(null, inputPanel,
-                "Enter Car number and model", JOptionPane.OK_CANCEL_OPTION);
+                MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             fleetController.save(new CarDTO(carModelField.getText(), carNumberField.getText()));

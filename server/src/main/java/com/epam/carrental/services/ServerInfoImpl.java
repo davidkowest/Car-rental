@@ -13,9 +13,7 @@ public class ServerInfoImpl implements ServerInfo {
         ZonedDateTime time = getCurrentTime();
         InetAddress ipAddress = getIPAddress();
 
-        ServerInfoDTO serverInfoDTO = new ServerInfoDTO();
-        serverInfoDTO.setIpAddress(ipAddress);
-        serverInfoDTO.setTime(time);
+        ServerInfoDTO serverInfoDTO = new ServerInfoDTO(ipAddress,time);
 
         try {
             Thread.sleep(10000L);

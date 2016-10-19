@@ -10,4 +10,6 @@ public interface RentedCarService {
     Boolean rentCarForCustomer(RentedCarDTO rentedCarDTO);
 
     List<CarDTO> findNotRented();
+
+    List<RentedCarDTO> findAll();
 }

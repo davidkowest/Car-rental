@@ -1,22 +1,22 @@
 package com.epam.carrental.dto;
 
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.time.ZonedDateTime;
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RentedCarDTO implements Serializable {
 
-    private final CarDTO carDTO;
-    private final CustomerDTO customerDTO;
+    private CarDTO car;
+    private CustomerDTO customer;
+    private ZonedDateTime dateOfRent;
 
-    public RentedCarDTO(CarDTO carDTO, CustomerDTO customerDTO) {
-        this.carDTO = carDTO;
-        this.customerDTO = customerDTO;
+    public RentedCarDTO(CarDTO car, CustomerDTO customer) {
+        this.car = car;
+        this.customer = customer;
     }
-
-    public CarDTO getCarDTO() {
-        return carDTO;
-    }
-    public CustomerDTO getCustomerDTO() {
-        return customerDTO;
-    }
-
 }

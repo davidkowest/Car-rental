@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FleetController implements TableController<CarDTO> {
+public class FleetController {
 
     @Autowired
     private BackgroundWorker inBackgroundWorker;
@@ -25,7 +25,6 @@ public class FleetController implements TableController<CarDTO> {
     private CarService carService;
 
 
-    @Override
     public void refreshTableView() {
         inBackgroundWorker.execute(
                 () -> (carService.readAll()),
@@ -43,7 +42,6 @@ public class FleetController implements TableController<CarDTO> {
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
-    @Override
     public void handleUserInput() {
         carUserInputHandler.handleInput();
     }

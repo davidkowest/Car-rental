@@ -5,14 +5,16 @@ import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
 import com.epam.carrental.entity.RentedCar;
-import com.epam.carrental.repository.RentedCarRepository;
 import com.epam.carrental.repository.CarRepository;
 import com.epam.carrental.repository.CustomerRepository;
+import com.epam.carrental.repository.RentedCarRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,10 +37,11 @@ public class RentedCarServiceImpl implements RentedCarService {
     @Transactional
     public Boolean rentCarForCustomer(RentedCarDTO rentedCarDTO) {
 
-        Car car = carRepository.findByRegistrationNumber(rentedCarDTO.getCarDTO().getRegistrationNumber());
-        Customer customer = customerRepository.findByEmail(rentedCarDTO.getCustomerDTO().getEmail());
-        RentedCar rentedCar = new RentedCar(car, customer);
+        Car car = carRepository.findByRegistrationNumber(rentedCarDTO.getCar().getRegistrationNumber());
+        Customer customer = customerRepository.findByEmail(rentedCarDTO.getCustomer().getEmail());
+        ZonedDateTime currentDateTime=ZonedDateTime.now(ZoneId.systemDefault());
 
+        RentedCar rentedCar = new RentedCar(car, customer,currentDateTime);
         rentedCarRepository.save(rentedCar);
         return true;
     }
@@ -54,5 +57,14 @@ public class RentedCarServiceImpl implements RentedCarService {
                 .collect(Collectors.toList());
 
     }
+
+    @Override
+    public List<RentedCarDTO> findAll() {
+        return rentedCarRepository.findAll()
+                .stream()
+                .map(rentedCar -> modelMapper.map(rentedCar,RentedCarDTO.class))
+                .collect(Collectors.toList());
+    }
 }
+
 

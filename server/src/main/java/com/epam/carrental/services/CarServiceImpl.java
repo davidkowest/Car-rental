@@ -32,7 +32,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<CarDTO> readAll() {
-        return carRepository.findAll().stream().map(c -> new CarDTO(c.getModel(), c.getRegistrationNumber())).collect(Collectors.toList());
+        return carRepository.findAll().stream().map(c -> modelMapper.map(c,CarDTO.class)).collect(Collectors.toList());
     }
 
 

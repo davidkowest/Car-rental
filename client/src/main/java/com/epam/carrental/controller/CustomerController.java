@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerController implements TableController<CustomerDTO> {
+public class CustomerController {
 
     @Autowired
     private BackgroundWorker inBackgroundWorker;
@@ -24,7 +24,6 @@ public class CustomerController implements TableController<CustomerDTO> {
     @Autowired
     private CustomerService customerService;
 
-    @Override
     public void refreshTableView() {
         inBackgroundWorker.execute(
                 () -> customerService.readAll(),
@@ -35,7 +34,6 @@ public class CustomerController implements TableController<CustomerDTO> {
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
-    @Override
     public void save(CustomerDTO customerDTO) {
        inBackgroundWorker.execute(
                 () -> customerService.create(customerDTO),
@@ -43,7 +41,6 @@ public class CustomerController implements TableController<CustomerDTO> {
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
-    @Override
     public void handleUserInput() {
         customerInputHandler.handleInput();
     }

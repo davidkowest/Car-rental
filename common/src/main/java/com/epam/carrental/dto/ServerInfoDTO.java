@@ -1,26 +1,15 @@
 package com.epam.carrental.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.time.ZonedDateTime;
 
+@Getter
+@AllArgsConstructor
 public class ServerInfoDTO implements Serializable {
-    private ZonedDateTime time;
     private InetAddress ipAddress;
-
-    public ZonedDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(ZonedDateTime time) {
-        this.time = time;
-    }
-
-    public InetAddress getIpAddress() {
-        return ipAddress;
-    }
-
-    public void setIpAddress(InetAddress ipAddress) {
-        this.ipAddress = ipAddress;
-    }
+    private ZonedDateTime time;
 }

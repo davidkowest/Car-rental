@@ -1,23 +1,32 @@
 package com.epam.carrental.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public abstract class AbstractSwingTableModel<DTO> extends AbstractTableModel {
 
+    @Getter
     String tableName;
-    List<String> columnNames;
+    @Setter
     List<DTO> data = new ArrayList<>();
 
-    public AbstractSwingTableModel(String tableName, List<String> columnNames) {
-        this.tableName = tableName;
-        this.columnNames = columnNames;
+    Map<String,Function<DTO, Object>> columnAndActionMap;
+
+
+    public AbstractSwingTableModel() {
+        this.columnAndActionMap=new LinkedHashMap<>();
     }
 
     @Override
     public String getColumnName(int columnIndex) {
-        return columnNames.get(columnIndex);
+        return columnAndActionMap.keySet().stream().skip(columnIndex).findFirst().orElse("");
     }
 
     @Override
@@ -27,26 +36,17 @@ public abstract class AbstractSwingTableModel<DTO> extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return columnNames.size();
+        return columnAndActionMap.keySet().size();
     }
 
-    public void setData(List<DTO> values) {
-        this.data = values;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        Function<DTO, Object> function=this.columnAndActionMap.values().stream().skip(columnIndex).findFirst().get();
+        return function.apply(data.get(rowIndex));
     }
 
     public DTO getModel(int rowIndex) {
         return data.get(rowIndex);
     }
 
-    public void setColumnNames(List<String> columnNames) {
-        this.columnNames = columnNames;
-    }
 }

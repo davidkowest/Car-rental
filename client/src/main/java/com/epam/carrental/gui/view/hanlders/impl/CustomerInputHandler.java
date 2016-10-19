@@ -13,6 +13,10 @@ import java.awt.*;
 @Component
 public class CustomerInputHandler implements UserInputHandler {
 
+    private final String USER_NAME_LABEL= "User Name:";
+    private final String USER_EMAIL_LABEL= "User Email:";
+    private final String MESSAGE="Enter your name and email";
+
     @Autowired
     private CustomerController customerController;
     @Autowired
@@ -26,11 +30,11 @@ public class CustomerInputHandler implements UserInputHandler {
         JTextField userEmailField = new JTextField();
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());
-        inputPanel.add(prepareInputPanel(userNameField, "User Name:"), BorderLayout.NORTH);
-        inputPanel.add(prepareInputPanel(userEmailField, "User Email:"), BorderLayout.CENTER);
+        inputPanel.add(prepareInputPanel(userNameField, USER_NAME_LABEL), BorderLayout.NORTH);
+        inputPanel.add(prepareInputPanel(userEmailField, USER_EMAIL_LABEL), BorderLayout.CENTER);
 
         int result = JOptionPane.showConfirmDialog(null, inputPanel,
-                "Enter your name and email", JOptionPane.OK_CANCEL_OPTION);
+                MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             customerController.save(new CustomerDTO(userNameField.getText(), userEmailField.getText()));

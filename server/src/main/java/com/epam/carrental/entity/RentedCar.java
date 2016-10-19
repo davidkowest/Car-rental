@@ -1,34 +1,32 @@
 package com.epam.carrental.entity;
 
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class RentedCar {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    Car car;
+    private Car car;
 
     @ManyToOne
-    Customer customer;
+    private Customer customer;
 
-    public RentedCar() {
-    }
+    private ZonedDateTime dateOfRent;
 
-    public RentedCar(Car car, Customer customer) {
-        this.car=car;
-        this.customer=customer;
+    public RentedCar(Car car, Customer customer, ZonedDateTime dateOfRent) {
+        this.car = car;
+        this.customer = customer;
+        this.dateOfRent = dateOfRent;
     }
-    public Car getCar() {
-        return car;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
 }

@@ -1,19 +1,19 @@
 package com.epam.carrental.controller;
 
 import com.epam.carrental.dto.CarDTO;
+import com.epam.carrental.dto.CustomerDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
-import com.epam.carrental.gui.view.builders.impl.TableTabView;
 import com.epam.carrental.gui.view.hanlders.impl.RentalUserInputHandler;
 import com.epam.carrental.models.AbstractSwingTableModel;
-import com.epam.carrental.services.RentedCarService;
 import com.epam.carrental.services.CustomerService;
+import com.epam.carrental.services.RentedCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RentCarController implements TableController<RentedCarDTO> {
+public class RentCarController {
 
     @Autowired
     private BackgroundWorker inBackgroundWorker;
@@ -21,32 +21,24 @@ public class RentCarController implements TableController<RentedCarDTO> {
     private MessageView messageView;
 
     @Autowired
-    private AbstractSwingTableModel<CarDTO> availableCarsTableModel;
+    private AbstractSwingTableModel<CarDTO> availableCarTableModel;
     @Autowired
-    private AbstractSwingTableModel customerTableModel;
+    private AbstractSwingTableModel<CustomerDTO> customerTableModel;
     @Autowired
     private RentedCarService rentedCarService;
     @Autowired
     CustomerService customerService;
 
-
-    private TableTabView rentCarView;
     @Autowired
     private RentalUserInputHandler rentalUserInputHandler;
 
-    // to avoid unresolvable circular reference during creating RentCarController and RentCarView
-    public void setRentCarView(TableTabView rentCarView) {
-        this.rentCarView = rentCarView;
-    }
-
-    @Override
     public void refreshTableView() {
 
         inBackgroundWorker.execute(
                 () -> rentedCarService.findNotRented(),
                 carDTOs -> {
-                    availableCarsTableModel.setData(carDTOs);
-                    availableCarsTableModel.fireTableDataChanged();
+                    availableCarTableModel.setData(carDTOs);
+                    availableCarTableModel.fireTableDataChanged();
                 },
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
@@ -58,14 +50,12 @@ public class RentCarController implements TableController<RentedCarDTO> {
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
-    @Override
-    public void handleUserInput() {
+    public void handleUserInput(int selectedRow) {
         refreshCustomerModel();
-        int selectedRow = rentCarView.getSelectedRow();
         if (selectedRow < 0) {
             messageView.showErrorMessage("No rows selected!");
         }
-        CarDTO carDTO = availableCarsTableModel.getModel(selectedRow);
+        CarDTO carDTO = availableCarTableModel.getModel(selectedRow);
         rentalUserInputHandler.handleInputUsing(carDTO);
     }
 

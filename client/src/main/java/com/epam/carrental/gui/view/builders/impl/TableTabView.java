@@ -5,21 +5,28 @@ import com.epam.carrental.models.AbstractSwingTableModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.SpringLayout.NORTH;
 
 
-public class TableTabView<DTO> implements TabView {
+public class TableTabView implements TabView {
 
-    private final AbstractSwingTableModel<DTO> tableModel;
+    private AbstractSwingTableModel tableModel;
 
-    private final Map<String,Runnable> actions;
+
+    Map<String,Runnable> actions;
 
     private JTable table;
 
-    public TableTabView(AbstractSwingTableModel<DTO> tableModel,  Map<String,Runnable> actions) {
+    public TableTabView(AbstractSwingTableModel tableModel) {
+        this.tableModel = tableModel;
+        this.actions=new LinkedHashMap<>();
+    }
+
+    public TableTabView(AbstractSwingTableModel tableModel,  Map<String,Runnable> actions) {
         this.tableModel = tableModel;
         this.actions=actions;
     }
@@ -45,7 +52,7 @@ public class TableTabView<DTO> implements TabView {
         return panel;
     }
 
-    private JToolBar prepareToolBar() {
+    JToolBar prepareToolBar() {
         JToolBar toolBar = new JToolBar();
 
         for (String buttonName:actions.keySet()){

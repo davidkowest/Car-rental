@@ -4,12 +4,12 @@ import com.epam.carrental.dto.CarDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CarTableModel extends AbstractSwingTableModel<CarDTO> {
+public class AvailableCarTableModel extends AbstractSwingTableModel<CarDTO> {
 
-    public CarTableModel(){
-        this.tableName="Fleet";
+    public AvailableCarTableModel(){
+        this.tableName="Available cars";
         this.columnAndActionMap.put("Registration number",CarDTO::getRegistrationNumber);
         this.columnAndActionMap.put("Car model",CarDTO::getModel);
     }
-
 }
+
