@@ -17,6 +17,7 @@ public class RentedCar {
     private Long id;
 
     @OneToOne
+    @JoinColumn(referencedColumnName = "ID",unique = true)
     private Car car;
 
     @ManyToOne

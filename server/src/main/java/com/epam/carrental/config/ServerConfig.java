@@ -1,8 +1,8 @@
 package com.epam.carrental.config;
 
-import com.epam.carrental.services.RentedCarService;
 import com.epam.carrental.services.CarService;
 import com.epam.carrental.services.CustomerService;
+import com.epam.carrental.services.RentedCarService;
 import com.epam.carrental.services.ServerInfo;
 import com.sun.net.httpserver.HttpHandler;
 import org.modelmapper.ModelMapper;
@@ -17,6 +17,7 @@ import org.springframework.remoting.support.SimpleHttpServerFactoryBean;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 @Configuration
 @PropertySource({"classpath:application.properties"})
@@ -72,6 +73,7 @@ public class ServerConfig {
     public SimpleHttpInvokerServiceExporter rentedCarServiceExporter() {
         return serviceExporter(rentedCarService,RentedCarService.class);
     }
+
     @Bean
     public SimpleHttpServerFactoryBean serverFactory() {
         Map<String, HttpHandler> contexts = new HashMap<>();
@@ -82,6 +84,7 @@ public class ServerConfig {
         SimpleHttpServerFactoryBean serverFactory = new SimpleHttpServerFactoryBean();
         serverFactory.setContexts(contexts);
         serverFactory.setPort(Integer.parseInt(port));
+        serverFactory.setExecutor(Executors.newFixedThreadPool(4));
         return serverFactory;
     }
 

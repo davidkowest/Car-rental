@@ -25,7 +25,7 @@
         <maven.plugin.compile.version>3.5.1</maven.plugin.compile.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
+        <hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
         <spring.boot.compile.version>1.4.1.RELEASE</spring.boot.compile.version>
         <lombock.version>1.16.10</lombock.version>
     </properties>
@@ -60,7 +60,7 @@
             </dependency>
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>${hibernate-jpa.version}</version>
             </dependency>
             <dependency>

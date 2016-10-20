@@ -42,6 +42,12 @@ public class RentedCarServiceImpl implements RentedCarService {
         ZonedDateTime currentDateTime=ZonedDateTime.now(ZoneId.systemDefault());
 
         RentedCar rentedCar = new RentedCar(car, customer,currentDateTime);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         rentedCarRepository.save(rentedCar);
         return true;
     }
