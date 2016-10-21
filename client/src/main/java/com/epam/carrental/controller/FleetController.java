@@ -27,7 +27,7 @@ public class FleetController {
 
     public void refreshTableView() {
         inBackgroundWorker.execute(
-                () -> (carService.readAll()),
+                () -> carService.readAll(),
                 carDTOs -> {
                     carTableModel.setData(carDTOs);
                     carTableModel.fireTableDataChanged();

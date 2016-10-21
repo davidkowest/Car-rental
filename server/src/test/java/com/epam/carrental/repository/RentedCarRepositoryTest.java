@@ -6,6 +6,7 @@ import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
 import com.epam.carrental.entity.RentedCar;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,21 @@ public class RentedCarRepositoryTest extends AbstractTestNGSpringContextTests {
         //assert
         ZonedDateTime resultDate=rentedCarRepository.findAll().get(0).getDateOfRent().withZoneSameInstant(ZoneId.of("Europe/Warsaw"));
         Assert.assertEquals(resultDate,expectedPolandRentingDate);
+    }
+
+    @Test(expectedExceptions = { DataIntegrityViolationException.class})
+    public void rentingTheSameCarTwiceTest() {
+        //arrange
+        Car car=carRepository.findByRegistrationNumber("KR12345");
+        Customer customer=customerRepository.findByEmail("tom.cruse@wp.pl");
+        ZonedDateTime rentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 9, 0), ZoneId.of("Europe/Warsaw"));
+
+        RentedCar firstRenting=new RentedCar(car,customer,rentingDate);
+        rentedCarRepository.save(firstRenting);
+
+        //act
+        RentedCar secondRenting=new RentedCar(car,customer,rentingDate);
+        rentedCarRepository.save(secondRenting);
     }
 
 }

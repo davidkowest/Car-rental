@@ -8,6 +8,7 @@ import com.epam.carrental.entity.RentedCar;
 import com.epam.carrental.repository.CarRepository;
 import com.epam.carrental.repository.CustomerRepository;
 import com.epam.carrental.repository.RentedCarRepository;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Component
 public class RentedCarServiceImpl implements RentedCarService {
 
@@ -42,12 +44,12 @@ public class RentedCarServiceImpl implements RentedCarService {
         ZonedDateTime currentDateTime=ZonedDateTime.now(ZoneId.systemDefault());
 
         RentedCar rentedCar = new RentedCar(car, customer,currentDateTime);
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//// TODO: For demo concurrent modifications purpose only
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            log.error(e);
+//        }
         rentedCarRepository.save(rentedCar);
         return true;
     }
@@ -70,6 +72,17 @@ public class RentedCarServiceImpl implements RentedCarService {
                 .stream()
                 .map(rentedCar -> modelMapper.map(rentedCar,RentedCarDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public Boolean returnRentedCar(RentedCarDTO rentedCarDTO) {
+        Car car=carRepository.findByRegistrationNumber(rentedCarDTO.getCar().getRegistrationNumber());
+        if (car == null) {
+            throw new IllegalArgumentException(car + " not exists in DB");
+        }
+        rentedCarRepository.deleteByCar(car);
+        return true;
     }
 }
 

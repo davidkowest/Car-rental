@@ -12,4 +12,6 @@ public interface RentedCarService {
     List<CarDTO> findNotRented();
 
     List<RentedCarDTO> findAll();
+
+    Boolean returnRentedCar(RentedCarDTO rentedCarDTO);
 }

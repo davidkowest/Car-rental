@@ -14,6 +14,18 @@
     </modules>
     <packaging>pom</packaging>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -28,6 +40,8 @@
         <hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
         <spring.boot.compile.version>1.4.1.RELEASE</spring.boot.compile.version>
         <lombock.version>1.16.10</lombock.version>
+        <log4j2.version>2.6.2</log4j2.version>
+        <sonar.version>3.0.2</sonar.version>
     </properties>
 
     <dependencyManagement>
@@ -67,6 +81,17 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombock.version}</version>
+            </dependency>
+            <!-- Logging -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

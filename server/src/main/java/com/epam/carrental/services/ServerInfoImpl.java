@@ -1,10 +1,12 @@
 package com.epam.carrental.services;
 
 import com.epam.carrental.dto.ServerInfoDTO;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.time.ZonedDateTime;
+@Log4j2
 @Component
 public class ServerInfoImpl implements ServerInfo {
 
@@ -18,7 +20,7 @@ public class ServerInfoImpl implements ServerInfo {
         try {
             Thread.sleep(10000L);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e);
         }
         return serverInfoDTO;
     }
@@ -32,7 +34,7 @@ public class ServerInfoImpl implements ServerInfo {
         try {
             ip = InetAddress.getLocalHost();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
         return ip;
     }

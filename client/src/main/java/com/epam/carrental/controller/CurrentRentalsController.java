@@ -1,5 +1,6 @@
 package com.epam.carrental.controller;
 
+import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.models.RentedCarTableModel;
@@ -32,5 +33,12 @@ public class CurrentRentalsController {
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
-
+    public void handleUserInput(int selectedRow) {
+        if (selectedRow < 0) {
+            messageView.showErrorMessage("No rows selected!");
+        }
+        RentedCarDTO rentedCarDTO = rentedCarTableModel.getModel(selectedRow);
+        rentedCarService.returnRentedCar(rentedCarDTO);
+        refreshTableView();
+    }
 }

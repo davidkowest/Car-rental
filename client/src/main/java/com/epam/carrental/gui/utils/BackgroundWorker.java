@@ -1,12 +1,13 @@
 package com.epam.carrental.gui.utils;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-
+@Log4j2
 @Component
 public class BackgroundWorker {
 
@@ -25,9 +26,8 @@ public class BackgroundWorker {
             protected void done() {
                 try {
                     successHandler.accept(this.get());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
+                } catch (ExecutionException|InterruptedException e) {
+                    log.error(e);
                     failureHandler.accept(e);
                 }
             }

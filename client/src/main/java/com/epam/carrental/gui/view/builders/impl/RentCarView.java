@@ -13,9 +13,7 @@ public class RentCarView  extends TableTabView{
 
     @Autowired
     private RentCarController rentCarController;
-
-    private JTable table;
-
+    
     public RentCarView(AbstractSwingTableModel availableCarTableModel) {
        super(availableCarTableModel);
     }

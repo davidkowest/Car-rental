@@ -55,9 +55,9 @@ public class TableTabView implements TabView {
     JToolBar prepareToolBar() {
         JToolBar toolBar = new JToolBar();
 
-        for (String buttonName:actions.keySet()){
-            JButton button = new JButton(buttonName);
-            button.addActionListener(e -> actions.get(buttonName).run());
+        for (Map.Entry<String,Runnable> entry : actions.entrySet()){
+            JButton button = new JButton(entry.getKey());
+            button.addActionListener(e -> entry.getValue().run());
             toolBar.add(button);
         }
 

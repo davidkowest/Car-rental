@@ -13,11 +13,11 @@ import java.util.function.Function;
 public abstract class AbstractSwingTableModel<DTO> extends AbstractTableModel {
 
     @Getter
-    String tableName;
+    transient String tableName;
     @Setter
-    List<DTO> data = new ArrayList<>();
+    transient List<DTO> data = new ArrayList<>();
 
-    Map<String,Function<DTO, Object>> columnAndActionMap;
+    transient Map<String,Function<DTO, Object>> columnAndActionMap;
 
 
     public AbstractSwingTableModel() {

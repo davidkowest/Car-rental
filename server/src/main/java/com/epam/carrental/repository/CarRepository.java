@@ -10,5 +10,6 @@ import java.util.List;
 public interface CarRepository extends CrudRepository<Car, Long> {
 
     Car findByRegistrationNumber(String registrationNumber);
+    @Override
     List<Car> findAll();
 }
