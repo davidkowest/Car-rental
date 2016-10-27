@@ -9,7 +9,13 @@ import java.util.List;
 @Component
 public interface CarRepository extends CrudRepository<Car, Long> {
 
-    Car findByRegistrationNumber(String registrationNumber);
     @Override
     List<Car> findAll();
+
+    default Car findByRegistrationNumber(String registrationNumber){
+        return findAll()
+                .stream()
+                .filter(c -> c.getRegistrationNumber().equals(registrationNumber))
+                .findFirst().get();
+    };
 }

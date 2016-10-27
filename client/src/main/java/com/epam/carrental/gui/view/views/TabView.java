@@ -1,4 +1,4 @@
-package com.epam.carrental.gui.view.builders;
+package com.epam.carrental.gui.view.views;
 
 import javax.swing.*;
 

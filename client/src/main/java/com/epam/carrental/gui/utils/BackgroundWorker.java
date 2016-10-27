@@ -1,13 +1,14 @@
 package com.epam.carrental.gui.utils;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-@Log4j2
+@Slf4j
 @Component
 public class BackgroundWorker {
 
@@ -27,11 +28,18 @@ public class BackgroundWorker {
                 try {
                     successHandler.accept(this.get());
                 } catch (ExecutionException|InterruptedException e) {
-                    log.error(e);
+                    log.error(e.toString());
                     failureHandler.accept(e);
                 }
             }
         };
         swingWorker.execute();
+    }
+
+    public  void execute(Runnable command,
+                                 Runnable successHandler,
+                                 Consumer<Exception> failureHandler) {
+
+        execute(Executors.callable(command), result->successHandler.run(), failureHandler);
     }
 }

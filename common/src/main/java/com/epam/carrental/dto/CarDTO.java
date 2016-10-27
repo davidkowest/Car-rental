@@ -1,23 +1,15 @@
 package com.epam.carrental.dto;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
-@ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class CarDTO implements Serializable {
 
-    @Getter
     private String model;
-    @Getter
     private String registrationNumber;
-
-    public CarDTO(String carModel, String carNumber) {
-        this.model = carModel;
-        this.registrationNumber = carNumber;
-    }
 }

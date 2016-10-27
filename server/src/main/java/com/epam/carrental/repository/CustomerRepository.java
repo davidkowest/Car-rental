@@ -6,8 +6,12 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface CustomerRepository  extends CrudRepository<Customer, Long> {
-    Customer findByEmail(String email);
+
     @Override
     List<Customer> findAll();
+
+    default Customer findByEmail(String email){
+        return findAll().stream().filter(c -> c.getEmail().equals(email)).findFirst().orElse(null);
+    }
 }
 

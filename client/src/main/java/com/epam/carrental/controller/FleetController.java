@@ -26,19 +26,17 @@ public class FleetController {
 
 
     public void refreshTableView() {
+
         inBackgroundWorker.execute(
-                () -> carService.readAll(),
-                carDTOs -> {
-                    carTableModel.setData(carDTOs);
-                    carTableModel.fireTableDataChanged();
-                },
+                carService::readAll,
+                carTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
     public void save(CarDTO carDTO) {
         inBackgroundWorker.execute(
                 () -> carService.create(carDTO),
-                o -> refreshTableView(),
+                this::refreshTableView,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 

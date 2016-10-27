@@ -1,6 +1,6 @@
-package com.epam.carrental.gui.view.builders.impl;
+package com.epam.carrental.gui.view.views.impl;
 
-import com.epam.carrental.gui.view.builders.TabView;
+import com.epam.carrental.gui.view.views.TabView;
 import com.epam.carrental.models.AbstractSwingTableModel;
 
 import javax.swing.*;

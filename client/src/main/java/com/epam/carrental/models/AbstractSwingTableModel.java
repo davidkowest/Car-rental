@@ -49,4 +49,9 @@ public abstract class AbstractSwingTableModel<DTO> extends AbstractTableModel {
         return data.get(rowIndex);
     }
 
+    public void setDataAndRefreshTable(List<DTO> dtoList){
+        setData(dtoList);
+        fireTableDataChanged();
+    }
+
 }

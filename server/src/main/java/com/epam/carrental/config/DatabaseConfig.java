@@ -10,6 +10,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -44,6 +45,7 @@ public class DatabaseConfig {
         entityManagerFactoryBean.setJpaVendorAdapter(adapter);
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPackagesToScan("com.epam.carrental.entity");
+        entityManagerFactoryBean.setJpaDialect(jpaDialect());
 
         Properties properties = new Properties();
         properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
@@ -61,5 +63,12 @@ public class DatabaseConfig {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
+    }
+
+    @Bean
+    public HibernateJpaDialect jpaDialect(){
+        HibernateJpaDialect hibernateJpaDialect=new HibernateJpaDialect();
+        hibernateJpaDialect.setPrepareConnection(false);
+        return hibernateJpaDialect;
     }
 }

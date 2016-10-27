@@ -1,14 +1,12 @@
 package com.epam.carrental.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CustomerDTO implements Serializable {
     private String name;
     private String email;

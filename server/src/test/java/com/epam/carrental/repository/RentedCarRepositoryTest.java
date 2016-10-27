@@ -7,11 +7,13 @@ import com.epam.carrental.entity.Customer;
 import com.epam.carrental.entity.RentedCar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -21,6 +23,7 @@ import java.time.ZonedDateTime;
 
 @ContextConfiguration(classes = {DatabaseConfig.class})
 @Transactional
+@TestExecutionListeners({TransactionalTestExecutionListener.class })
 public class RentedCarRepositoryTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
@@ -41,14 +44,8 @@ public class RentedCarRepositoryTest extends AbstractTestNGSpringContextTests {
         customerRepository.save(customer);
     }
 
-    @AfterMethod
-    public void clearAll() {
-        rentedCarRepository.deleteAll();
-        carRepository.deleteAll();
-        customerRepository.deleteAll();
-    }
-
     @Test
+    @Rollback(true)
     public void timeZoneMoscowToWarsawTest() {
         //arrange
         Car car=carRepository.findByRegistrationNumber("KR12345");
@@ -67,6 +64,7 @@ public class RentedCarRepositoryTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test(expectedExceptions = { DataIntegrityViolationException.class})
+    @Rollback(true)
     public void rentingTheSameCarTwiceTest() {
         //arrange
         Car car=carRepository.findByRegistrationNumber("KR12345");

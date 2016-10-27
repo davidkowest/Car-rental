@@ -35,18 +35,15 @@ public class RentCarController {
     public void refreshTableView() {
 
         inBackgroundWorker.execute(
-                () -> rentedCarService.findNotRented(),
-                carDTOs -> {
-                    availableCarTableModel.setData(carDTOs);
-                    availableCarTableModel.fireTableDataChanged();
-                },
+                rentedCarService::findNotRented,
+                availableCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
     public void save(RentedCarDTO rentedCarDTO) {
         inBackgroundWorker.execute(
                 () -> rentedCarService.rentCarForCustomer(rentedCarDTO),
-                o -> refreshTableView(),
+                this::refreshTableView,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
@@ -54,20 +51,17 @@ public class RentCarController {
         refreshCustomerModel();
         if (selectedRow < 0) {
             messageView.showErrorMessage("No rows selected!");
+        } else {
+            CarDTO carDTO = availableCarTableModel.getModel(selectedRow);
+            rentalUserInputHandler.handleInputUsing(carDTO);
         }
-        CarDTO carDTO = availableCarTableModel.getModel(selectedRow);
-        rentalUserInputHandler.handleInputUsing(carDTO);
     }
 
     private void refreshCustomerModel() {
         inBackgroundWorker.execute(
-                () -> customerService.readAll(),
-                customerDTOs -> {
-                    customerTableModel.setData(customerDTOs);
-                    customerTableModel.fireTableDataChanged();
-                },
+                customerService::readAll,
+                customerTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
-
     }
 }
 

@@ -1,25 +1,30 @@
 package com.epam.carrental.services;
 
+import com.epam.carrental.data_generator.CurrentTimeUtil;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
 import com.epam.carrental.entity.RentedCar;
+import com.epam.carrental.entity.RentedCarHistory;
 import com.epam.carrental.repository.CarRepository;
 import com.epam.carrental.repository.CustomerRepository;
+import com.epam.carrental.repository.RentedCarHistoryRepository;
 import com.epam.carrental.repository.RentedCarRepository;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZoneId;
+import java.lang.reflect.Type;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log4j2
+@Slf4j
 @Component
 public class RentedCarServiceImpl implements RentedCarService {
 
@@ -31,17 +36,22 @@ public class RentedCarServiceImpl implements RentedCarService {
 
     @Autowired
     private RentedCarRepository rentedCarRepository;
+    @Autowired
+    private RentedCarHistoryRepository rentedCarHistoryRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CurrentTimeUtil currentTimeUtil;
+
     @Override
     @Transactional
-    public Boolean rentCarForCustomer(RentedCarDTO rentedCarDTO) {
+    public  void rentCarForCustomer(RentedCarDTO rentedCarDTO) {
 
         Car car = carRepository.findByRegistrationNumber(rentedCarDTO.getCar().getRegistrationNumber());
         Customer customer = customerRepository.findByEmail(rentedCarDTO.getCustomer().getEmail());
-        ZonedDateTime currentDateTime=ZonedDateTime.now(ZoneId.systemDefault());
+        ZonedDateTime currentDateTime=currentTimeUtil.getCurrentTime();
 
         RentedCar rentedCar = new RentedCar(car, customer,currentDateTime);
 //// TODO: For demo concurrent modifications purpose only
@@ -51,7 +61,6 @@ public class RentedCarServiceImpl implements RentedCarService {
 //            log.error(e);
 //        }
         rentedCarRepository.save(rentedCar);
-        return true;
     }
 
     @Override
@@ -67,23 +76,45 @@ public class RentedCarServiceImpl implements RentedCarService {
     }
 
     @Override
-    public List<RentedCarDTO> findAll() {
-        return rentedCarRepository.findAll()
-                .stream()
-                .map(rentedCar -> modelMapper.map(rentedCar,RentedCarDTO.class))
-                .collect(Collectors.toList());
+    public List<RentedCarDTO> findCurrentRentals() {
+        Type listType = new TypeToken<List<RentedCarDTO>>() {
+        }.getType();
+        return modelMapper.map(rentedCarRepository.findAll(), listType);
     }
 
     @Override
     @Transactional
-    public Boolean returnRentedCar(RentedCarDTO rentedCarDTO) {
-        Car car=carRepository.findByRegistrationNumber(rentedCarDTO.getCar().getRegistrationNumber());
+    public  void returnRentedCar(RentedCarDTO rentedCarDTO) {
+
+        Car car = carRepository.findByRegistrationNumber(rentedCarDTO.getCar().getRegistrationNumber());
         if (car == null) {
             throw new IllegalArgumentException(car + " not exists in DB");
         }
+
+        Customer customer = customerRepository.findByEmail(rentedCarDTO.getCustomer().getEmail());
+        if (customer == null) {
+            throw new IllegalArgumentException(customer + " not exists in DB");
+        }
+
+        RentedCar rentedCar = rentedCarRepository.findByCarAndCustomerAndDateOfRent(car, customer, rentedCarDTO.getDateOfRent());
+
+        ZonedDateTime dateOfReturn=currentTimeUtil.getCurrentTime();
+        ZonedDateTime dateOfRent =rentedCar.getDateOfRent();
+        RentedCarHistory rentedCarHistory = modelMapper.map(rentedCar, RentedCarHistory.class);
+        rentedCarHistory.setDateOfReturn(dateOfReturn);
+
+        long duration= Duration.between(dateOfRent,dateOfReturn).toHours();
+        rentedCarHistory.setDuration(duration);
+        rentedCarHistory.setId(null);
+
+        rentedCarHistoryRepository.save(rentedCarHistory);
         rentedCarRepository.deleteByCar(car);
-        return true;
+    }
+
+    @Override
+    public List<RentedCarDTO> findByDateOfRentAndDateOfReturn(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn) {
+        return rentedCarHistoryRepository.findByDateOfRentAndDateOfReturn(dateOfRent, dateOfReturn).stream()
+                .map(rentedCarHistory -> modelMapper.map(rentedCarHistory, RentedCarDTO.class))
+                .collect(Collectors.toList());
     }
 }
-
-

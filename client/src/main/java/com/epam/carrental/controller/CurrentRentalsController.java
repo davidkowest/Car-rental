@@ -24,21 +24,20 @@ public class CurrentRentalsController {
     private MessageView messageView;
 
     public void refreshTableView() {
+
         inBackgroundWorker.execute(
-                () -> rentedCarService.findAll(),
-                rentedCarDTOs -> {
-                    rentedCarTableModel.setData(rentedCarDTOs);
-                    rentedCarTableModel.fireTableDataChanged();
-                },
+                rentedCarService::findCurrentRentals,
+                rentedCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
     public void handleUserInput(int selectedRow) {
         if (selectedRow < 0) {
             messageView.showErrorMessage("No rows selected!");
+        }else {
+            RentedCarDTO rentedCarDTO = rentedCarTableModel.getModel(selectedRow);
+            rentedCarService.returnRentedCar(rentedCarDTO);
+            refreshTableView();
         }
-        RentedCarDTO rentedCarDTO = rentedCarTableModel.getModel(selectedRow);
-        rentedCarService.returnRentedCar(rentedCarDTO);
-        refreshTableView();
     }
 }

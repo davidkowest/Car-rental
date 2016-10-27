@@ -12,7 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
 
 @Configuration
-@PropertySource({"classpath:application.properties"})
+@PropertySource({"classpath:application.properties","labels.properties"})
 @ComponentScan(basePackages = {"com.epam.carrental"})
 public class HttpInvokerConfig {
 

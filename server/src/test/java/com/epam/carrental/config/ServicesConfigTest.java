@@ -7,8 +7,8 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-@ContextConfiguration(classes = ServerConfig.class)
-public class ServerConfigTest extends AbstractTestNGSpringContextTests {
+@ContextConfiguration(classes = ServicesConfig.class)
+public class ServicesConfigTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private ApplicationContext context;

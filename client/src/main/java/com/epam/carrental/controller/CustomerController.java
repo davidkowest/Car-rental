@@ -25,19 +25,17 @@ public class CustomerController {
     private CustomerService customerService;
 
     public void refreshTableView() {
+
         inBackgroundWorker.execute(
-                () -> customerService.readAll(),
-                customerDTOs -> {
-                    customerTableModel.setData(customerDTOs);
-                    customerTableModel.fireTableDataChanged();
-                },
+                customerService::readAll,
+                customerTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
     public void save(CustomerDTO customerDTO) {
-       inBackgroundWorker.execute(
+        inBackgroundWorker.execute(
                 () -> customerService.create(customerDTO),
-                o -> refreshTableView(),
+                this::refreshTableView,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 

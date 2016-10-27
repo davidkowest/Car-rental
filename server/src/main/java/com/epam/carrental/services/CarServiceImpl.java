@@ -4,12 +4,13 @@ import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.repository.CarRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class CarServiceImpl implements CarService {
@@ -22,17 +23,15 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
-    public Boolean create(CarDTO carDTO) {
-
+    public void create(CarDTO carDTO) {
         Car car = modelMapper.map(carDTO, Car.class);
         carRepository.save(car);
-
-        return true;
     }
 
     @Override
     public List<CarDTO> readAll() {
-        return carRepository.findAll().stream().map(c -> modelMapper.map(c,CarDTO.class)).collect(Collectors.toList());
+        Type listType = new TypeToken<List<CarDTO>>() {}.getType();
+        return modelMapper.map(carRepository.findAll(),listType);
     }
 
 

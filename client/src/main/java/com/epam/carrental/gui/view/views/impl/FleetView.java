@@ -1,4 +1,4 @@
-package com.epam.carrental.gui.view.builders.impl;
+package com.epam.carrental.gui.view.views.impl;
 
 import com.epam.carrental.controller.FleetController;
 import com.epam.carrental.models.AbstractSwingTableModel;
