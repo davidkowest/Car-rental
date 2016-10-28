@@ -12,13 +12,15 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @ContextConfiguration(classes = {DatabaseConfig.class})
 @Transactional
@@ -50,13 +52,12 @@ public class RentedCarHistoryRepositoryTest  extends AbstractTestNGSpringContext
         Customer customer=customerRepository.findByEmail("trump@wp.pl");
         ZonedDateTime rentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 9, 0), ZoneId.of("Europe/Warsaw"));
         ZonedDateTime returningDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 10, 0), ZoneId.of("Europe/Warsaw"));
-        long duration= Duration.between(returningDate, rentingDate).toHours();
 
-        RentedCarHistory firstHistory=new RentedCarHistory(car,customer,rentingDate,returningDate,duration);
+        RentedCarHistory firstHistory=new RentedCarHistory(car,customer,rentingDate,returningDate);
         rentedCarHistoryRepository.save(firstHistory);
 
         //act
-        RentedCarHistory secondHistory=new RentedCarHistory(car,customer,rentingDate,returningDate,duration);
+        RentedCarHistory secondHistory=new RentedCarHistory(car,customer,rentingDate,returningDate);
         rentedCarHistoryRepository.save(secondHistory);
 
 
@@ -71,11 +72,31 @@ public class RentedCarHistoryRepositoryTest  extends AbstractTestNGSpringContext
         Customer customer=customerRepository.findByEmail("trump@wp.pl");
         ZonedDateTime rentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 19, 10, 0), ZoneId.of("Europe/Warsaw"));
         ZonedDateTime returningDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 19, 9, 0), ZoneId.of("Europe/Warsaw"));
-        long duration= Duration.between(returningDate, rentingDate).toHours();
         //act
-        RentedCarHistory rentedCarHistory=new RentedCarHistory(car,customer,rentingDate,returningDate,duration);
+        RentedCarHistory rentedCarHistory=new RentedCarHistory(car,customer,rentingDate,returningDate);
         rentedCarHistoryRepository.save(rentedCarHistory);
 
+    }
+
+    @Test
+    @Rollback(true)
+    public void filterByDateOfRentAndDateOfReturnTest() {
+        //arrange
+        Car car=carRepository.findByRegistrationNumber("KR12345");
+        Customer customer=customerRepository.findByEmail("trump@wp.pl");
+        ZonedDateTime rentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 8, 10, 0), ZoneId.of("Europe/Warsaw"));
+        ZonedDateTime returningDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 19, 9, 0), ZoneId.of("Europe/Warsaw"));
+
+        RentedCarHistory rentedCarHistory=new RentedCarHistory(car,customer,rentingDate,returningDate);
+        rentedCarHistoryRepository.save(rentedCarHistory);
+
+        List<RentedCarHistory> expectedRentedCarHistory= Arrays.asList(rentedCarHistory);
+
+        //act
+        rentedCarHistoryRepository.save(rentedCarHistory);
+        List<RentedCarHistory> resultRentedCarHistory=rentedCarHistoryRepository.findByDateOfRentAndDateOfReturn(rentingDate,returningDate);
+
+        Assert.assertEquals(resultRentedCarHistory,expectedRentedCarHistory);
     }
 
 

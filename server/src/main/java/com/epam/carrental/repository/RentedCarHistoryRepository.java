@@ -13,9 +13,13 @@ public interface RentedCarHistoryRepository extends CrudRepository<RentedCarHist
     @Override
     List<RentedCarHistory> findAll();
 
+
     default List<RentedCarHistory> findByDateOfRentAndDateOfReturn(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn) {
-        return findAll().stream()
-                .filter(rentedCarHistory -> rentedCarHistory.getDateOfRent().isAfter(dateOfRent) && rentedCarHistory.getDateOfReturn().isBefore(dateOfReturn))
+        return this.findAll().stream()
+                .filter(rentedCarHistory -> (rentedCarHistory.getDateOfRent().isAfter(dateOfRent)
+                        || rentedCarHistory.getDateOfRent().equals(dateOfRent))
+                        && (rentedCarHistory.getDateOfReturn().isBefore(dateOfReturn)
+                        || (rentedCarHistory.getDateOfReturn().equals(dateOfReturn))))
                 .collect(Collectors.toList());
     }
 }

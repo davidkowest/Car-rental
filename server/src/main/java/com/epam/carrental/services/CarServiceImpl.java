@@ -16,14 +16,18 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
 
     @Autowired
-    private CarRepository carRepository;
+    CarRepository carRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
 
     @Override
     @Transactional
     public void create(CarDTO carDTO) {
+        Car existingCar = carRepository.findByRegistrationNumber(carDTO.getRegistrationNumber());
+        if (existingCar != null) {
+            throw new IllegalArgumentException(carDTO + " exists in DB");
+        }
         Car car = modelMapper.map(carDTO, Car.class);
         carRepository.save(car);
     }

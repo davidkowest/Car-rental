@@ -1,9 +1,6 @@
 package com.epam.carrental.config;
 
-import com.epam.carrental.services.RentedCarService;
-import com.epam.carrental.services.CarService;
-import com.epam.carrental.services.CustomerService;
-import com.epam.carrental.services.ServerInfo;
+import com.epam.carrental.services.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -42,7 +39,17 @@ public class HttpInvokerConfig {
     }
 
     @Bean
-    public HttpInvokerProxyFactoryBean carRentalService(@Value("${remote.service.rentedCar}") String carRentalServicePath) {
-        return httpInvokerProxyFactoryBean(carRentalServicePath,RentedCarService.class);
+    public HttpInvokerProxyFactoryBean rentReturnCarService(@Value("${remote.service.rentReturnCar}") String rentReturnCarServicePath) {
+        return httpInvokerProxyFactoryBean(rentReturnCarServicePath,RentReturnService.class);
+    }
+
+    @Bean
+    public HttpInvokerProxyFactoryBean currentRentalsService(@Value("${remote.service.currentRentals}") String currentRentalsServicePath) {
+        return httpInvokerProxyFactoryBean(currentRentalsServicePath,CurrentRentalsService.class);
+    }
+
+    @Bean
+    public HttpInvokerProxyFactoryBean rentalHistoryService(@Value("${remote.service.rentalHistory}") String rentalHistoryServicePath) {
+        return httpInvokerProxyFactoryBean(rentalHistoryServicePath,RentalsHistoryService.class);
     }
 }

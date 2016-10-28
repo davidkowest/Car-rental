@@ -27,14 +27,11 @@ public class RentedCarHistory  {
 
     private ZonedDateTime dateOfRent;
     private ZonedDateTime dateOfReturn;
-    private long duration;
 
-
-    public RentedCarHistory(Car car, Customer customer, ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn,long duration) {
+    public RentedCarHistory(Car car, Customer customer, ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn) {
         this.car = car;
         this.customer = customer;
         this.dateOfRent = dateOfRent;
         this.dateOfReturn = dateOfReturn;
-        this.duration=duration;
     }
 }

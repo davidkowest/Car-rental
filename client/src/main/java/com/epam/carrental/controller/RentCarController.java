@@ -7,8 +7,9 @@ import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.gui.view.hanlders.impl.RentalUserInputHandler;
 import com.epam.carrental.models.AbstractSwingTableModel;
+import com.epam.carrental.services.CurrentRentalsService;
 import com.epam.carrental.services.CustomerService;
-import com.epam.carrental.services.RentedCarService;
+import com.epam.carrental.services.RentReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,9 @@ public class RentCarController {
     @Autowired
     private AbstractSwingTableModel<CustomerDTO> customerTableModel;
     @Autowired
-    private RentedCarService rentedCarService;
+    private RentReturnService rentReturnService;
+    @Autowired
+    private CurrentRentalsService currentRentalsService;
     @Autowired
     CustomerService customerService;
 
@@ -35,14 +38,14 @@ public class RentCarController {
     public void refreshTableView() {
 
         inBackgroundWorker.execute(
-                rentedCarService::findNotRented,
+                currentRentalsService::findNotRented,
                 availableCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
     public void save(RentedCarDTO rentedCarDTO) {
         inBackgroundWorker.execute(
-                () -> rentedCarService.rentCarForCustomer(rentedCarDTO),
+                () -> rentReturnService.rentCarForCustomer(rentedCarDTO),
                 this::refreshTableView,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }

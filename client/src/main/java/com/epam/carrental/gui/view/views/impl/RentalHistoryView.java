@@ -5,12 +5,11 @@ import com.epam.carrental.controller.RentalHistoryController;
 import com.epam.carrental.gui.utils.DateTimeAdapter;
 import com.epam.carrental.models.AbstractSwingTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 
-@Component
+@org.springframework.stereotype.Component
 public class RentalHistoryView extends TableTabView {
 
     @Autowired
@@ -26,24 +25,25 @@ public class RentalHistoryView extends TableTabView {
         super(rentedCarHistoryTableModel);
     }
 
+    private JToolBar toolBar = new JToolBar();
+
     @Override
     JToolBar prepareToolBar() {
-        JToolBar toolBar = new JToolBar();
 
-        JLabel dateFromLabel = new JLabel();
-        dateFromLabel.setText("Date from:");
-        toolBar.add(dateFromLabel, BorderLayout.NORTH);
-        toolBar.add(dateFromPicker.getComponent(), BorderLayout.CENTER);
-
-        JLabel dateToLabel = new JLabel();
-        dateToLabel.setText("Date to:");
-        toolBar.add(dateToLabel, BorderLayout.NORTH);
-        toolBar.add(dateToPicker.getComponent(), BorderLayout.CENTER);
+        addTimePicker("Date from:", dateFromPicker.getComponent());
+        addTimePicker("Date to:", dateToPicker.getComponent());
 
         JButton refreshTableButton = new JButton("Filter");
-        refreshTableButton.addActionListener(e ->  rentalHistoryController.filter(dateFromPicker.getDateTime(),dateToPicker.getDateTime()));
+        refreshTableButton.addActionListener(e -> rentalHistoryController.filter(dateFromPicker.getDateTime(), dateToPicker.getDateTime()));
         toolBar.add(refreshTableButton);
 
         return toolBar;
+    }
+
+    private void addTimePicker(String label, Component datePickerComponent) {
+        JLabel jLabel = new JLabel();
+        jLabel.setText(label);
+        toolBar.add(jLabel, BorderLayout.NORTH);
+        toolBar.add(datePickerComponent, BorderLayout.CENTER);
     }
 }

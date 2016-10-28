@@ -4,7 +4,8 @@ import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.models.RentedCarTableModel;
-import com.epam.carrental.services.RentedCarService;
+import com.epam.carrental.services.CurrentRentalsService;
+import com.epam.carrental.services.RentReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,10 @@ public class CurrentRentalsController {
     private BackgroundWorker inBackgroundWorker;
 
     @Autowired
-    private RentedCarService rentedCarService;
+    private CurrentRentalsService currentRentalsService;
+
+    @Autowired
+    private RentReturnService rentReturnService;
 
     @Autowired
     private RentedCarTableModel rentedCarTableModel;
@@ -26,7 +30,7 @@ public class CurrentRentalsController {
     public void refreshTableView() {
 
         inBackgroundWorker.execute(
-                rentedCarService::findCurrentRentals,
+                currentRentalsService::findCurrentRentals,
                 rentedCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
@@ -36,8 +40,10 @@ public class CurrentRentalsController {
             messageView.showErrorMessage("No rows selected!");
         }else {
             RentedCarDTO rentedCarDTO = rentedCarTableModel.getModel(selectedRow);
-            rentedCarService.returnRentedCar(rentedCarDTO);
-            refreshTableView();
+            inBackgroundWorker.execute(
+                    () ->  rentReturnService.returnRentedCar(rentedCarDTO),
+                    () -> refreshTableView(),
+                    e -> messageView.showErrorMessage(e.getCause().getMessage()));
         }
     }
 }

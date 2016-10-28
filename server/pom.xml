@@ -114,5 +114,9 @@
             <artifactId>spring-boot</artifactId>
             <version>${spring.boot}</version>
         </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+        </dependency>
     </dependencies>
 </project>

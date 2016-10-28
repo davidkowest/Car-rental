@@ -1,9 +1,6 @@
 package com.epam.carrental.config;
 
-import com.epam.carrental.services.CarService;
-import com.epam.carrental.services.CustomerService;
-import com.epam.carrental.services.RentedCarService;
-import com.epam.carrental.services.ServerInfo;
+import com.epam.carrental.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +24,13 @@ public class ServicesConfig {
     CustomerService customerService;
 
     @Autowired
-    RentedCarService rentedCarService;
+    RentReturnService rentReturnService;
+
+    @Autowired
+    CurrentRentalsService currentRentalsService;
+
+    @Autowired
+    RentalsHistoryService rentalsHistoryService;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -48,10 +51,17 @@ public class ServicesConfig {
         return serviceExporter(customerService,CustomerService.class);
     }
     @Bean
-    public SimpleHttpInvokerServiceExporter rentedCarServiceExporter() {
-        return serviceExporter(rentedCarService,RentedCarService.class);
+    public SimpleHttpInvokerServiceExporter rentReturnServiceExporter() {
+        return serviceExporter(rentReturnService,RentReturnService.class);
     }
-
+    @Bean
+    public SimpleHttpInvokerServiceExporter currentRentalsServiceExporter() {
+        return serviceExporter(currentRentalsService,CurrentRentalsService.class);
+    }
+    @Bean
+    public SimpleHttpInvokerServiceExporter rentalsHistoryServiceExporter() {
+        return serviceExporter(rentalsHistoryService,RentalsHistoryService.class);
+    }
     public SimpleHttpInvokerServiceExporter serviceExporter(Object service,Class<?> serviceInterface) {
         SimpleHttpInvokerServiceExporter exporter = new SimpleHttpInvokerServiceExporter();
         exporter.setService(service);

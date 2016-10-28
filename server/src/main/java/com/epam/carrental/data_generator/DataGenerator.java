@@ -4,18 +4,22 @@ import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.CustomerDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.services.CarService;
+import com.epam.carrental.services.CurrentRentalsService;
 import com.epam.carrental.services.CustomerService;
-import com.epam.carrental.services.RentedCarService;
+import com.epam.carrental.services.RentReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Component
+@Conditional(GenerateCondition.class)
 public class DataGenerator {
 
     @Autowired
@@ -31,7 +35,10 @@ public class DataGenerator {
     private CustomerService customerService;
 
     @Autowired
-    private RentedCarService rentedCarService;
+    private RentReturnService rentReturnService;
+
+    @Autowired
+    private CurrentRentalsService currentRentalsService;
 
     @Autowired
     private ZonedDateTimeGenerator zonedDateTimeGenerator;
@@ -48,6 +55,7 @@ public class DataGenerator {
     private List<CarDTO> availableCars;
     private List<CustomerDTO> customers;
 
+    @PostConstruct
     public void generateAndSaveData() {
         generateCarsAndCustomers();
         saveCarsAndCustomers();
@@ -74,7 +82,7 @@ public class DataGenerator {
                 ZonedDateTime returnedTime = zonedDateTimeGenerator.getTimeAfter(rentedTime);
                 if (returnedTime.isBefore(ZonedDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()))) {
                     rentCar(car, rentedTime);
-                    RentedCarDTO rentedCarFromDB = rentedCarService.findCurrentRentals().get(0);
+                    RentedCarDTO rentedCarFromDB = currentRentalsService.findCurrentRentals().get(0);
                     returnCar(rentedCarFromDB, returnedTime);
                 }
                 beginTime = returnedTime;
@@ -85,14 +93,13 @@ public class DataGenerator {
 
     private void returnCar(RentedCarDTO rentedCarFromDB, ZonedDateTime returnedTime) {
         currentTimeUtil.setCurrentTime(returnedTime);
-        rentedCarService.returnRentedCar(rentedCarFromDB);
-        rentedCarFromDB.setDateOfReturn(returnedTime);
+        rentReturnService.returnRentedCar(rentedCarFromDB);
     }
 
     private void rentCar(CarDTO car, ZonedDateTime rentedTime) {
         RentedCarDTO rentedCarDTO = new RentedCarDTO(car, getRandomCustomer());
         currentTimeUtil.setCurrentTime(rentedTime);
-        rentedCarService.rentCarForCustomer(rentedCarDTO);
+        rentReturnService.rentCarForCustomer(rentedCarDTO);
     }
 
     private CustomerDTO getRandomCustomer() {

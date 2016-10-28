@@ -42,6 +42,7 @@
         <lombock.version>1.16.10</lombock.version>
         <slf4j.version>1.7.21</slf4j.version>
         <sonar.version>3.0.2</sonar.version>
+        <easymock.version>3.4</easymock.version>
     </properties>
 
     <dependencyManagement>
@@ -92,7 +93,11 @@
                 <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>${easymock.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

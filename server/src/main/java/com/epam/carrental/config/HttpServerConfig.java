@@ -26,7 +26,16 @@ public class HttpServerConfig {
     SimpleHttpInvokerServiceExporter customerServiceExporter;
 
     @Autowired
-    SimpleHttpInvokerServiceExporter rentedCarServiceExporter;
+    SimpleHttpInvokerServiceExporter rentReturnServiceExporter;
+
+    @Autowired
+    SimpleHttpInvokerServiceExporter currentRentalsServiceExporter;
+
+    @Autowired
+    SimpleHttpInvokerServiceExporter rentalsHistoryServiceExporter;
+
+    @Value("${remote.port}")
+    private String port;
 
     @Value("${remote.service.info}")
     private String serviceInfoPath;
@@ -37,11 +46,14 @@ public class HttpServerConfig {
     @Value("${remote.service.customer}")
     private String customerServicePath;
 
-    @Value("${remote.port}")
-    private String port;
+    @Value("${remote.service.rentReturnCar}")
+    private String rentReturnServicePath;
 
-    @Value("${remote.service.rentedCar}")
-    private String rentedCarServicePath;
+    @Value("${remote.service.currentRentals}")
+    private String currentRentalsServicePath;
+
+    @Value("${remote.service.rentalHistory}")
+    private String rentalHistoryServicePath;
 
     @Bean
     public SimpleHttpServerFactoryBean serverFactory() {
@@ -49,7 +61,9 @@ public class HttpServerConfig {
         contexts.put("/" + serviceInfoPath, serverInfoServiceExporter);
         contexts.put("/" + carServicePath, carServiceExporter);
         contexts.put("/" + customerServicePath, customerServiceExporter);
-        contexts.put("/" + rentedCarServicePath, rentedCarServiceExporter);
+        contexts.put("/" + rentReturnServicePath, rentReturnServiceExporter);
+        contexts.put("/" + currentRentalsServicePath, currentRentalsServiceExporter);
+        contexts.put("/" + rentalHistoryServicePath, rentalsHistoryServiceExporter);
         SimpleHttpServerFactoryBean serverFactory = new SimpleHttpServerFactoryBean();
         serverFactory.setContexts(contexts);
         serverFactory.setPort(Integer.parseInt(port));

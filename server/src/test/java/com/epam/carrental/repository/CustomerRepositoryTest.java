@@ -30,7 +30,7 @@ public class CustomerRepositoryTest  extends AbstractTestNGSpringContextTests {
 
     @Test(expectedExceptions = { DataIntegrityViolationException.class})
     @Rollback(true)
-    public void savingTheSameCar() {
+    public void savingTheSameCustomer() {
         //arrange
         Customer customer=new Customer("Witold Trump","trump@wp.pl");
         //act

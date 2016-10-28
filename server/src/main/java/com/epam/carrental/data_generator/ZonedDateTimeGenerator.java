@@ -8,20 +8,15 @@ import java.time.*;
 @Component
 public class ZonedDateTimeGenerator {
 
-    @Value("${rented.time.min.sec}")
-    private long timeMin;
+    @Value("${rented.time.min.hours}")
+     Long timeMin;
 
-    @Value("${rented.time.max.sec}")
-    private long timeMax;
-
-    @Value("${rented.time.initial}")
-    private String timeInitial;
+    @Value("${rented.time.max.hours}")
+     Long timeMax;
 
     public ZonedDateTime getTimeAfter(ZonedDateTime beginTime) {
-        long beginTimeAsLong=beginTime.toEpochSecond();
-        beginTimeAsLong = beginTimeAsLong + (long) (Math.random() * (timeMax-timeMin));
+        long additionalTime = timeMin+(long) (Math.random() * (timeMax - timeMin));
 
-        Instant instant = Instant.ofEpochSecond(beginTimeAsLong);
-        return ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+        return beginTime.plusHours(additionalTime);
     }
 }
