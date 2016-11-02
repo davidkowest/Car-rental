@@ -1,9 +1,7 @@
 package com.epam.carrental.services;
 
 import com.epam.carrental.data_generator.CurrentTimeUtil;
-import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.RentedCarDTO;
-import com.epam.carrental.dto.RentedCarHistoryDTO;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
 import com.epam.carrental.entity.RentedCar;
@@ -14,36 +12,32 @@ import com.epam.carrental.repository.RentedCarHistoryRepository;
 import com.epam.carrental.repository.RentedCarRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Type;
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class RentReturnServiceImpl implements RentReturnService {
 
     @Autowired
-    private CarRepository carRepository;
+    CarRepository carRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    CustomerRepository customerRepository;
 
     @Autowired
-    private RentedCarRepository rentedCarRepository;
+    RentedCarRepository rentedCarRepository;
     @Autowired
-    private RentedCarHistoryRepository rentedCarHistoryRepository;
+    RentedCarHistoryRepository rentedCarHistoryRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
 
     @Autowired
-    private CurrentTimeUtil currentTimeUtil;
+    CurrentTimeUtil currentTimeUtil;
 
     @Override
     @Transactional

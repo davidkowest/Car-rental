@@ -78,26 +78,6 @@ public class RentedCarHistoryRepositoryTest  extends AbstractTestNGSpringContext
 
     }
 
-    @Test
-    @Rollback(true)
-    public void filterByDateOfRentAndDateOfReturnTest() {
-        //arrange
-        Car car=carRepository.findByRegistrationNumber("KR12345");
-        Customer customer=customerRepository.findByEmail("trump@wp.pl");
-        ZonedDateTime rentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 8, 10, 0), ZoneId.of("Europe/Warsaw"));
-        ZonedDateTime returningDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 19, 9, 0), ZoneId.of("Europe/Warsaw"));
-
-        RentedCarHistory rentedCarHistory=new RentedCarHistory(car,customer,rentingDate,returningDate);
-        rentedCarHistoryRepository.save(rentedCarHistory);
-
-        List<RentedCarHistory> expectedRentedCarHistory= Arrays.asList(rentedCarHistory);
-
-        //act
-        rentedCarHistoryRepository.save(rentedCarHistory);
-        List<RentedCarHistory> resultRentedCarHistory=rentedCarHistoryRepository.findByDateOfRentAndDateOfReturn(rentingDate,returningDate);
-
-        Assert.assertEquals(resultRentedCarHistory,expectedRentedCarHistory);
-    }
 
 
 }
