@@ -32,7 +32,6 @@ public class RentalHistoryServiceTest {
         rentalsHistoryServiceImp.modelMapper = modelMapper;
         rentalsHistoryServiceImp.rentedCarHistoryRepository = rentedCarHistoryRepositoryMock;
         this.rentalsHistoryService = rentalsHistoryServiceImp;
-        rentalsHistoryServiceImp.rentReturnDateFilter = new RentReturnDateFilter();
     }
 
     @Test(dataProvider = "provideRentedHistories")

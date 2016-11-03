@@ -14,30 +14,31 @@ import static org.testng.Assert.assertEquals;
 public class RentReturnDateFilterTest {
 
     @Test(dataProvider = "pickDates")
-    public void testCarHistoryMatchingConditions(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn, boolean expected) {
+    public void testCarHistoryMatchingConditions(RentedCarHistory history, boolean expected) {
         //arrange
-        RentReturnDateFilter rentReturnDateFilter = new RentReturnDateFilter();
-        RentedCarHistory rentedCarHistory = getRentedCarHistory();
+        ZonedDateTime filterDateOfRent = getTime("2015-08-15T10:00:00Z");
+        ZonedDateTime filterDateOfReturn = getTime("2015-08-30T10:10:00Z");
+
+        RentReturnDateFilter rentReturnDateFilter = new RentReturnDateFilter(filterDateOfRent,filterDateOfReturn);
 
         //act
-        Predicate<RentedCarHistory> rentedCarHistoryPredicate = rentReturnDateFilter.filterBy(dateOfRent, dateOfReturn);
+        boolean rentedCarHistoryPredicate = rentReturnDateFilter.test(history);
 
         //assert
-        assertEquals(rentedCarHistoryPredicate.test(rentedCarHistory),expected, "Test "+dateOfRent+ " as rent and " + dateOfReturn+ " as return date");
+        assertEquals(rentedCarHistoryPredicate,expected, "Test history with dateOfRent:  "+ history.getDateOfRent()+ "and dateOfReturn: "+history.getDateOfReturn());
     }
 
     @DataProvider
     public Object[][] pickDates() {
         return new Object[][]{
-                {getTime("2015-08-16T15:23:01Z"), getTime("2015-08-25T15:23:01Z"),true},
-                {getTime("2015-08-16T15:22:01Z"), getTime("2015-08-25T15:24:01Z"),true},
-                {getTime("2015-08-16T15:23:00Z"), getTime("2015-08-25T15:23:02Z"),true},
-                {getTime("2015-07-10T10:00:00Z"), getTime("2015-09-23T11:00:00Z"),true},
-                {getTime("2015-08-16T15:23:02Z"), getTime("2015-08-25T15:23:00Z"),false}, // frames' dates are only one second differ from history's dates
-                {getTime("2015-09-10T15:22:00Z"), getTime("2015-09-25T15:24:01Z"),false}, // car is rented and returned after picked dates
-                {getTime("2015-07-15T15:22:00Z"), getTime("2015-08-22T10:10:00Z"),false}, // car is rented before picked date though returned before picked date
-                {getTime("2015-08-18T10:20:00Z"), getTime("2015-08-26T10:10:00Z"),false}, // car is rented after picked date but not returned till picked date
-                {getTime("2015-08-26T10:10:00Z"), getTime("2015-08-18T10:20:00Z"),false}, // switch dateOfRent and dateOfReturn
+                {getHistory(getTime("2015-08-20T10:10:00Z"), getTime("2015-08-25T10:00:00Z")),true},// rented after picked dateOfRent, return before picked dateOfReturn
+                {getHistory(getTime("2015-08-10T10:00:00Z"), getTime("2015-08-25T10:00:00Z")),true},// rented before picked dateOfRent, return before picked dateOfReturn
+                {getHistory(getTime("2015-08-25T10:00:00Z"), getTime("2015-09-10T10:00:00Z")),true},// rented before picked dateOfReturn, return after picked dateOfReturn
+                {getHistory(getTime("2015-07-10T10:00:00Z"), getTime("2015-09-10T10:00:00Z")),true}, // rented before picked dateOfRent, return after picked dateOfReturn
+                {getHistory(getTime("2015-08-10T10:00:00Z"), getTime("2015-08-12T10:00:00Z")),false}, // rented and return before picked period
+                {getHistory(getTime("2015-09-10T10:10:00Z"), getTime("2015-09-25T10:00:00Z")),false}, // rented and return after picked period
+                {getHistory(getTime("2015-08-15T10:00:00Z"), getTime("2015-08-30T10:10:00Z")),true}, // rented and return dates are like in filter datePicker
+
         };
     }
 
@@ -45,11 +46,9 @@ public class RentReturnDateFilterTest {
         return ZonedDateTime.parse(time);
     }
 
-    private RentedCarHistory getRentedCarHistory() {
+    private RentedCarHistory getHistory(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn) {
         return new RentedCarHistory(
                 new Car("Opel Vectra", "o095ey"),
-                new Customer("White Rabbit", "white@gmail.com"),
-                getTime("2015-08-16T15:23:01Z"),
-                getTime("2015-08-25T15:23:01Z"));
+                new Customer("White Rabbit", "white@gmail.com"),dateOfRent,dateOfReturn);
     }
 }

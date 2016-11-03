@@ -6,14 +6,19 @@ import org.springframework.stereotype.Component;
 import java.time.ZonedDateTime;
 import java.util.function.Predicate;
 
-@Component
-public class RentReturnDateFilter {
+public class RentReturnDateFilter implements Predicate<RentedCarHistory> {
+    private ZonedDateTime dateOfRent;
+    private ZonedDateTime dateOfReturn;
 
-    public  Predicate<RentedCarHistory> filterBy(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn){
-
-        return rentedCarHistory -> (rentedCarHistory.getDateOfRent().isAfter(dateOfRent)
-                || rentedCarHistory.getDateOfRent().equals(dateOfRent))
-                && (rentedCarHistory.getDateOfReturn().isBefore(dateOfReturn)
-                || (rentedCarHistory.getDateOfReturn().equals(dateOfReturn)));
+    public RentReturnDateFilter(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn) {
+        this.dateOfRent = dateOfRent;
+        this.dateOfReturn = dateOfReturn;
     }
+
+    @Override
+    public boolean test(RentedCarHistory rentedCarHistory) {
+        return rentedCarHistory.getDateOfRent().isBefore(dateOfReturn) && rentedCarHistory.getDateOfReturn().isAfter(dateOfRent);
+    }
+
+
 }

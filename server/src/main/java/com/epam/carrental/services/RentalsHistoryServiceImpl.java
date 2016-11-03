@@ -21,14 +21,13 @@ public class RentalsHistoryServiceImpl implements RentalsHistoryService {
     @Autowired
     ModelMapper modelMapper;
 
-    @Autowired
-    RentReturnDateFilter rentReturnDateFilter;
-
     @Override
     public List<RentedCarHistoryDTO> findByDateOfRentAndDateOfReturn(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn) {
 
+        RentReturnDateFilter rentReturnDateFilter=new RentReturnDateFilter(dateOfRent,dateOfReturn);
+
         return rentedCarHistoryRepository.findAll().stream()
-                .filter(rentReturnDateFilter.filterBy(dateOfRent,dateOfReturn))
+                .filter(rentReturnDateFilter::test)
                 .map(rentedCarHistory -> modelMapper.map(rentedCarHistory, RentedCarHistoryDTO.class))
                 .collect(Collectors.toList());
     }
