@@ -3,15 +3,13 @@ package com.epam.carrental.config;
 import com.epam.carrental.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter;
 
 @Configuration
 @PropertySource({"classpath:application.properties","classpath:dataGenerator.properties"})
 @ComponentScan (basePackages = {"com.epam.carrental"})
+@EnableAspectJAutoProxy
 public class ServicesConfig {
 
     @Autowired
@@ -63,7 +61,7 @@ public class ServicesConfig {
         return serviceExporter(rentalsHistoryService,RentalsHistoryService.class);
     }
     public SimpleHttpInvokerServiceExporter serviceExporter(Object service,Class<?> serviceInterface) {
-        SimpleHttpInvokerServiceExporter exporter = new SimpleHttpInvokerServiceExporter();
+        SimpleHttpInvokerServiceExporter exporter = new CustomSimpleHttpInvokerServiceExporter();
         exporter.setService(service);
         exporter.setServiceInterface(serviceInterface);
         return exporter;

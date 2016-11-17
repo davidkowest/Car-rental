@@ -12,4 +12,5 @@ import java.time.ZonedDateTime;
 public class ServerInfoDTO implements Serializable {
     private InetAddress ipAddress;
     private ZonedDateTime time;
+    private String tenantId;
 }

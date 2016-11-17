@@ -1,17 +1,23 @@
 package com.epam.carrental.config;
 
 import com.epam.carrental.services.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
+import org.springframework.remoting.httpinvoker.SimpleHttpInvokerRequestExecutor;
 
 @Configuration
 @PropertySource({"classpath:application.properties","labels.properties"})
 @ComponentScan(basePackages = {"com.epam.carrental"})
 public class HttpInvokerConfig {
+
+
+    @Autowired
+    SimpleHttpInvokerRequestExecutor customSimpleHttpInvokerRequestExecutor;
 
     @Value("${remote.protocol}://${remote.ip}:${remote.port}")
     private String url;
@@ -20,6 +26,7 @@ public class HttpInvokerConfig {
         HttpInvokerProxyFactoryBean proxy = new HttpInvokerProxyFactoryBean();
         proxy.setServiceUrl(url + "/" + path);
         proxy.setServiceInterface(serviceInterface);
+        proxy.setHttpInvokerRequestExecutor(customSimpleHttpInvokerRequestExecutor);
         return proxy;
     }
 

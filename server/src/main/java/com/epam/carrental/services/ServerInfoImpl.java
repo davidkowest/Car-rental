@@ -1,5 +1,6 @@
 package com.epam.carrental.services;
 
+import com.epam.carrental.utils.Tenant;
 import com.epam.carrental.dto.ServerInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,13 +17,13 @@ public class ServerInfoImpl implements ServerInfo {
         ZonedDateTime time = getCurrentTime();
         InetAddress ipAddress = getIPAddress();
 
-        ServerInfoDTO serverInfoDTO = new ServerInfoDTO(ipAddress,time);
+        ServerInfoDTO serverInfoDTO = new ServerInfoDTO(ipAddress,time, Tenant.getId());
 
-        try {
+       /* try {
             Thread.sleep(10000L);
         } catch (InterruptedException e) {
             log.error(e.toString());
-        }
+        }*/
         return serverInfoDTO;
     }
 

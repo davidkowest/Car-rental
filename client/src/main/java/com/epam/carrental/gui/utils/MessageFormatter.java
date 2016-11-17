@@ -10,6 +10,7 @@ public class MessageFormatter {
     public static String prepareMessageFromServerInfoDTO(ServerInfoDTO serverInfoDTO) {
         String time = serverInfoDTO.getTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
         String ipAddress = serverInfoDTO.getIpAddress().getHostAddress();
-        return "Server returned " + ipAddress + " IP address. Server time is " + time;
+        String tenantId=serverInfoDTO.getTenantId();
+        return tenantId+" @ [" + ipAddress + "], time: [" + time+"]";
     }
 }
