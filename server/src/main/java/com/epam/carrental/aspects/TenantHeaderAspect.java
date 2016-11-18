@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -13,9 +14,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TenantHeaderAspect {
 
-    @Before("execution(* com.epam.carrental.services.ServerInfo.*(..))")
+    @Autowired
+    private Tenant tenant;
+
+    @Before("@annotation(RequiresTenant)")
     public void afterThrowingInExporter(JoinPoint jp) {
-        if(Tenant.getId()==null){
+        if(tenant.id.get()==null){
             throw new IllegalArgumentException("Tenant not specified for this transaction");
         }
     }
