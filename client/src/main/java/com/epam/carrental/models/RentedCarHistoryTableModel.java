@@ -1,6 +1,5 @@
 package com.epam.carrental.models;
 
-import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.dto.RentedCarHistoryDTO;
 import org.springframework.stereotype.Component;
 

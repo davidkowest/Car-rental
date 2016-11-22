@@ -34,6 +34,9 @@ public class HttpServerConfig {
     @Autowired
     SimpleHttpInvokerServiceExporter rentalsHistoryServiceExporter;
 
+    @Autowired
+    SimpleHttpInvokerServiceExporter rentalClassServiceExporter;
+
     @Value("${remote.port}")
     private String port;
 
@@ -55,6 +58,9 @@ public class HttpServerConfig {
     @Value("${remote.service.rentalHistory}")
     private String rentalHistoryServicePath;
 
+    @Value("${remote.service.rentalClass}")
+    private String rentalClassServicePath;
+
     @Bean
     public SimpleHttpServerFactoryBean serverFactory() {
         Map<String, HttpHandler> contexts = new HashMap<>();
@@ -64,6 +70,7 @@ public class HttpServerConfig {
         contexts.put("/" + rentReturnServicePath, rentReturnServiceExporter);
         contexts.put("/" + currentRentalsServicePath, currentRentalsServiceExporter);
         contexts.put("/" + rentalHistoryServicePath, rentalsHistoryServiceExporter);
+        contexts.put("/" + rentalClassServicePath, rentalClassServiceExporter);
         SimpleHttpServerFactoryBean serverFactory = new SimpleHttpServerFactoryBean();
         serverFactory.setContexts(contexts);
         serverFactory.setPort(Integer.parseInt(port));

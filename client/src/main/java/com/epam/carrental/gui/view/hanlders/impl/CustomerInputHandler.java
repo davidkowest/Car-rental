@@ -28,9 +28,6 @@ public class CustomerInputHandler implements UserInputHandler {
     @Autowired
     private MessageView messageView;
 
-    public CustomerInputHandler() {
-    }
-
     public void handleInput() {
         JTextField userNameField = new JTextField();
         JTextField userEmailField = new JTextField();

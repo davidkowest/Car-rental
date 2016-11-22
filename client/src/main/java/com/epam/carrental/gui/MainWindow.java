@@ -29,6 +29,9 @@ public class MainWindow {
     @Autowired
     private TableTabView rentalHistoryView;
 
+    @Autowired
+    private TableTabView rentalClassView;
+
     @PostConstruct
     public void init() {
         SwingUtilities.invokeLater(this::initGUI);
@@ -45,6 +48,7 @@ public class MainWindow {
         jTabbedPane.addTab("Rent car", null, rentCarView.initView(), "Rent car");
         jTabbedPane.addTab("Current rentals", null, currentRentalsView.initView(), "Current rentals");
         jTabbedPane.addTab("Rental history", null, rentalHistoryView.initView(), "Rental history");
+        jTabbedPane.addTab("Rental classes", null, rentalClassView.initView(), "Rental classes");
         mainFrame.add(jTabbedPane);
         mainFrame.pack();
         //set component relativeTo null so that window will be shown in the center of the screen

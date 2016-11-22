@@ -21,11 +21,11 @@ public class RentalHistoryView extends TableTabView {
     @Autowired
     DateTimeAdapter dateToPicker;
 
+    private JToolBar toolBar = new JToolBar();
+
     public RentalHistoryView(AbstractSwingTableModel rentedCarHistoryTableModel) {
         super(rentedCarHistoryTableModel);
     }
-
-    private JToolBar toolBar = new JToolBar();
 
     @Override
     JToolBar prepareToolBar() {

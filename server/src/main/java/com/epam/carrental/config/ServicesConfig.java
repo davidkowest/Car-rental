@@ -30,6 +30,9 @@ public class ServicesConfig {
     @Autowired
     RentalsHistoryService rentalsHistoryService;
 
+    @Autowired
+    RentalClassService rentalClassService;
+
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper=new ModelMapper();
@@ -60,6 +63,12 @@ public class ServicesConfig {
     public SimpleHttpInvokerServiceExporter rentalsHistoryServiceExporter() {
         return serviceExporter(rentalsHistoryService,RentalsHistoryService.class);
     }
+
+    @Bean
+    public SimpleHttpInvokerServiceExporter rentalClassServiceExporter() {
+        return serviceExporter(rentalClassService, RentalClassService.class);
+    }
+
     public SimpleHttpInvokerServiceExporter serviceExporter(Object service,Class<?> serviceInterface) {
         SimpleHttpInvokerServiceExporter exporter = new CustomSimpleHttpInvokerServiceExporter();
         exporter.setService(service);

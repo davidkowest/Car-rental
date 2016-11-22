@@ -4,5 +4,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Tenant {
-    public final ThreadLocal<String> id = new ThreadLocal<String>();
+    public final ThreadLocal<String> id = new ThreadLocal<>();
 }

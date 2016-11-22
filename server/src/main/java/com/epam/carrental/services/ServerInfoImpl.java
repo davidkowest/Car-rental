@@ -23,14 +23,12 @@ public class ServerInfoImpl implements ServerInfo {
         ZonedDateTime time = getCurrentTime();
         InetAddress ipAddress = getIPAddress();
 
-        ServerInfoDTO serverInfoDTO = new ServerInfoDTO(ipAddress,time, tenant.id.get());
-
        /* try {
             Thread.sleep(10000L);
         } catch (InterruptedException e) {
             log.error(e.toString());
         }*/
-        return serverInfoDTO;
+        return new ServerInfoDTO(ipAddress,time, tenant.id.get());
     }
 
     private ZonedDateTime getCurrentTime() {

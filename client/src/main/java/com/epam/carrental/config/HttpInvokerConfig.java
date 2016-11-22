@@ -59,4 +59,9 @@ public class HttpInvokerConfig {
     public HttpInvokerProxyFactoryBean rentalHistoryService(@Value("${remote.service.rentalHistory}") String rentalHistoryServicePath) {
         return httpInvokerProxyFactoryBean(rentalHistoryServicePath,RentalsHistoryService.class);
     }
+
+    @Bean
+    public HttpInvokerProxyFactoryBean rentalClassService(@Value("${remote.service.rentalClass}") String rentalClassServicePath) {
+        return httpInvokerProxyFactoryBean(rentalClassServicePath,RentalClassService.class);
+    }
 }

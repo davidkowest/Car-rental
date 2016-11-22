@@ -2,12 +2,12 @@ package com.epam.carrental.utils;
 
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
+import com.epam.carrental.entity.RentalClass;
 import com.epam.carrental.entity.RentedCarHistory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
-import java.util.function.Predicate;
 
 import static org.testng.Assert.assertEquals;
 
@@ -47,8 +47,9 @@ public class RentReturnDateFilterTest {
     }
 
     private RentedCarHistory getHistory(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn) {
+        RentalClass rentalClass=new RentalClass("Economy",2.45f);
         return new RentedCarHistory(
-                new Car("Opel Vectra", "o095ey"),
+                new Car("Opel Vectra", "o095ey",rentalClass),
                 new Customer("White Rabbit", "white@gmail.com"),dateOfRent,dateOfReturn);
     }
 }

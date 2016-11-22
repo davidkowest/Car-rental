@@ -17,5 +17,5 @@ public interface CarRepository extends CrudRepository<Car, Long> {
                 .stream()
                 .filter(c -> c.getRegistrationNumber().equals(registrationNumber))
                 .findFirst().orElse(null);
-    };
+    }
 }

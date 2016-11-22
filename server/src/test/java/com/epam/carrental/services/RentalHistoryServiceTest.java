@@ -3,9 +3,9 @@ package com.epam.carrental.services;
 import com.epam.carrental.dto.RentedCarHistoryDTO;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
+import com.epam.carrental.entity.RentalClass;
 import com.epam.carrental.entity.RentedCarHistory;
 import com.epam.carrental.repository.RentedCarHistoryRepository;
-import com.epam.carrental.utils.RentReturnDateFilter;
 import org.easymock.EasyMock;
 import org.modelmapper.ModelMapper;
 import org.testng.Assert;
@@ -79,7 +79,8 @@ public class RentalHistoryServiceTest {
     }
 
     private Car getCar() {
-        return new Car("VW GOL IV", "KR12345");
+        RentalClass rentalClass=new RentalClass("Economy",2.45f);
+        return new Car("VW GOL IV", "KR12345",rentalClass);
     }
 
     private Customer getCustomer() {

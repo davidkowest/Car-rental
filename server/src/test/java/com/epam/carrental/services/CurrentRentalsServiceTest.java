@@ -1,11 +1,14 @@
 package com.epam.carrental.services;
 
 import com.epam.carrental.dto.CarDTO;
+import com.epam.carrental.dto.RentalClassDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
+import com.epam.carrental.entity.RentalClass;
 import com.epam.carrental.entity.RentedCar;
 import com.epam.carrental.repository.CarRepository;
+import com.epam.carrental.repository.RentalClassRepository;
 import com.epam.carrental.repository.RentedCarRepository;
 import org.easymock.EasyMock;
 import org.modelmapper.ModelMapper;
@@ -26,6 +29,7 @@ public class CurrentRentalsServiceTest {
 
     private CurrentRentalsService currentRentalsService;
     private CarRepository carRepositoryMock;
+    private RentalClassRepository rentalClassRepositoryMock;
     private RentedCarRepository rentedCarRepositoryMock;
     private ModelMapper modelMapper=new ModelMapper();
 
@@ -34,17 +38,22 @@ public class CurrentRentalsServiceTest {
         CurrentRentalsServiceImpl currentRentalsServiceImpl = new CurrentRentalsServiceImpl();
         this.carRepositoryMock=createStrictMock(CarRepository.class);
         this.rentedCarRepositoryMock=createStrictMock(RentedCarRepository.class);
+        this.rentalClassRepositoryMock=createStrictMock(RentalClassRepository.class);
         currentRentalsServiceImpl.modelMapper=modelMapper;
         currentRentalsServiceImpl.carRepository=carRepositoryMock;
         currentRentalsServiceImpl.rentedCarRepository=rentedCarRepositoryMock;
+        currentRentalsServiceImpl.rentalClassRepository=rentalClassRepositoryMock;
         this.currentRentalsService=currentRentalsServiceImpl;
     }
 
     @Test
-    public void testFindNotRented(){
+    public void findNotRentedInClassEconomyTest(){
         //arrange
-        Car rentedCar=new Car ("VW GOL IV","KR12345");
-        Car notRentedCar=new Car ("VW GOL V","KR12346");
+        RentalClassDTO rentalClassDTO=new RentalClassDTO("Economy",2.45f);
+        RentalClass rentalClass=modelMapper.map(rentalClassDTO,RentalClass.class);
+
+        Car rentedCar=new Car ("VW GOL IV","KR12345",rentalClass);
+        Car notRentedCar=new Car ("VW GOL V","KR12346",rentalClass);
         CarDTO notRentedCarDTO=modelMapper.map(notRentedCar,CarDTO.class);
 
         Customer customer=new Customer("Adam Malysz","adam.malysz@gmail.com");
@@ -56,15 +65,18 @@ public class CurrentRentalsServiceTest {
         replay(rentedCarRepositoryMock);
         EasyMock.expect(carRepositoryMock.findAll()).andReturn(Arrays.asList(rentedCar,notRentedCar));
         replay(carRepositoryMock);
+        EasyMock.expect(rentalClassRepositoryMock.findByName("Economy")).andReturn(rentalClass);
+        replay(rentalClassRepositoryMock);
 
         List<CarDTO> expectedNotRentedCarList=Arrays.asList(notRentedCarDTO);
 
         //act
-        List<CarDTO> resultNotRentedCarList=currentRentalsService.findNotRented();
+        List<CarDTO> resultNotRentedCarList=currentRentalsService.findNotRentedInClass(rentalClassDTO);
 
         //assert
         verify(carRepositoryMock);
         verify(rentedCarRepositoryMock);
+        verify(rentalClassRepositoryMock);
         Assert.assertEquals(resultNotRentedCarList,expectedNotRentedCarList);
     }
 
@@ -72,7 +84,8 @@ public class CurrentRentalsServiceTest {
     @Test
     public void testFindCurrentRentals()  {
         //arrange
-        Car rentedCar=new Car ("VW GOL IV","KR12345");
+        RentalClass rentalClass=new RentalClass("Economy",2.45f);
+        Car rentedCar=new Car ("VW GOL IV","KR12345",rentalClass);
         Customer customer=new Customer("Adam Malysz","adam.malysz@gmail.com");
         ZonedDateTime rentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 9, 0), ZoneId.of("Europe/Warsaw"));
 
@@ -91,6 +104,15 @@ public class CurrentRentalsServiceTest {
         //assert
         verify(rentedCarRepositoryMock);
         Assert.assertEquals(resultRentedCarList,expectedRentedCarsList);
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class})
+    public void findNotRentedInNonExistingClassTest() {
+        //arrange
+        Car rentedCar=new Car ("VW GOL IV","KR12345",null);
+
+        //act
+        List<RentedCarDTO> resultRentedCarList=currentRentalsService.findCurrentRentals();
     }
 
 }

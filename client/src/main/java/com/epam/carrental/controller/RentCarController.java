@@ -2,6 +2,7 @@ package com.epam.carrental.controller;
 
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.CustomerDTO;
+import com.epam.carrental.dto.RentalClassDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
@@ -20,7 +21,6 @@ public class RentCarController {
     private BackgroundWorker inBackgroundWorker;
     @Autowired
     private MessageView messageView;
-
     @Autowired
     private AbstractSwingTableModel<CarDTO> availableCarTableModel;
     @Autowired
@@ -30,15 +30,13 @@ public class RentCarController {
     @Autowired
     private CurrentRentalsService currentRentalsService;
     @Autowired
-    CustomerService customerService;
-
+    private CustomerService customerService;
     @Autowired
     private RentalUserInputHandler rentalUserInputHandler;
 
-    public void refreshTableView() {
-
+    public void refreshTableView(RentalClassDTO rentalClassDTO) {
         inBackgroundWorker.execute(
-                currentRentalsService::findNotRented,
+                () -> currentRentalsService.findNotRentedInClass(rentalClassDTO),
                 availableCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
@@ -46,7 +44,7 @@ public class RentCarController {
     public void save(RentedCarDTO rentedCarDTO) {
         inBackgroundWorker.execute(
                 () -> rentReturnService.rentCarForCustomer(rentedCarDTO),
-                this::refreshTableView,
+                () -> refreshTableView(rentedCarDTO.getCar().getRentalClass()),
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 

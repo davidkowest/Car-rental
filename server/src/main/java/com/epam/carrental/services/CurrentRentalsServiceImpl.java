@@ -1,10 +1,13 @@
 package com.epam.carrental.services;
 
 import com.epam.carrental.dto.CarDTO;
+import com.epam.carrental.dto.RentalClassDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.entity.Car;
+import com.epam.carrental.entity.RentalClass;
 import com.epam.carrental.entity.RentedCar;
 import com.epam.carrental.repository.CarRepository;
+import com.epam.carrental.repository.RentalClassRepository;
 import com.epam.carrental.repository.RentedCarRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -22,18 +25,28 @@ public class CurrentRentalsServiceImpl implements CurrentRentalsService {
     CarRepository carRepository;
 
     @Autowired
+    RentalClassRepository rentalClassRepository;
+
+    @Autowired
     RentedCarRepository rentedCarRepository;
 
     @Autowired
     ModelMapper modelMapper;
 
     @Override
-    public List<CarDTO> findNotRented() {
+    public List<CarDTO> findNotRentedInClass(RentalClassDTO rentalClassDTO) {
+
+        if(rentalClassDTO==null){
+            throw new IllegalArgumentException("Rental class should be specified before");
+        }
+
+        RentalClass rentalClass=rentalClassRepository.findByName(rentalClassDTO.getName());
         List<Car> rentedCarList = rentedCarRepository.findAll().stream().map(RentedCar::getCar).collect(Collectors.toList());
 
         return carRepository.findAll()
                 .stream()
                 .filter(car -> !rentedCarList.contains(car))
+                .filter(car -> car.getRentalClass().equals(rentalClass))
                 .map(car -> modelMapper.map(car, CarDTO.class))
                 .collect(Collectors.toList());
     }

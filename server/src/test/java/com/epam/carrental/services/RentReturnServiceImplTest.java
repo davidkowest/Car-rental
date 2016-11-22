@@ -4,10 +4,7 @@ import com.epam.carrental.data_generator.CurrentTimeUtil;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.CustomerDTO;
 import com.epam.carrental.dto.RentedCarDTO;
-import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.Customer;
-import com.epam.carrental.entity.RentedCar;
-import com.epam.carrental.entity.RentedCarHistory;
+import com.epam.carrental.entity.*;
 import com.epam.carrental.repository.CarRepository;
 import com.epam.carrental.repository.CustomerRepository;
 import com.epam.carrental.repository.RentedCarHistoryRepository;
@@ -39,7 +36,8 @@ public class RentReturnServiceImplTest {
 
     @BeforeMethod
     public void setUp(){
-        this.car=new Car ("VW GOL IV","KR12345");
+        RentalClass rentalClass=new RentalClass("Economy",2.45f);
+        this.car=new Car ("VW GOL IV","KR12345",rentalClass);
         this.customer=new Customer("Adam Malysz","adam.malysz@gmail.com");
         this.dateOfRent=ZonedDateTime.of(LocalDateTime.of(2016, 10, 8, 10, 0), ZoneId.of("Europe/Warsaw"));
 

@@ -1,7 +1,6 @@
 package com.epam.carrental.repository;
 
 import com.epam.carrental.config.DatabaseConfig;
-import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.RentalClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,10 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @ContextConfiguration(classes = {DatabaseConfig.class})
-public class CarRepositoryTest  extends AbstractTransactionalTestNGSpringContextTests {
-
-    @Autowired
-    private CarRepository carRepository;
+public class RentalClassRepositoryTest  extends AbstractTransactionalTestNGSpringContextTests {
 
     @Autowired
     private RentalClassRepository rentalClassRepository;
@@ -23,17 +19,14 @@ public class CarRepositoryTest  extends AbstractTransactionalTestNGSpringContext
     public void setUp() {
         RentalClass rentalClass=new RentalClass("Economy",2.45f);
         rentalClassRepository.save(rentalClass);
-
-        Car car = new Car("VW GOLF 4", "KR12345",rentalClass);
-        carRepository.save(car);
     }
 
+
     @Test(expectedExceptions = { DataIntegrityViolationException.class})
-    public void savingTheSameCar() {
+    public void savingExistingRentalClass() {
         //arrange
-        RentalClass rentalClass=rentalClassRepository.findByName("Economy");
-        Car car = new Car("VW GOLF 5", "KR12345",rentalClass);
+        RentalClass rentalClass=new RentalClass("Economy",2.45f);
         //act
-        carRepository.save(car);
+        rentalClassRepository.save(rentalClass);
     }
 }

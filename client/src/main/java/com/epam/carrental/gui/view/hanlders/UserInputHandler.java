@@ -12,4 +12,12 @@ public interface UserInputHandler {
         panel.add(field, BorderLayout.CENTER);
         return panel;
     }
+
+    default JPanel prepareComboBoxPanel(JComboBox comboBox, String name) {
+        JLabel label = new JLabel(name);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(comboBox, BorderLayout.CENTER);
+        return panel;
+    }
 }

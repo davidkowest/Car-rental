@@ -4,6 +4,7 @@ package com.epam.carrental.repository;
 import com.epam.carrental.config.DatabaseConfig;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
+import com.epam.carrental.entity.RentalClass;
 import com.epam.carrental.entity.RentedCar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,9 +30,15 @@ public class RentedCarRepositoryTest extends AbstractTransactionalTestNGSpringCo
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private RentalClassRepository rentalClassRepository;
+
     @BeforeMethod
     public void setUp() {
-        Car car = new Car("VW GOLF 4", "KR12345");
+        RentalClass rentalClass=new RentalClass("Economy",2.45f);
+        rentalClassRepository.save(rentalClass);
+
+        Car car = new Car("VW GOLF 4", "KR12345",rentalClass);
         carRepository.save(car);
 
         Customer customer = new Customer("Tom Cruse", "tom.cruse@wp.pl");

@@ -12,4 +12,5 @@ public class CarDTO implements Serializable {
 
     private String model;
     private String registrationNumber;
+    private RentalClassDTO rentalClass;
 }

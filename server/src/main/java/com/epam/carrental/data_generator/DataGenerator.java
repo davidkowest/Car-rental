@@ -2,11 +2,9 @@ package com.epam.carrental.data_generator;
 
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.CustomerDTO;
+import com.epam.carrental.dto.RentalClassDTO;
 import com.epam.carrental.dto.RentedCarDTO;
-import com.epam.carrental.services.CarService;
-import com.epam.carrental.services.CurrentRentalsService;
-import com.epam.carrental.services.CustomerService;
-import com.epam.carrental.services.RentReturnService;
+import com.epam.carrental.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Conditional;
@@ -23,10 +21,16 @@ import java.util.List;
 public class DataGenerator {
 
     @Autowired
+    ClassGenerator classGenerator;
+
+    @Autowired
     private CarGenerator carGenerator;
 
     @Autowired
     private CustomerGenerator customerGenerator;
+
+    @Autowired
+    RentalClassService rentalClassService;
 
     @Autowired
     private CarService carService;
@@ -52,22 +56,25 @@ public class DataGenerator {
     @Value("${rented.time.initial}")
     private String timeInitial;
 
+    private List<RentalClassDTO> rentalClasses;
     private List<CarDTO> availableCars;
     private List<CustomerDTO> customers;
 
     @PostConstruct
     public void generateAndSaveData() {
-        generateCarsAndCustomers();
-        saveCarsAndCustomers();
+        generateInitialData();
+        saveInitialData();
         generateAndSaveRentalHistory();
     }
 
-    private void generateCarsAndCustomers() {
-        this.availableCars = carGenerator.generateCars();
+    private void generateInitialData() {
+        this.rentalClasses = classGenerator.generateRentalClasses();
+        this.availableCars = carGenerator.generateCars(rentalClasses);
         this.customers = customerGenerator.generateCustomers();
     }
 
-    private void saveCarsAndCustomers() {
+    private void saveInitialData() {
+        this.rentalClasses.forEach(rentalClassService::create);
         this.availableCars.forEach(carService::create);
         this.customers.forEach(customerService::create);
     }

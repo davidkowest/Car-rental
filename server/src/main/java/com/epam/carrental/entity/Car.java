@@ -17,9 +17,13 @@ public class Car {
     private String model;
     @Column(unique = true, nullable = false)
     private String registrationNumber;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private RentalClass rentalClass;
 
-    public Car(String model,String registrationNumber){
+    public Car(String model,String registrationNumber,RentalClass rentalClass){
         this.model=model;
         this.registrationNumber=registrationNumber;
+        this.rentalClass=rentalClass;
     }
 }

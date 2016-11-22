@@ -19,7 +19,7 @@ public class CustomSimpleHttpInvokerServiceExporter extends SimpleHttpInvokerSer
     protected RemoteInvocation readRemoteInvocation(HttpExchange exchange) throws IOException, ClassNotFoundException {
 
         List<String> headers = exchange.getRequestHeaders().get(Headers.TENANT_ID_HEADER);
-        if (headers != null && headers.size() > 0) {
+        if (headers != null && !headers.isEmpty()) {
             tenant.id.set(headers.get(0));
         } else {
             tenant.id.remove();

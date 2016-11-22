@@ -42,7 +42,7 @@ public class CurrentRentalsController {
             RentedCarDTO rentedCarDTO = rentedCarTableModel.getModel(selectedRow);
             inBackgroundWorker.execute(
                     () ->  rentReturnService.returnRentedCar(rentedCarDTO),
-                    () -> refreshTableView(),
+                    this::refreshTableView,
                     e -> messageView.showErrorMessage(e.getCause().getMessage()));
         }
     }
