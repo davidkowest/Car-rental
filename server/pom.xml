@@ -36,6 +36,7 @@
         <modelmapper.version>0.7.6</modelmapper.version>
         <hsqldb.version>2.3.4</hsqldb.version>
         <spring.boot>1.4.0.RELEASE</spring.boot>
+        <guava.version>19.0</guava.version>
     </properties>
 
     <dependencies>
@@ -121,6 +122,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 </project>

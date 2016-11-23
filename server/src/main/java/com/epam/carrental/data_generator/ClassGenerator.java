@@ -6,20 +6,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class ClassGenerator {
 
-    @Value("#{'${rental.classes}'.split(',')}")
-    private List<String> classes;
-
-    @Value("#{'${rental.rate}'.split(',')}")
-    private List<Float> carHourlyRate;
+    @Value("#{PropertySplitter.map('${rental.classes.rate.map}')}")
+    Map<String, Float> classesWithRates;
 
     public List<RentalClassDTO> generateRentalClasses() {
-        List<RentalClassDTO> rentalClasses= new LinkedList<>();
-        for (int i = 0; i < classes.size(); i++) {
-            rentalClasses.add(new RentalClassDTO(classes.get(i),carHourlyRate.get(i)));
+        List<RentalClassDTO> rentalClasses = new LinkedList<>();
+        for (String key : classesWithRates.keySet()) {
+            rentalClasses.add(new RentalClassDTO(key, classesWithRates.get(key)));
         }
         return rentalClasses;
     }
