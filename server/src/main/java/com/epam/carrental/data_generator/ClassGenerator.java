@@ -4,9 +4,9 @@ import com.epam.carrental.dto.RentalClassDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class ClassGenerator {
@@ -15,10 +15,9 @@ public class ClassGenerator {
     Map<String, Float> classesWithRates;
 
     public List<RentalClassDTO> generateRentalClasses() {
-        List<RentalClassDTO> rentalClasses = new LinkedList<>();
-        for (String key : classesWithRates.keySet()) {
-            rentalClasses.add(new RentalClassDTO(key, classesWithRates.get(key)));
-        }
-        return rentalClasses;
+        return classesWithRates.entrySet()
+                .stream()
+                .map(mapEntry ->new RentalClassDTO(mapEntry.getKey(),mapEntry.getValue()))
+                .collect(Collectors.toList());
     }
 }

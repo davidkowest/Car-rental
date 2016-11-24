@@ -1,10 +1,10 @@
 package com.epam.carrental.gui.view.hanlders.impl;
 
 
-import com.epam.carrental.controller.RentCarController;
+import com.epam.carrental.controller.BookCarController;
+import com.epam.carrental.dto.BookedCarDTO;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.CustomerDTO;
-import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.gui.view.hanlders.UserInputHandler;
 import com.epam.carrental.models.AbstractSwingTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,31 +12,32 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.ZonedDateTime;
 
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.SpringLayout.NORTH;
 
 @Component
-public class RentalUserInputHandler implements UserInputHandler {
+public class BookUserInputHandler implements UserInputHandler {
 
     @Autowired
     AbstractSwingTableModel<CustomerDTO> customerTableModel;
     @Autowired
-    private RentCarController rentCarController;
+    private BookCarController bookCarController;
 
-    public void handleInputUsing(CarDTO carDTO) {
-
+    public void handleInputUsing(CarDTO carDTO, ZonedDateTime startDate, ZonedDateTime endDate) {
         JTable customersTable = new JTable(customerTableModel);
         JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(new JLabel(customerTableModel.getTableName()), NORTH);
         inputPanel.add(new JScrollPane(customersTable), CENTER);
 
         int result = JOptionPane.showConfirmDialog(null, inputPanel,
-                "Rent  [" + carDTO.getModel() +" & "+ carDTO.getRegistrationNumber()+ "]", JOptionPane.OK_CANCEL_OPTION);
+                "Book  [" + carDTO.getModel() + " & " + carDTO.getRegistrationNumber() + "]", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
-            rentCarController.save(new RentedCarDTO(carDTO, customerTableModel.getModel(customersTable.getSelectedRow())));
+            bookCarController.bookCar(new BookedCarDTO(carDTO, customerTableModel.getModel(customersTable.getSelectedRow()), startDate, endDate));
         }
     }
 
 }
+

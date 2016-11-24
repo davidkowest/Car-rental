@@ -22,7 +22,7 @@ public class RentCarController {
     @Autowired
     private MessageView messageView;
     @Autowired
-    private AbstractSwingTableModel<CarDTO> availableCarTableModel;
+    private AbstractSwingTableModel<CarDTO> availableToRentCarTableModel;
     @Autowired
     private AbstractSwingTableModel<CustomerDTO> customerTableModel;
     @Autowired
@@ -37,7 +37,7 @@ public class RentCarController {
     public void refreshTableView(RentalClassDTO rentalClassDTO) {
         inBackgroundWorker.execute(
                 () -> currentRentalsService.findNotRentedInClass(rentalClassDTO),
-                availableCarTableModel::setDataAndRefreshTable,
+                availableToRentCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 
@@ -53,7 +53,7 @@ public class RentCarController {
         if (selectedRow < 0) {
             messageView.showErrorMessage("No rows selected!");
         } else {
-            CarDTO carDTO = availableCarTableModel.getModel(selectedRow);
+            CarDTO carDTO = availableToRentCarTableModel.getModel(selectedRow);
             rentalUserInputHandler.handleInputUsing(carDTO);
         }
     }

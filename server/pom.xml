@@ -37,6 +37,7 @@
         <hsqldb.version>2.3.4</hsqldb.version>
         <spring.boot>1.4.0.RELEASE</spring.boot>
         <guava.version>19.0</guava.version>
+        <mockito.version>1.10.19</mockito.version>
     </properties>
 
     <dependencies>
@@ -127,6 +128,12 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
