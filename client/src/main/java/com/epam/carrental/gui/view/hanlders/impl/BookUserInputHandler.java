@@ -5,6 +5,7 @@ import com.epam.carrental.controller.BookCarController;
 import com.epam.carrental.dto.BookedCarDTO;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.CustomerDTO;
+import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.gui.view.hanlders.UserInputHandler;
 import com.epam.carrental.models.AbstractSwingTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class BookUserInputHandler implements UserInputHandler {
     AbstractSwingTableModel<CustomerDTO> customerTableModel;
     @Autowired
     private BookCarController bookCarController;
+    @Autowired
+    private MessageView messageView;
 
     public void handleInputUsing(CarDTO carDTO, ZonedDateTime startDate, ZonedDateTime endDate) {
         JTable customersTable = new JTable(customerTableModel);
@@ -35,7 +38,12 @@ public class BookUserInputHandler implements UserInputHandler {
                 "Book  [" + carDTO.getModel() + " & " + carDTO.getRegistrationNumber() + "]", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
-            bookCarController.bookCar(new BookedCarDTO(carDTO, customerTableModel.getModel(customersTable.getSelectedRow()), startDate, endDate));
+            int selectedRow=customersTable.getSelectedRow();
+            if (selectedRow < 0) {
+                messageView.showErrorMessage("No rows selected!");
+            }else {
+                bookCarController.bookCar(new BookedCarDTO(carDTO, customerTableModel.getModel(selectedRow), startDate, endDate));
+            }
         }
     }
 

@@ -20,4 +20,12 @@ public interface UserInputHandler {
         panel.add(comboBox, BorderLayout.CENTER);
         return panel;
     }
+
+    default JPanel prepareTimePicker(Component datePickerComponent, String name) {
+        JLabel label = new JLabel(name);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(datePickerComponent, BorderLayout.CENTER);
+        return panel;
+    }
 }

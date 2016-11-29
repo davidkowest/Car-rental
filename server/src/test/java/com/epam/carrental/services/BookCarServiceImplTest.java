@@ -4,14 +4,8 @@ import com.epam.carrental.dto.BookedCarDTO;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.CustomerDTO;
 import com.epam.carrental.dto.RentalClassDTO;
-import com.epam.carrental.entity.BookedCar;
-import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.Customer;
-import com.epam.carrental.entity.RentalClass;
-import com.epam.carrental.repository.BookedCarRepository;
-import com.epam.carrental.repository.CarRepository;
-import com.epam.carrental.repository.CustomerRepository;
-import com.epam.carrental.repository.RentalClassRepository;
+import com.epam.carrental.entity.*;
+import com.epam.carrental.repository.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -19,16 +13,16 @@ import org.modelmapper.ModelMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyCollection;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 
 
@@ -36,6 +30,7 @@ public class BookCarServiceImplTest {
 
     @InjectMocks
     BookCarServiceImpl bookCarServiceImpl = new BookCarServiceImpl();
+
     @Mock
     private CarRepository carRepositoryMock;
     @Mock
@@ -44,6 +39,8 @@ public class BookCarServiceImplTest {
     private RentalClassRepository rentalClassRepositoryMock;
     @Mock
     private CustomerRepository customerRepositoryMock;
+    @Mock
+    private RentedCarRepository rentedCarRepositoryMock;
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -68,33 +65,56 @@ public class BookCarServiceImplTest {
 
 
     @Test(dataProvider = "getCarDTO")
-    public void testFindAvailableCarsBy(CarDTO availableCar, boolean expected, String message) {
-        // arrange in BeforeMethod
+    public void testFindAvailableCarsWithoutRented(CarDTO mayBeAvailableCar, boolean expected, String message) {
+        // arrange
+        when(rentedCarRepositoryMock.findAll()).thenReturn(Collections.emptyList());
 
         // act
-        List<CarDTO> availableCars = bookCarServiceImpl.findAvailableCarsBy(getTime("2017-01-01T10:10:00Z"), getTime("2017-01-08T10:10:00Z"), new RentalClassDTO());
+        List<CarDTO> availableCars = bookCarServiceImpl.findAvailableToBook(getTime("2017-01-01T10:10:00Z"), getTime("2017-01-08T10:10:00Z"), new RentalClassDTO());
 
         //assert
-        assertEquals(availableCars.contains(availableCar), expected, message);
+        assertEquals(availableCars.contains(mayBeAvailableCar), expected, message);
     }
 
     @Test
-    public void testBookAvailableCar(){
+    public void testFindAvailableCarsWithRented() {
+        // arrange
+        RentedCar rentedCar1 = new RentedCar(cars.get(5),getCustomer(),getTime("2016-12-01T10:10:00Z"),getTime("2016-12-07T10:10:00Z")); // must be available
+        RentedCar rentedCar2 = new RentedCar(cars.get(0),getCustomer(),getTime("2017-01-01T10:10:00Z"),getTime("2017-01-07T10:10:00Z")); // must be NOT available
+        List<RentedCar> rentedCars = Arrays.asList(rentedCar1,rentedCar2);
+
+        when(rentedCarRepositoryMock.findAll()).thenReturn(rentedCars);
+
+        CarDTO expectedCar1 = mapCarToCarDTO(rentedCar1.getCar());
+        CarDTO expectedCar2 = mapCarToCarDTO(rentedCar2.getCar());
+
+        // act
+        List<CarDTO> availableCars = bookCarServiceImpl.findAvailableToBook(getTime("2017-01-01T10:10:00Z"), getTime("2017-01-08T10:10:00Z"), new RentalClassDTO());
+
+        //assert
+        SoftAssert sa = new SoftAssert();
+        sa.assertTrue(availableCars.contains(expectedCar1),"Expected "+expectedCar1.getModel()+" to be available");
+        sa.assertFalse(availableCars.contains(expectedCar2),"Expected "+expectedCar2.getModel()+" to be NOT available");
+        sa.assertAll();
+    }
+
+    @Test
+    public void testBookAvailableCar() {
         // arrange in BeforeMethod
 
         // act
         ZonedDateTime bookFrom = getTime("2017-01-01T10:10:00Z");
         ZonedDateTime bookTo = getTime("2017-01-08T10:10:00Z");
-        CustomerDTO customerDTO = new CustomerDTO(getCustomer().getName(),getCustomer().getEmail());
+        CustomerDTO customerDTO = new CustomerDTO(getCustomer().getName(), getCustomer().getEmail());
 
         CarDTO carDTO1 = mapCarToCarDTO(cars.get(0));
         CarDTO carDTO2 = mapCarToCarDTO(cars.get(3));
         CarDTO carDTO3 = mapCarToCarDTO(cars.get(4));
         CarDTO carDTO4 = mapCarToCarDTO(cars.get(5));
-        BookedCarDTO bookedCarDTO1 = new BookedCarDTO(carDTO1,customerDTO,bookFrom,bookTo);
-        BookedCarDTO bookedCarDTO2 = new BookedCarDTO(carDTO2,customerDTO,bookFrom,bookTo);
-        BookedCarDTO bookedCarDTO3 = new BookedCarDTO(carDTO3,customerDTO,bookFrom,bookTo);
-        BookedCarDTO bookedCarDTO4 = new BookedCarDTO(carDTO3,customerDTO,bookFrom,bookTo);
+        BookedCarDTO bookedCarDTO1 = new BookedCarDTO(carDTO1, customerDTO, bookFrom, bookTo);
+        BookedCarDTO bookedCarDTO2 = new BookedCarDTO(carDTO2, customerDTO, bookFrom, bookTo);
+        BookedCarDTO bookedCarDTO3 = new BookedCarDTO(carDTO3, customerDTO, bookFrom, bookTo);
+        BookedCarDTO bookedCarDTO4 = new BookedCarDTO(carDTO3, customerDTO, bookFrom, bookTo);
 
         bookCarServiceImpl.bookCar(bookedCarDTO1);
         bookCarServiceImpl.bookCar(bookedCarDTO2);
@@ -107,17 +127,36 @@ public class BookCarServiceImplTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testBookNotAvailableCar(){
+    public void testBookNotAvailableBecauseBooked() {
         // arrange in BeforeMethod
 
         // act
         ZonedDateTime bookFrom = getTime("2017-01-01T10:10:00Z");
         ZonedDateTime bookTo = getTime("2017-01-08T10:10:00Z");
-        CustomerDTO customerDTO = new CustomerDTO(getCustomer().getName(),getCustomer().getEmail());
+        CustomerDTO customerDTO = new CustomerDTO(getCustomer().getName(), getCustomer().getEmail());
         CarDTO carDTO1 = mapCarToCarDTO(cars.get(2));
-        BookedCarDTO bookedCarDTO1 = new BookedCarDTO(carDTO1,customerDTO,bookFrom,bookTo);
+        BookedCarDTO bookedCarDTO1 = new BookedCarDTO(carDTO1, customerDTO, bookFrom, bookTo);
 
         bookCarServiceImpl.bookCar(bookedCarDTO1);
+
+        //assert Exception
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testBookNotAvailableBecauseRented() {
+        // arrange
+        RentedCar rentedCar = new RentedCar(cars.get(0),getCustomer(),getTime("2017-01-01T10:10:00Z"),getTime("2017-01-07T10:10:00Z"));
+        List<RentedCar> rentedCars = Arrays.asList(rentedCar);
+        when(rentedCarRepositoryMock.findAll()).thenReturn(rentedCars);
+
+        // act
+        ZonedDateTime bookFrom = getTime("2017-01-03T10:10:00Z");
+        ZonedDateTime bookTo = getTime("2017-01-08T10:10:00Z");
+        CustomerDTO customerDTO = new CustomerDTO(getCustomer().getName(), getCustomer().getEmail());
+        CarDTO carDTO = mapCarToCarDTO(cars.get(0));
+        BookedCarDTO bookedCarDTO = new BookedCarDTO(carDTO, customerDTO, bookFrom, bookTo);
+
+        bookCarServiceImpl.bookCar(bookedCarDTO);
 
         //assert Exception
     }
@@ -158,15 +197,16 @@ public class BookCarServiceImplTest {
     }
 
     private CarDTO mapCarToCarDTO(Car car) {
-        //return modelMapper.mapCarToCarDTO(car,CarDTO.class);
-        return new CarDTO(car.getModel(), car.getRegistrationNumber(), new RentalClassDTO(car.getRentalClass().getName(), car.getRentalClass().getHourlyRate()));
+        return modelMapper.map(car,CarDTO.class);
+       // return new CarDTO(car.getModel(), car.getRegistrationNumber(), new RentalClassDTO(car.getRentalClass().getName(), car.getRentalClass().getHourlyRate()));
     }
 
     private BookedCarDTO mapBookedCarToDTO(BookedCar bookedCar) {
-        CarDTO carDTO = new CarDTO(bookedCar.getCar().getModel(),bookedCar.getCar().getRegistrationNumber(),new RentalClassDTO());
-        CustomerDTO customerDTO = new CustomerDTO(bookedCar.getCustomer().getName(),bookedCar.getCustomer().getEmail());
-        return new BookedCarDTO(carDTO, customerDTO,bookedCar.getStartDate(),bookedCar.getEndDate());
+        CarDTO carDTO = new CarDTO(bookedCar.getCar().getModel(), bookedCar.getCar().getRegistrationNumber(), new RentalClassDTO());
+        CustomerDTO customerDTO = new CustomerDTO(bookedCar.getCustomer().getName(), bookedCar.getCustomer().getEmail());
+        return new BookedCarDTO(carDTO, customerDTO, bookedCar.getStartDate(), bookedCar.getEndDate());
     }
+
     private Customer getCustomer() {
         return new Customer("Robin Bobbin", "Bobbin@gmail.com");
     }

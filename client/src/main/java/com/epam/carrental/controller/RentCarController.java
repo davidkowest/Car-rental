@@ -14,6 +14,8 @@ import com.epam.carrental.services.RentReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
+
 @Component
 public class RentCarController {
 
@@ -34,9 +36,9 @@ public class RentCarController {
     @Autowired
     private RentalUserInputHandler rentalUserInputHandler;
 
-    public void refreshTableView(RentalClassDTO rentalClassDTO) {
+    public void refreshTableView(RentalClassDTO rentalClassDTO, ZonedDateTime dateUntil) {
         inBackgroundWorker.execute(
-                () -> currentRentalsService.findNotRentedInClass(rentalClassDTO),
+                () -> currentRentalsService.findAvailableToRent(rentalClassDTO, dateUntil),
                 availableToRentCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
@@ -44,7 +46,7 @@ public class RentCarController {
     public void save(RentedCarDTO rentedCarDTO) {
         inBackgroundWorker.execute(
                 () -> rentReturnService.rentCarForCustomer(rentedCarDTO),
-                () -> refreshTableView(rentedCarDTO.getCar().getRentalClass()),
+                () -> refreshTableView(rentedCarDTO.getCar().getRentalClass(),rentedCarDTO.getPlannedDateOfReturn()),
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 

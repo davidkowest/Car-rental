@@ -14,8 +14,8 @@ public class RentedCarHistoryDTO extends RentedCarDTO {
 
     private ZonedDateTime dateOfReturn;
 
-    public RentedCarHistoryDTO(CarDTO car, CustomerDTO customer) {
-        super(car, customer);
+    public RentedCarHistoryDTO(CarDTO car, CustomerDTO customer,ZonedDateTime plannedDateOfReturn) {
+        super(car, customer,plannedDateOfReturn);
     }
 
     public String getDuration() {

@@ -88,7 +88,7 @@ public class DataGenerator {
                 ZonedDateTime rentedTime = zonedDateTimeGenerator.getTimeAfter(beginTime);
                 ZonedDateTime returnedTime = zonedDateTimeGenerator.getTimeAfter(rentedTime);
                 if (returnedTime.isBefore(ZonedDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()))) {
-                    rentCar(car, rentedTime);
+                    rentCar(car, rentedTime,returnedTime);
                     RentedCarDTO rentedCarFromDB = currentRentalsService.findCurrentRentals().get(0);
                     returnCar(rentedCarFromDB, returnedTime);
                 }
@@ -103,8 +103,8 @@ public class DataGenerator {
         rentReturnService.returnRentedCar(rentedCarFromDB);
     }
 
-    private void rentCar(CarDTO car, ZonedDateTime rentedTime) {
-        RentedCarDTO rentedCarDTO = new RentedCarDTO(car, getRandomCustomer());
+    private void rentCar(CarDTO car, ZonedDateTime rentedTime,ZonedDateTime plannedDateOfReturn) {
+        RentedCarDTO rentedCarDTO = new RentedCarDTO(car, getRandomCustomer(),plannedDateOfReturn);
         currentTimeUtil.setCurrentTime(rentedTime);
         rentReturnService.rentCarForCustomer(rentedCarDTO);
     }

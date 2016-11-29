@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import static org.testng.Assert.assertEquals;
+
 @ContextConfiguration(classes = {DatabaseConfig.class})
 public class RentedCarRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
 
@@ -53,14 +55,15 @@ public class RentedCarRepositoryTest extends AbstractTransactionalTestNGSpringCo
 
         ZonedDateTime moscowStartRentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 10, 0), ZoneId.of("Europe/Moscow"));
         ZonedDateTime expectedPolandRentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 9, 0), ZoneId.of("Europe/Warsaw"));
+        ZonedDateTime plannedReturnDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 23, 10, 0), ZoneId.of("Europe/Moscow"));
 
         //act
-        RentedCar rentedCar = new RentedCar(car, customer, moscowStartRentingDate);
+        RentedCar rentedCar = new RentedCar(car, customer, moscowStartRentingDate,plannedReturnDate);
         rentedCarRepository.save(rentedCar);
 
         //assert
         ZonedDateTime resultDate = rentedCarRepository.findAll().get(0).getDateOfRent().withZoneSameInstant(ZoneId.of("Europe/Warsaw"));
-        Assert.assertEquals(resultDate, expectedPolandRentingDate);
+        assertEquals(resultDate, expectedPolandRentingDate);
     }
 
     @Test(expectedExceptions = {DataIntegrityViolationException.class})
@@ -69,13 +72,33 @@ public class RentedCarRepositoryTest extends AbstractTransactionalTestNGSpringCo
         Car car = carRepository.findByRegistrationNumber("KR12345");
         Customer customer = customerRepository.findByEmail("tom.cruse@wp.pl");
         ZonedDateTime rentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 9, 0), ZoneId.of("Europe/Warsaw"));
+        ZonedDateTime plannedReturnDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 23, 10, 0), ZoneId.of("Europe/Moscow"));
 
-        RentedCar firstRenting = new RentedCar(car, customer, rentingDate);
+        RentedCar firstRenting = new RentedCar(car, customer, rentingDate,plannedReturnDate);
         rentedCarRepository.save(firstRenting);
 
         //act
-        RentedCar secondRenting = new RentedCar(car, customer, rentingDate);
+        RentedCar secondRenting = new RentedCar(car, customer, rentingDate,plannedReturnDate);
         rentedCarRepository.save(secondRenting);
+
+        //assert ExpectedException
     }
 
+    @Test
+    public void findByCarAndCustomerAndDateOfRentTest(){
+        //arrange
+        Car car = carRepository.findByRegistrationNumber("KR12345");
+        Customer customer = customerRepository.findByEmail("tom.cruse@wp.pl");
+        ZonedDateTime rentingDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 9, 0), ZoneId.of("Europe/Warsaw"));
+        ZonedDateTime plannedReturnDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 23, 10, 0), ZoneId.of("Europe/Moscow"));
+
+        RentedCar rentedCar = new RentedCar(car, customer, rentingDate,plannedReturnDate);
+        rentedCarRepository.save(rentedCar);
+
+        //act
+        RentedCar retrievedCar = rentedCarRepository.findByCarAndCustomerAndDateOfRent(car, customer, rentingDate);
+
+        //assert
+        assertEquals(retrievedCar,rentedCar);
+    }
 }

@@ -49,7 +49,7 @@ public class BookCarController {
 
     public void refreshTableView(ZonedDateTime startDate, ZonedDateTime endDate, RentalClassDTO rentalClassDTO) {
         inBackgroundWorker.execute(
-                () -> bookCarService.findAvailableCarsBy(startDate, endDate, rentalClassDTO),
+                () -> bookCarService.findAvailableToBook(startDate, endDate, rentalClassDTO),
                 availableToBookCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage())
         );

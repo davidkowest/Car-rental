@@ -17,6 +17,8 @@ import org.testng.annotations.Test;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.easymock.EasyMock.*;
 
@@ -28,60 +30,53 @@ public class RentReturnServiceImplTest {
     private RentedCarHistoryRepository rentedCarHistoryRepositoryMock;
     private CurrentTimeUtil currentTimeUtilMock;
     private RentReturnService rentReturnService;
-    private ModelMapper modelMapper=new ModelMapper();
+    private CurrentRentalsService currentRentalsServiceMock;
+    private ModelMapper modelMapper = new ModelMapper();
 
     private Car car;
     private Customer customer;
     private ZonedDateTime dateOfRent;
 
     @BeforeMethod
-    public void setUp(){
-        RentalClass rentalClass=new RentalClass("Economy",2.45f);
-        this.car=new Car ("VW GOL IV","KR12345",rentalClass);
-        this.customer=new Customer("Adam Malysz","adam.malysz@gmail.com");
-        this.dateOfRent=ZonedDateTime.of(LocalDateTime.of(2016, 10, 8, 10, 0), ZoneId.of("Europe/Warsaw"));
+    public void setUp() {
+        RentalClass rentalClass = new RentalClass("Economy", 2.45f);
+        this.car = new Car("VW GOL IV", "KR12345", rentalClass);
+        this.customer = new Customer("Adam Malysz", "adam.malysz@gmail.com");
+        this.dateOfRent = ZonedDateTime.of(LocalDateTime.of(2016, 10, 8, 10, 0), ZoneId.of("Europe/Warsaw"));
 
-        this.carRepositoryMock=createStrictMock(CarRepository.class);
-        this.customerRepositoryMock=createStrictMock(CustomerRepository.class);
-        this.rentedCarRepositoryMock=createStrictMock(RentedCarRepository.class);
-        this.rentedCarHistoryRepositoryMock=createStrictMock(RentedCarHistoryRepository.class);
-        this.currentTimeUtilMock=createStrictMock(CurrentTimeUtil.class);
+        this.carRepositoryMock = createStrictMock(CarRepository.class);
+        this.customerRepositoryMock = createStrictMock(CustomerRepository.class);
+        this.rentedCarRepositoryMock = createStrictMock(RentedCarRepository.class);
+        this.rentedCarHistoryRepositoryMock = createStrictMock(RentedCarHistoryRepository.class);
+        this.currentTimeUtilMock = createStrictMock(CurrentTimeUtil.class);
+        this.currentRentalsServiceMock = createStrictMock(CurrentRentalsService.class);
 
         RentReturnServiceImpl rentReturnServiceImpl = new RentReturnServiceImpl();
-        rentReturnServiceImpl.modelMapper=modelMapper;
-        rentReturnServiceImpl.carRepository=carRepositoryMock;
-        rentReturnServiceImpl.customerRepository=customerRepositoryMock;
-        rentReturnServiceImpl.rentedCarRepository=rentedCarRepositoryMock;
-        rentReturnServiceImpl.rentedCarHistoryRepository=rentedCarHistoryRepositoryMock;
-        rentReturnServiceImpl.currentTimeUtil=currentTimeUtilMock;
+        rentReturnServiceImpl.modelMapper = modelMapper;
+        rentReturnServiceImpl.carRepository = carRepositoryMock;
+        rentReturnServiceImpl.customerRepository = customerRepositoryMock;
+        rentReturnServiceImpl.rentedCarRepository = rentedCarRepositoryMock;
+        rentReturnServiceImpl.rentedCarHistoryRepository = rentedCarHistoryRepositoryMock;
+        rentReturnServiceImpl.currentRentalsService = currentRentalsServiceMock;
+        rentReturnServiceImpl.currentTimeUtil = currentTimeUtilMock;
 
-        this.rentReturnService=rentReturnServiceImpl;
+        this.rentReturnService = rentReturnServiceImpl;
     }
 
-    private CarDTO getCarDTO(){
-        return modelMapper.map(this.car,CarDTO.class);
-    }
-    private CustomerDTO getCustomerDTO(){
-        return modelMapper.map(this.customer,CustomerDTO.class);
-    }
 
     @Test
     public void rentCarForCustomerTest() {
         //arrange
-        RentedCarDTO rentedCarDTO=new RentedCarDTO(getCarDTO(),getCustomerDTO());
-        RentedCar rentedCar = new RentedCar(car, customer,dateOfRent);
+        ZonedDateTime plannedReturnDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 23, 10, 0), ZoneId.of("Europe/Moscow"));
+        RentedCarDTO rentedCarDTO = new RentedCarDTO(getCarDTO(), getCustomerDTO(), plannedReturnDate);
+        RentedCar rentedCar = new RentedCar(car, customer, dateOfRent, plannedReturnDate);
 
         EasyMock.expect(carRepositoryMock.findByRegistrationNumber(this.car.getRegistrationNumber())).andReturn(this.car);
-        replay(carRepositoryMock);
-
         EasyMock.expect(customerRepositoryMock.findByEmail(getCustomerDTO().getEmail())).andReturn(customer);
-        replay(customerRepositoryMock);
-
         EasyMock.expect(currentTimeUtilMock.getCurrentTime()).andReturn(dateOfRent);
-        replay(currentTimeUtilMock);
-
         EasyMock.expect(rentedCarRepositoryMock.save(rentedCar)).andReturn(rentedCar);
-        replay(rentedCarRepositoryMock);
+        EasyMock.expect(currentRentalsServiceMock.findAvailableToRent(rentedCarDTO.getCar().getRentalClass(),plannedReturnDate)).andReturn(Collections.singletonList(getCarDTO()));
+        replay(rentedCarRepositoryMock, carRepositoryMock, customerRepositoryMock, currentTimeUtilMock,currentRentalsServiceMock);
 
         //act
         rentReturnService.rentCarForCustomer(rentedCarDTO);
@@ -93,32 +88,49 @@ public class RentReturnServiceImplTest {
         verify(currentTimeUtilMock);
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void rentNotAvailableCarForCustomerTest() {
+        //arrange
+        ZonedDateTime plannedReturnDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 23, 10, 0), ZoneId.of("Europe/Moscow"));
+        RentedCarDTO rentedCarDTO = new RentedCarDTO(getCarDTO(), getCustomerDTO(), plannedReturnDate);
+        RentedCar rentedCar = new RentedCar(car, customer, dateOfRent, plannedReturnDate);
+
+        EasyMock.expect(carRepositoryMock.findByRegistrationNumber(this.car.getRegistrationNumber())).andReturn(this.car);
+        EasyMock.expect(customerRepositoryMock.findByEmail(getCustomerDTO().getEmail())).andReturn(customer);
+        EasyMock.expect(currentTimeUtilMock.getCurrentTime()).andReturn(dateOfRent);
+        EasyMock.expect(rentedCarRepositoryMock.save(rentedCar)).andReturn(rentedCar);
+        EasyMock.expect(currentRentalsServiceMock.findAvailableToRent(rentedCarDTO.getCar().getRentalClass(),plannedReturnDate)).andReturn(Collections.emptyList());
+        replay(rentedCarRepositoryMock, carRepositoryMock, customerRepositoryMock, currentTimeUtilMock,currentRentalsServiceMock);
+
+        //act
+        rentReturnService.rentCarForCustomer(rentedCarDTO);
+
+        //assert
+        verify(rentedCarRepositoryMock);
+        verify(carRepositoryMock);
+        verify(customerRepositoryMock);
+        verify(currentTimeUtilMock);
+    }
 
     @Test
-    public void returnRentedCarTest()  {
+    public void returnRentedCarTest() {
         //arrange
-        ZonedDateTime dateOfReturn= ZonedDateTime.of(LocalDateTime.of(2016, 11, 9, 8, 0), ZoneId.of("Europe/Warsaw"));
+        ZonedDateTime dateOfReturn = ZonedDateTime.of(LocalDateTime.of(2016, 11, 9, 8, 0), ZoneId.of("Europe/Warsaw"));
+        ZonedDateTime plannedReturnDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 23, 10, 0), ZoneId.of("Europe/Moscow"));
 
-        RentedCarDTO rentedCarDTO=new RentedCarDTO(getCarDTO(),getCustomerDTO(),dateOfRent);
-        RentedCar rentedCar = new RentedCar(car, customer,dateOfRent);
-        RentedCarHistory rentedCarHistory = new RentedCarHistory(car,customer,dateOfRent,dateOfReturn);
+        RentedCarDTO rentedCarDTO = new RentedCarDTO(getCarDTO(), getCustomerDTO(), dateOfRent, plannedReturnDate);
+        RentedCar rentedCar = new RentedCar(car, customer, dateOfRent, plannedReturnDate);
+        RentedCarHistory rentedCarHistory = new RentedCarHistory(car, customer, dateOfRent, dateOfReturn);
 
         EasyMock.expect(carRepositoryMock.findByRegistrationNumber(car.getRegistrationNumber())).andReturn(car);
-        replay(carRepositoryMock);
-
         EasyMock.expect(customerRepositoryMock.findByEmail(getCustomerDTO().getEmail())).andReturn(customer);
-        replay(customerRepositoryMock);
-
         EasyMock.expect(currentTimeUtilMock.getCurrentTime()).andReturn(dateOfReturn);
-        replay(currentTimeUtilMock);
-
         EasyMock.expect(rentedCarRepositoryMock.findByCarAndCustomerAndDateOfRent(car, customer, dateOfRent)).andReturn(rentedCar);
         rentedCarRepositoryMock.deleteByCar(car);
         EasyMock.expectLastCall();
-        replay(rentedCarRepositoryMock);
 
         EasyMock.expect(rentedCarHistoryRepositoryMock.save(rentedCarHistory)).andReturn(rentedCarHistory);
-        replay(rentedCarHistoryRepositoryMock);
+        replay(rentedCarHistoryRepositoryMock,carRepositoryMock,customerRepositoryMock,currentTimeUtilMock,rentedCarRepositoryMock);
 
         //act
         rentReturnService.returnRentedCar(rentedCarDTO);
@@ -130,4 +142,13 @@ public class RentReturnServiceImplTest {
         verify(customerRepositoryMock);
         verify(currentTimeUtilMock);
     }
+
+    private CarDTO getCarDTO() {
+        return modelMapper.map(this.car, CarDTO.class);
+    }
+
+    private CustomerDTO getCustomerDTO() {
+        return modelMapper.map(this.customer, CustomerDTO.class);
+    }
+
 }

@@ -12,5 +12,5 @@ public interface BookCarService {
 
     void bookCar(BookedCarDTO bookedCarDTO);
 
-    List<CarDTO> findAvailableCarsBy(ZonedDateTime startDate, ZonedDateTime endDate, RentalClassDTO rentalClassDTO);
+    List<CarDTO> findAvailableToBook(ZonedDateTime startDate, ZonedDateTime endDate, RentalClassDTO rentalClassDTO);
 }
