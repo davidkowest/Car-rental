@@ -13,26 +13,22 @@ import java.util.List;
 @Component
 public class CustomerGenerator {
 
-
     @Value("#{'${customer.firstNames}'.split(',')}")
-    private List<String> firstNames;
-
+    List<String> firstNames;
     @Value("#{'${customer.surnames}'.split(',')}")
-    private List<String> surnames;
-
+    List<String> surnames;
     @Value("${customers.amount}")
-    private int amountOfCustomers;
-
-    private int appender = 1;
-
+    int amountOfCustomers;
     @Autowired
     RandomNumberGenerator randomNumberGenerator;
+
+    private int appender = 1;
 
     public List<CustomerDTO> generateCustomers() {
         List<CustomerDTO> customers = new ArrayList<>(amountOfCustomers);
         for (int i = 0; i < amountOfCustomers; i++) {
-            String firstName = firstNames.get(randomNumberGenerator.generateWithin(0,firstNames.size()));
-            String surname = surnames.get(randomNumberGenerator.generateWithin(0,surnames.size()));
+            String firstName = firstNames.get(randomNumberGenerator.generateWithin(0, firstNames.size()));
+            String surname = surnames.get(randomNumberGenerator.generateWithin(0, surnames.size()));
             String name = firstName + " " + surname;
             String email = firstName + "." + surname + appender + "@gmail.com";
             customers.add(new CustomerDTO(name, email));

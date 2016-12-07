@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class ClassGenerator {
 
-    @Value("#{PropertySplitter.map('${rental.classes.rate.map}')}")
+    @Value("#{${rental.classes.rate.map}}")
     Map<String, Float> classesWithRates;
 
     public List<RentalClassDTO> generateRentalClasses() {

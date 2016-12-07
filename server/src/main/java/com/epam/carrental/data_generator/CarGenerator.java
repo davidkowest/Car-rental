@@ -12,26 +12,26 @@ import java.util.List;
 @Component
 class CarGenerator {
 
-    @Value("#{'${car.models}'.split(',')}")
-    private List<String> carModels;
+    @Value("${car.models}")
+    List<String> carModels;
 
-    @Value("#{'${car.prefixes}'.split(',')}")
-    private List<String> carPrefixes;
+    @Value("${car.prefixes}")
+    List<String> carPrefixes;
 
     @Value("${cars.amount}")
-    private int amountOfCars;
+    int amountOfCars;
 
     private int appender = 0;
 
     @Autowired
     private RandomNumberGenerator randomNumberGenerator;
 
-    public List<CarDTO> generateCars(List<RentalClassDTO>  rentalClassDTOs) {
+    public List<CarDTO> generateCars(List<RentalClassDTO> rentalClassDTOs) {
         List<CarDTO> cars = new ArrayList<>(amountOfCars);
         for (int i = 0; i < amountOfCars; i++) {
             String model = carModels.get(randomNumberGenerator.generateWithin(0, carModels.size()));
             String number = carPrefixes.get(randomNumberGenerator.generateWithin(0, carPrefixes.size())) + appender + randomNumberGenerator.generateWithin(1000, 9999);
-            RentalClassDTO rentalClass = rentalClassDTOs.get(randomNumberGenerator.generateWithin(0,rentalClassDTOs.size()));
+            RentalClassDTO rentalClass = rentalClassDTOs.get(randomNumberGenerator.generateWithin(0, rentalClassDTOs.size()));
             cars.add(new CarDTO(model, number, rentalClass));
             appender++;
         }
