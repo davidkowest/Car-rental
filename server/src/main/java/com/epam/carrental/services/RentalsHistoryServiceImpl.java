@@ -27,7 +27,7 @@ public class RentalsHistoryServiceImpl implements RentalsHistoryService {
         RentReturnDateFilter rentReturnDateFilter=new RentReturnDateFilter(dateOfRent,dateOfReturn);
 
         return rentedCarHistoryRepository.findAll().stream()
-                .filter(rentReturnDateFilter::test)
+                .filter(rentReturnDateFilter)
                 .map(rentedCarHistory -> modelMapper.map(rentedCarHistory, RentedCarHistoryDTO.class))
                 .collect(Collectors.toList());
     }

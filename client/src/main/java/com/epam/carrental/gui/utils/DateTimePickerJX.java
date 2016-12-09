@@ -103,10 +103,6 @@ public class DateTimePickerJX extends JXDatePicker {
         }
     }
 
-    public DateFormat getTimeFormat() {
-        return timeFormat;
-    }
-
     public void setTimeFormat(DateFormat timeFormat) {
         this.timeFormat = timeFormat;
         updateTextFieldFormat();

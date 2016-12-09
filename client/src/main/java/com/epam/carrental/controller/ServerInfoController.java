@@ -1,7 +1,7 @@
 package com.epam.carrental.controller;
 
 import com.epam.carrental.gui.utils.BackgroundWorker;
-import com.epam.carrental.gui.utils.MessageFormatter;
+import com.epam.carrental.gui.utils.CustomFormatter;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.services.ServerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ServerInfoController {
     public void getMessageForTestConnectionButton() {
         inBackgroundWorker.execute(
                 serverInfo::getServerInfo,
-                serverInfoDTO -> messageView.showMessage(MessageFormatter.prepareMessageFromServerInfoDTO(serverInfoDTO)),
+                serverInfoDTO -> messageView.showMessage(CustomFormatter.prepareMessageFromServerInfoDTO(serverInfoDTO)),
                 exception -> messageView.showErrorMessage(exception.getCause().getMessage())
         );
     }

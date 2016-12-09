@@ -1,7 +1,6 @@
 package com.epam.carrental.services;
 
 import com.epam.carrental.data_generator.CurrentTimeUtil;
-import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -33,8 +31,6 @@ public class RentReturnServiceImpl implements RentReturnService {
     @Autowired
     RentedCarHistoryRepository rentedCarHistoryRepository;
     @Autowired
-    CurrentRentalsService currentRentalsService;
-    @Autowired
     ModelMapper modelMapper;
     @Autowired
     CurrentTimeUtil currentTimeUtil;
@@ -46,11 +42,6 @@ public class RentReturnServiceImpl implements RentReturnService {
         Car car = carRepository.findByRegistrationNumber(rentedCarDTO.getCar().getRegistrationNumber());
         Customer customer = customerRepository.findByEmail(rentedCarDTO.getCustomer().getEmail());
         ZonedDateTime currentDateTime=currentTimeUtil.getCurrentTime();
-
-        List<CarDTO> avaiableCars = currentRentalsService.findAvailableToRent(rentedCarDTO.getCar().getRentalClass(),rentedCarDTO.getPlannedDateOfReturn());
-        if (!avaiableCars.contains(rentedCarDTO.getCar())) {
-            throw new IllegalArgumentException("This car is not available for this period");
-        }
 
         RentedCar rentedCar = new RentedCar(car, customer,currentDateTime,rentedCarDTO.getPlannedDateOfReturn());
 //// TODO: For demo concurrent modifications purpose only
@@ -68,12 +59,12 @@ public class RentReturnServiceImpl implements RentReturnService {
 
         Car car = carRepository.findByRegistrationNumber(rentedCarDTO.getCar().getRegistrationNumber());
         if (car == null) {
-            throw new IllegalArgumentException(car + " not exists in DB");
+            throw new IllegalArgumentException(rentedCarDTO.getCar()+"does not exist in DB");
         }
 
         Customer customer = customerRepository.findByEmail(rentedCarDTO.getCustomer().getEmail());
         if (customer == null) {
-            throw new IllegalArgumentException(customer + " not exists in DB");
+            throw new IllegalArgumentException(rentedCarDTO.getCustomer()+"does not exist in DB");
         }
 
         RentedCar rentedCar = rentedCarRepository.findByCarAndCustomerAndDateOfRent(car, customer, rentedCarDTO.getDateOfRent());

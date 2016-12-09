@@ -61,6 +61,7 @@ public class DataGenerator {
     private List<CustomerDTO> customers;
 
     @PostConstruct
+    @SuppressWarnings("unused")
     public void generateAndSaveData() {
         generateInitialData();
         saveInitialData();

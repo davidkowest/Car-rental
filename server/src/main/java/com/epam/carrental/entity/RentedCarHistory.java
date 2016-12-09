@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames ={ "car_id", "customer_id","dateOfRent","dateOfReturn" })})
-@Check(constraints = "dateofReturn > dateOfRent")
+@Check(constraints = "dateOfReturn > dateOfRent")
 public class RentedCarHistory  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

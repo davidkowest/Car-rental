@@ -33,6 +33,7 @@ public class CarUserInputHandler implements UserInputHandler {
     @Autowired
     private UpdatableListComboBoxModel<RentalClassDTO> updatableListComboBoxModel;
 
+    @SuppressWarnings("unchecked")
     public void handleInput() {
         JTextField carModelField = new JTextField();
         JTextField carNumberField = new JTextField();

@@ -11,7 +11,6 @@ import java.time.ZonedDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames ={ "car_id", "customer_id","dateOfRent","plannedDateOfReturn" })})
 @Check(constraints = "plannedDateOfReturn > dateOfRent")
 public class RentedCar {
 
@@ -20,7 +19,7 @@ public class RentedCar {
     private Long id;
 
     @OneToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(unique = true)
     private Car car;
 
     @ManyToOne

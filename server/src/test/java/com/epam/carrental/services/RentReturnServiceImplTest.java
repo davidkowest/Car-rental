@@ -57,7 +57,6 @@ public class RentReturnServiceImplTest {
         rentReturnServiceImpl.customerRepository = customerRepositoryMock;
         rentReturnServiceImpl.rentedCarRepository = rentedCarRepositoryMock;
         rentReturnServiceImpl.rentedCarHistoryRepository = rentedCarHistoryRepositoryMock;
-        rentReturnServiceImpl.currentRentalsService = currentRentalsServiceMock;
         rentReturnServiceImpl.currentTimeUtil = currentTimeUtilMock;
 
         this.rentReturnService = rentReturnServiceImpl;
@@ -76,30 +75,6 @@ public class RentReturnServiceImplTest {
         EasyMock.expect(currentTimeUtilMock.getCurrentTime()).andReturn(dateOfRent);
         EasyMock.expect(rentedCarRepositoryMock.save(rentedCar)).andReturn(rentedCar);
         EasyMock.expect(currentRentalsServiceMock.findAvailableToRent(rentedCarDTO.getCar().getRentalClass(),plannedReturnDate)).andReturn(Collections.singletonList(getCarDTO()));
-        replay(rentedCarRepositoryMock, carRepositoryMock, customerRepositoryMock, currentTimeUtilMock,currentRentalsServiceMock);
-
-        //act
-        rentReturnService.rentCarForCustomer(rentedCarDTO);
-
-        //assert
-        verify(rentedCarRepositoryMock);
-        verify(carRepositoryMock);
-        verify(customerRepositoryMock);
-        verify(currentTimeUtilMock);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void rentNotAvailableCarForCustomerTest() {
-        //arrange
-        ZonedDateTime plannedReturnDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 23, 10, 0), ZoneId.of("Europe/Moscow"));
-        RentedCarDTO rentedCarDTO = new RentedCarDTO(getCarDTO(), getCustomerDTO(), plannedReturnDate);
-        RentedCar rentedCar = new RentedCar(car, customer, dateOfRent, plannedReturnDate);
-
-        EasyMock.expect(carRepositoryMock.findByRegistrationNumber(this.car.getRegistrationNumber())).andReturn(this.car);
-        EasyMock.expect(customerRepositoryMock.findByEmail(getCustomerDTO().getEmail())).andReturn(customer);
-        EasyMock.expect(currentTimeUtilMock.getCurrentTime()).andReturn(dateOfRent);
-        EasyMock.expect(rentedCarRepositoryMock.save(rentedCar)).andReturn(rentedCar);
-        EasyMock.expect(currentRentalsServiceMock.findAvailableToRent(rentedCarDTO.getCar().getRentalClass(),plannedReturnDate)).andReturn(Collections.emptyList());
         replay(rentedCarRepositoryMock, carRepositoryMock, customerRepositoryMock, currentTimeUtilMock,currentRentalsServiceMock);
 
         //act

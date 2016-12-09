@@ -26,11 +26,6 @@ public class TableTabView implements TabView {
         this.actions=new LinkedHashMap<>();
     }
 
-    public TableTabView(AbstractSwingTableModel tableModel,  Map<String,Runnable> actions) {
-        this.tableModel = tableModel;
-        this.actions=actions;
-    }
-
     @Override
     public JPanel initView() {
         return preparePanel();

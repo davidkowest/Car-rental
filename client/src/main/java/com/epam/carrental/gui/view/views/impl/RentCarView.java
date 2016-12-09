@@ -30,6 +30,7 @@ public class RentCarView extends TableTabView {
         super(availableToRentCarTableModel);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     JToolBar prepareToolBar() {
         JToolBar toolBar = new JToolBar();

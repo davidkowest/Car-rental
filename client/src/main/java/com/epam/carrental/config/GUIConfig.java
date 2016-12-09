@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class GUIConfig {
 
     @Bean
+    @SuppressWarnings("unchecked")
     public UpdatableListComboBoxModel updatableListComboBoxModel(){
         return new UpdatableListComboBoxModel(new ArrayList());
     }

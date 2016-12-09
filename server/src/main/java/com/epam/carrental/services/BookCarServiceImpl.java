@@ -37,8 +37,8 @@ public class BookCarServiceImpl implements BookCarService {
         Car car = carRepository.findByRegistrationNumber(bookedCarDTO.getCar().getRegistrationNumber());
         Customer customer = customerRepository.findByEmail(bookedCarDTO.getCustomer().getEmail());
 
-        List<CarDTO> avaiableCars = findAvailableToBook(bookedCarDTO.getStartDate(), bookedCarDTO.getEndDate(), bookedCarDTO.getCar().getRentalClass());
-        if (!avaiableCars.contains(bookedCarDTO.getCar())) {
+        List<CarDTO> availableCars = findAvailableToBook(bookedCarDTO.getStartDate(), bookedCarDTO.getEndDate(), bookedCarDTO.getCar().getRentalClass());
+        if (!availableCars.contains(bookedCarDTO.getCar())) {
             throw new IllegalArgumentException("This car is not available for this period");
         }
 

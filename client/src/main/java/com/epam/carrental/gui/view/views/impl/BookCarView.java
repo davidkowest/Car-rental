@@ -33,10 +33,12 @@ public class BookCarView extends TableTabView {
 
     private JToolBar toolBar = new JToolBar();
 
+    @Autowired
     public BookCarView(AbstractSwingTableModel availableToBookCarTableModel) {
         super(availableToBookCarTableModel);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     JToolBar prepareToolBar() {
 

@@ -36,6 +36,7 @@ public class MainWindow {
     private TableTabView bookCarView;
 
     @PostConstruct
+    @SuppressWarnings("unused")
     public void init() {
         SwingUtilities.invokeLater(this::initGUI);
     }
