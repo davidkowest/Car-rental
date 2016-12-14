@@ -7,7 +7,7 @@ import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.gui.view.hanlders.impl.RentalUserInputHandler;
-import com.epam.carrental.models.AbstractSwingTableModel;
+import com.epam.carrental.models.table.AbstractSwingTableModel;
 import com.epam.carrental.services.CurrentRentalsService;
 import com.epam.carrental.services.CustomerService;
 import com.epam.carrental.services.RentReturnService;

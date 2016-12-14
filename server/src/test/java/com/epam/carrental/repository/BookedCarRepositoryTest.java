@@ -46,7 +46,6 @@ public class BookedCarRepositoryTest extends AbstractTransactionalTestNGSpringCo
     @Test(expectedExceptions = DataIntegrityViolationException.class)
     public void savingTheSameCarInSamePeriod() {
         //arrange
-        RentalClass rentalClass = rentalClassRepository.findByName("Economy");
         Car car = carRepository.findByRegistrationNumber("KR12345");
         Customer customer = customerRepository.findByEmail("Bobbin@gmail.com");
         BookedCar bookedCar2 = new BookedCar(car, customer, ZonedDateTime.parse("2016-08-20T10:10:00Z"), ZonedDateTime.parse("2016-08-25T10:10:00Z"));

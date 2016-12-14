@@ -1,4 +1,4 @@
-package com.epam.carrental.models;
+package com.epam.carrental.models.table;
 
 import lombok.Getter;
 import lombok.Setter;

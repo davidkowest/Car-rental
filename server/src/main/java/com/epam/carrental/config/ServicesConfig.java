@@ -36,6 +36,9 @@ public class ServicesConfig {
     @Autowired
     BookCarService bookCarService;
 
+    @Autowired
+    ChartService chartService;
+
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper=new ModelMapper();
@@ -75,6 +78,11 @@ public class ServicesConfig {
     @Bean
     public SimpleHttpInvokerServiceExporter bookCarServiceExporter() {
         return serviceExporter(bookCarService, BookCarService.class);
+    }
+
+    @Bean
+    public SimpleHttpInvokerServiceExporter chartServiceExporter() {
+        return serviceExporter(chartService, ChartService.class);
     }
 
     public SimpleHttpInvokerServiceExporter serviceExporter(Object service,Class<?> serviceInterface) {

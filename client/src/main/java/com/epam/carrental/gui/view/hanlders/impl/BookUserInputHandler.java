@@ -7,7 +7,7 @@ import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.CustomerDTO;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.gui.view.hanlders.UserInputHandler;
-import com.epam.carrental.models.AbstractSwingTableModel;
+import com.epam.carrental.models.table.AbstractSwingTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

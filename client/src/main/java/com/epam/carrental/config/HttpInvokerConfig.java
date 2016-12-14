@@ -69,4 +69,9 @@ public class HttpInvokerConfig {
     public HttpInvokerProxyFactoryBean bookCarService(@Value("${remote.service.bookCar}") String bookCarServicePath) {
         return httpInvokerProxyFactoryBean(bookCarServicePath,BookCarService.class);
     }
+
+    @Bean
+    public HttpInvokerProxyFactoryBean chartService(@Value("${remote.service.chartService}") String bookCarServicePath) {
+        return httpInvokerProxyFactoryBean(bookCarServicePath,ChartService.class);
+    }
 }

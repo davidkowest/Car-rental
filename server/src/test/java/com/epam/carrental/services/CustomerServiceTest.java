@@ -9,7 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
@@ -69,9 +69,9 @@ public class CustomerServiceTest {
     @Test
     public void readAllCustomersTest()  {
         //arrange
-        EasyMock.expect(customerRepositoryMock.findAll()).andReturn(Arrays.asList(new Customer("Adam Malysz","adam.malysz@gmail.com")));
+        EasyMock.expect(customerRepositoryMock.findAll()).andReturn(Collections.singletonList(new Customer("Adam Malysz", "adam.malysz@gmail.com")));
         replay(customerRepositoryMock);
-        List<CustomerDTO> expectedCustomers=Arrays.asList(new CustomerDTO("Adam Malysz","adam.malysz@gmail.com"));
+        List<CustomerDTO> expectedCustomers= Collections.singletonList(new CustomerDTO("Adam Malysz", "adam.malysz@gmail.com"));
 
         //act
         List<CustomerDTO> resultCustomers=customerService.readAll();

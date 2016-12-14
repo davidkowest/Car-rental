@@ -1,4 +1,4 @@
-package com.epam.carrental.models;
+package com.epam.carrental.models.table;
 
 import com.epam.carrental.dto.CarDTO;
 import org.springframework.stereotype.Component;

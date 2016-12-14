@@ -9,4 +9,5 @@ import java.util.List;
 public interface RentalsHistoryService {
     List<RentedCarHistoryDTO> findByDateOfRentAndDateOfReturn(ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn);
 
+    List<RentedCarHistoryDTO> findAll();
 }

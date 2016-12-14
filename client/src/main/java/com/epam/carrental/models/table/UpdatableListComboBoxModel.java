@@ -1,9 +1,10 @@
-package com.epam.carrental.models;
+package com.epam.carrental.models.table;
 
 
 import org.jdesktop.swingx.combobox.ListComboBoxModel;
 
 import java.util.List;
+
 
 public class UpdatableListComboBoxModel<E> extends ListComboBoxModel<E> {
 

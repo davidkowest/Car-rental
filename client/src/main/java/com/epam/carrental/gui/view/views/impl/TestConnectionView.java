@@ -5,26 +5,12 @@ import com.epam.carrental.gui.view.views.TabView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
-
 @Component
-public class TestConnectionView implements TabView {
-
-    private final JPanel panel;
+public class TestConnectionView extends TabView {
 
     @Autowired
-    private ServerInfoController serverInfoController;
-
-    public TestConnectionView(){
-        this.panel = new JPanel();
-        JButton testConnectionButton = new JButton("Test connection");
-        testConnectionButton.addActionListener(e ->  serverInfoController.getMessageForTestConnectionButton());
-        this.panel.add(testConnectionButton);
-    }
-
-    @Override
-    public JPanel initView(){
-        return this.panel;
+    public TestConnectionView(ServerInfoController serverInfoController){
+        addButtonToPanel("Test connection", serverInfoController::getMessageForTestConnectionButton);
     }
 
 }

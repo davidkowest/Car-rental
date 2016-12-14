@@ -110,7 +110,6 @@ public class BookCarServiceImplTest {
         CarDTO carDTO1 = mapCarToCarDTO(cars.get(0));
         CarDTO carDTO2 = mapCarToCarDTO(cars.get(3));
         CarDTO carDTO3 = mapCarToCarDTO(cars.get(4));
-        CarDTO carDTO4 = mapCarToCarDTO(cars.get(5));
         BookedCarDTO bookedCarDTO1 = new BookedCarDTO(carDTO1, customerDTO, bookFrom, bookTo);
         BookedCarDTO bookedCarDTO2 = new BookedCarDTO(carDTO2, customerDTO, bookFrom, bookTo);
         BookedCarDTO bookedCarDTO3 = new BookedCarDTO(carDTO3, customerDTO, bookFrom, bookTo);
@@ -146,7 +145,7 @@ public class BookCarServiceImplTest {
     public void testBookNotAvailableBecauseRented() {
         // arrange
         RentedCar rentedCar = new RentedCar(cars.get(0),getCustomer(),getTime("2017-01-01T10:10:00Z"),getTime("2017-01-07T10:10:00Z"));
-        List<RentedCar> rentedCars = Arrays.asList(rentedCar);
+        List<RentedCar> rentedCars = Collections.singletonList(rentedCar);
         when(rentedCarRepositoryMock.findAll()).thenReturn(rentedCars);
 
         // act
@@ -199,12 +198,6 @@ public class BookCarServiceImplTest {
     private CarDTO mapCarToCarDTO(Car car) {
         return modelMapper.map(car,CarDTO.class);
        // return new CarDTO(car.getModel(), car.getRegistrationNumber(), new RentalClassDTO(car.getRentalClass().getName(), car.getRentalClass().getHourlyRate()));
-    }
-
-    private BookedCarDTO mapBookedCarToDTO(BookedCar bookedCar) {
-        CarDTO carDTO = new CarDTO(bookedCar.getCar().getModel(), bookedCar.getCar().getRegistrationNumber(), new RentalClassDTO());
-        CustomerDTO customerDTO = new CustomerDTO(bookedCar.getCustomer().getName(), bookedCar.getCustomer().getEmail());
-        return new BookedCarDTO(carDTO, customerDTO, bookedCar.getStartDate(), bookedCar.getEndDate());
     }
 
     private Customer getCustomer() {

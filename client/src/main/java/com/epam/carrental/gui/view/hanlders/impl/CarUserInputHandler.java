@@ -3,9 +3,10 @@ package com.epam.carrental.gui.view.hanlders.impl;
 import com.epam.carrental.controller.FleetController;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.RentalClassDTO;
+import com.epam.carrental.gui.listeners.RentalClassComboBoxListener;
 import com.epam.carrental.gui.utils.RentalClassRenderer;
 import com.epam.carrental.gui.view.hanlders.UserInputHandler;
-import com.epam.carrental.models.UpdatableListComboBoxModel;
+import com.epam.carrental.models.table.UpdatableListComboBoxModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,9 @@ public class CarUserInputHandler implements UserInputHandler {
     @Autowired
     private UpdatableListComboBoxModel<RentalClassDTO> updatableListComboBoxModel;
 
+    @Autowired
+    RentalClassComboBoxListener rentalClassComboBoxListener;
+
     @SuppressWarnings("unchecked")
     public void handleInput() {
         JTextField carModelField = new JTextField();
@@ -40,6 +44,7 @@ public class CarUserInputHandler implements UserInputHandler {
 
         JComboBox<RentalClassDTO> rentalClassComboBox = new JComboBox(updatableListComboBoxModel);
         rentalClassComboBox.setRenderer(new RentalClassRenderer());
+        rentalClassComboBox.addPopupMenuListener(rentalClassComboBoxListener);
 
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());

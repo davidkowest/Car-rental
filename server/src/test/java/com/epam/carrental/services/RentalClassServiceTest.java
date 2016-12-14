@@ -9,7 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
@@ -47,9 +47,9 @@ public class RentalClassServiceTest {
     @Test
     public void readAllRentalClassesTest()  {
         //arrange
-        EasyMock.expect(rentalClassRepositoryMock.findAll()).andReturn(Arrays.asList(new RentalClass("Economy",2.45f)));
+        EasyMock.expect(rentalClassRepositoryMock.findAll()).andReturn(Collections.singletonList(new RentalClass("Economy", 2.45f)));
         replay(rentalClassRepositoryMock);
-        List<RentalClassDTO> expectedRentalClasses=Arrays.asList(new RentalClassDTO("Economy",2.45f));
+        List<RentalClassDTO> expectedRentalClasses= Collections.singletonList(new RentalClassDTO("Economy", 2.45f));
 
         //act
         List<RentalClassDTO> resultRentalClasses=rentalClassService.readAll();

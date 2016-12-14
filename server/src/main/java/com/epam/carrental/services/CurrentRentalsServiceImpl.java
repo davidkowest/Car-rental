@@ -67,7 +67,7 @@ public class CurrentRentalsServiceImpl implements CurrentRentalsService {
     }
 
     @Override
-    public List<RentedCarDTO> findCurrentRentals() {
+    public List<RentedCarDTO> findAll() {
         Type listType = new TypeToken<List<RentedCarDTO>>() {
         }.getType();
         return modelMapper.map(rentedCarRepository.findAll(), listType);

@@ -12,7 +12,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
@@ -102,9 +102,9 @@ public class CarServiceTest {
         RentalClassDTO rentalClassDTO=new RentalClassDTO("Economy",2.45f);
         RentalClass rentalClass=modelMapper.map(rentalClassDTO,RentalClass.class);
 
-        EasyMock.expect(carRepositoryMock.findAll()).andReturn(Arrays.asList(new Car("VW GOL IV","KR12345",rentalClass)));
+        EasyMock.expect(carRepositoryMock.findAll()).andReturn(Collections.singletonList(new Car("VW GOL IV", "KR12345", rentalClass)));
         replay(carRepositoryMock);
-        List<CarDTO> expectedCars=Arrays.asList(new CarDTO("VW GOL IV","KR12345",rentalClassDTO));
+        List<CarDTO> expectedCars= Collections.singletonList(new CarDTO("VW GOL IV", "KR12345", rentalClassDTO));
 
         //act
         List<CarDTO> resultCars=carService.readAll();

@@ -1,9 +1,6 @@
 package com.epam.carrental.data_generator;
 
-import com.epam.carrental.dto.CarDTO;
-import com.epam.carrental.dto.CustomerDTO;
-import com.epam.carrental.dto.RentalClassDTO;
-import com.epam.carrental.dto.RentedCarDTO;
+import com.epam.carrental.dto.*;
 import com.epam.carrental.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +8,6 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -22,39 +17,35 @@ public class DataGenerator {
 
     @Autowired
     ClassGenerator classGenerator;
-
     @Autowired
     private CarGenerator carGenerator;
-
     @Autowired
     private CustomerGenerator customerGenerator;
-
-    @Autowired
-    RentalClassService rentalClassService;
-
-    @Autowired
-    private CarService carService;
-
-    @Autowired
-    private CustomerService customerService;
-
-    @Autowired
-    private RentReturnService rentReturnService;
-
-    @Autowired
-    private CurrentRentalsService currentRentalsService;
-
     @Autowired
     private ZonedDateTimeGenerator zonedDateTimeGenerator;
-
+    @Autowired
+    private RandomNumberGenerator randomNumberGenerator;
     @Autowired
     private CurrentTimeUtil currentTimeUtil;
 
     @Autowired
-    private RandomNumberGenerator randomNumberGenerator;
+    private CarService carService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    RentalClassService rentalClassService;
+    @Autowired
+    private RentReturnService rentReturnService;
+    @Autowired
+    private CurrentRentalsService currentRentalsService;
+    @Autowired
+    private BookCarService bookCarService;
 
     @Value("${rented.time.initial}")
     private String timeInitial;
+
+    @Value("${booked.time.end}")
+    private String timeEnd;
 
     private List<RentalClassDTO> rentalClasses;
     private List<CarDTO> availableCars;
@@ -84,16 +75,25 @@ public class DataGenerator {
 
         for (CarDTO car : availableCars) {
             ZonedDateTime beginTime = ZonedDateTime.parse(timeInitial);
+            ZonedDateTime endTime = ZonedDateTime.parse(timeEnd);
 
-            while (beginTime.isBefore(ZonedDateTime.now())) {
-                ZonedDateTime rentedTime = zonedDateTimeGenerator.getTimeAfter(beginTime);
-                ZonedDateTime returnedTime = zonedDateTimeGenerator.getTimeAfter(rentedTime);
-                if (returnedTime.isBefore(ZonedDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()))) {
-                    rentCar(car, rentedTime,returnedTime);
-                    RentedCarDTO rentedCarFromDB = currentRentalsService.findCurrentRentals().get(0);
-                    returnCar(rentedCarFromDB, returnedTime);
+            while (beginTime.isBefore(endTime)) {
+                ZonedDateTime generatedBeginTime = zonedDateTimeGenerator.getTimeAfter(beginTime);
+                ZonedDateTime generatedEndTime = zonedDateTimeGenerator.getTimeAfter(generatedBeginTime);
+
+                if (randomNumberGenerator.generateWithin(0, 2) == 0 && generatedBeginTime.isBefore(ZonedDateTime.now())) { // lottery "Book or Rent" && logic "rentals only before today"
+                    RentedCarDTO rentedCarDTO = new RentedCarDTO(car, getRandomCustomer(), generatedBeginTime, generatedEndTime);
+                    rentCar(rentedCarDTO);
+                    RentedCarDTO rentedCarFromDB = findCurrentlyRentedCar(car);
+
+                    if (generatedEndTime.isBefore(ZonedDateTime.now())) { // if true: this car will be returned, if false: this car will be in current rentals
+                        returnCar(rentedCarFromDB, generatedEndTime);
+                    }
+                } else {
+                    bookCar(car, generatedBeginTime, generatedEndTime);
                 }
-                beginTime = returnedTime;
+                beginTime = generatedEndTime;
+
             }
         }
         currentTimeUtil.setCurrentTime(null);
@@ -104,14 +104,23 @@ public class DataGenerator {
         rentReturnService.returnRentedCar(rentedCarFromDB);
     }
 
-    private void rentCar(CarDTO car, ZonedDateTime rentedTime,ZonedDateTime plannedDateOfReturn) {
-        RentedCarDTO rentedCarDTO = new RentedCarDTO(car, getRandomCustomer(),plannedDateOfReturn);
-        currentTimeUtil.setCurrentTime(rentedTime);
+    private void rentCar(RentedCarDTO rentedCarDTO) {
+        currentTimeUtil.setCurrentTime(rentedCarDTO.getDateOfRent());
         rentReturnService.rentCarForCustomer(rentedCarDTO);
+    }
+
+    private void bookCar(CarDTO car, ZonedDateTime bookedTime, ZonedDateTime unbookedTime) {
+        BookedCarDTO bookedCarDTO = new BookedCarDTO(car, getRandomCustomer(), bookedTime, unbookedTime);
+        bookCarService.bookCar(bookedCarDTO);
+    }
+
+    private RentedCarDTO findCurrentlyRentedCar(CarDTO car) {
+        return currentRentalsService.findAll()
+                .stream()
+                .filter(rentedCar -> rentedCar.getCar().equals(car)).findAny().orElse(null);
     }
 
     private CustomerDTO getRandomCustomer() {
         return customers.get(randomNumberGenerator.generateWithin(0, customers.size()));
     }
-
 }

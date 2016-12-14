@@ -1,5 +1,6 @@
 package com.epam.carrental.gui;
 
+import com.epam.carrental.gui.view.views.impl.ScheduleChartView;
 import com.epam.carrental.gui.view.views.impl.TableTabView;
 import com.epam.carrental.gui.view.views.impl.TestConnectionView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class MainWindow {
     @Autowired
     private TableTabView bookCarView;
 
+    @Autowired
+    private ScheduleChartView scheduleChartView;
+
     @PostConstruct
     @SuppressWarnings("unused")
     public void init() {
@@ -54,6 +58,7 @@ public class MainWindow {
         jTabbedPane.addTab("Rental history", null, rentalHistoryView.initView(), "Rental history");
         jTabbedPane.addTab("Rental classes", null, rentalClassView.initView(), "Rental classes");
         jTabbedPane.addTab("Available to book", null, bookCarView.initView(), "Available to book");
+        jTabbedPane.addTab("Schedule chart", null,scheduleChartView.initView(), "Schedule chart");
         mainFrame.add(jTabbedPane);
         mainFrame.pack();
         //set component relativeTo null so that window will be shown in the center of the screen

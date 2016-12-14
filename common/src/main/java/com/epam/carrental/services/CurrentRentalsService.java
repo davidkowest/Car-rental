@@ -11,5 +11,5 @@ public interface CurrentRentalsService {
 
     List<CarDTO> findAvailableToRent(RentalClassDTO rentalClassDTO, ZonedDateTime plannedDateOfReturn);
 
-    List<RentedCarDTO> findCurrentRentals();
+    List<RentedCarDTO> findAll();
 }

@@ -3,7 +3,7 @@ package com.epam.carrental.controller;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.gui.utils.BackgroundWorker;
 import com.epam.carrental.gui.view.MessageView;
-import com.epam.carrental.models.RentedCarTableModel;
+import com.epam.carrental.models.table.RentedCarTableModel;
 import com.epam.carrental.services.CurrentRentalsService;
 import com.epam.carrental.services.RentReturnService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class CurrentRentalsController {
     public void refreshTableView() {
 
         inBackgroundWorker.execute(
-                currentRentalsService::findCurrentRentals,
+                currentRentalsService::findAll,
                 rentedCarTableModel::setDataAndRefreshTable,
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }

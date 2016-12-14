@@ -8,7 +8,7 @@ import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.gui.utils.DateTimeAdapter;
 import com.epam.carrental.gui.view.MessageView;
 import com.epam.carrental.gui.view.hanlders.UserInputHandler;
-import com.epam.carrental.models.AbstractSwingTableModel;
+import com.epam.carrental.models.table.AbstractSwingTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

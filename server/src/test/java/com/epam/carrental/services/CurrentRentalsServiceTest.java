@@ -1,7 +1,6 @@
 package com.epam.carrental.services;
 
 import com.epam.carrental.data_generator.CurrentTimeUtil;
-import com.epam.carrental.dto.BookedCarDTO;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.RentalClassDTO;
 import com.epam.carrental.dto.RentedCarDTO;
@@ -105,26 +104,18 @@ public class CurrentRentalsServiceTest {
         RentedCar currentRentedCar = new RentedCar(rentedCar, customer, rentingDate, plannedReturnDate);
         RentedCarDTO currentRentedCarDTO = modelMapper.map(currentRentedCar, RentedCarDTO.class);
 
-        EasyMock.expect(rentedCarRepositoryMock.findAll()).andReturn(Arrays.asList(currentRentedCar));
+        EasyMock.expect(rentedCarRepositoryMock.findAll()).andReturn(Collections.singletonList(currentRentedCar));
         replay(rentedCarRepositoryMock);
 
 
-        List<RentedCarDTO> expectedRentedCarsList = Arrays.asList(currentRentedCarDTO);
+        List<RentedCarDTO> expectedRentedCarsList = Collections.singletonList(currentRentedCarDTO);
 
         //act
-        List<RentedCarDTO> resultRentedCarList = currentRentalsService.findCurrentRentals();
+        List<RentedCarDTO> resultRentedCarList = currentRentalsService.findAll();
 
         //assert
         verify(rentedCarRepositoryMock);
         Assert.assertEquals(resultRentedCarList, expectedRentedCarsList);
     }
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void findNotRentedInNonExistingClassTest() {
-        //arrange
-        Car rentedCar = new Car("VW GOL IV", "KR12345", null);
-
-        //act
-        List<RentedCarDTO> resultRentedCarList = currentRentalsService.findCurrentRentals();
-    }
 }

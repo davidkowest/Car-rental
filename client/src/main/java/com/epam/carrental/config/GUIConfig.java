@@ -1,6 +1,6 @@
 package com.epam.carrental.config;
 
-import com.epam.carrental.models.UpdatableListComboBoxModel;
+import com.epam.carrental.models.table.UpdatableListComboBoxModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
