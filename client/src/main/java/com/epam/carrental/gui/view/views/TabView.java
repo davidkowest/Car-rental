@@ -23,7 +23,7 @@ public abstract class TabView {
         jPanel.add(prepareButton(name,action));
     }
 
-    protected void addTimePickerToToolBar(String label, Component datePickerComponent) {
+    protected void addPickerToToolBar(String label, Component datePickerComponent) {
         JLabel jLabel = new JLabel();
         jLabel.setText(label);
         toolBar.add(jLabel, BorderLayout.NORTH);
@@ -39,6 +39,8 @@ public abstract class TabView {
         button.addActionListener(e -> action.run());
         return button;
     }
+
+    @SuppressWarnings("unchecked")
     protected JComboBox prepareComboBox(ListComboBoxModel comboBoxModel, DefaultListCellRenderer renderer, PopupMenuListener listener) {
         JComboBox comboBox = new JComboBox(comboBoxModel);
         comboBox.setRenderer(renderer);

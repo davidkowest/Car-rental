@@ -10,7 +10,6 @@ import com.epam.carrental.models.table.UpdatableListComboBoxModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.swing.*;
 
 
@@ -29,19 +28,19 @@ public class RentCarView extends TableTabView {
 
     public RentCarView(AbstractSwingTableModel availableToRentCarTableModel) {
         super(availableToRentCarTableModel);
-
     }
 
-    @SuppressWarnings("unchecked")
-    @PostConstruct
-    protected void prepareToolBar() {
+    @Override
+    public JPanel initView() {
+        super.initView();
+        JComboBox rentalClassComboBox = prepareComboBox(updatableListComboBoxModel, new RentalClassRenderer(), rentalClassComboBoxListener);
 
-        JComboBox<RentalClassDTO> rentalClassComboBox = prepareComboBox(updatableListComboBoxModel, new RentalClassRenderer(), rentalClassComboBoxListener);
-
-        addButtonToToolBar("Refresh table",() -> rentCarController.refreshTableView((RentalClassDTO) rentalClassComboBox.getSelectedItem(), dateUntilPicker.getDateTime()));
-        addButtonToToolBar("Rent a car",() -> rentCarController.handleUserInput(getSelectedRow()));
+        addButtonToToolBar("Refresh table", () -> rentCarController.refreshTableView((RentalClassDTO) rentalClassComboBox.getSelectedItem(), dateUntilPicker.getDateTime()));
+        addButtonToToolBar("Rent a car", () -> rentCarController.handleUserInput(getSelectedRow()));
         addComponentToToolBar(rentalClassComboBox);
-        addTimePickerToToolBar("Available until", dateUntilPicker.getComponent());
+        addPickerToToolBar("Available until", dateUntilPicker.getComponent());
+        return jPanel;
     }
+
 }
 

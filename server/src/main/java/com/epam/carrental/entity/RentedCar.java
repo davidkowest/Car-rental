@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@Check(constraints = "plannedDateOfReturn > dateOfRent")
+@Check(constraints = "endDate > startDate")
 public class RentedCar {
 
     @Id
@@ -27,15 +27,15 @@ public class RentedCar {
     private Customer customer;
 
     @Column(nullable = false)
-    private ZonedDateTime dateOfRent;
+    private ZonedDateTime startDate;
 
     @Column(nullable = false)
-    private ZonedDateTime plannedDateOfReturn;
+    private ZonedDateTime endDate;
 
-    public RentedCar(Car car, Customer customer, ZonedDateTime dateOfRent,ZonedDateTime plannedDateOfReturn) {
+    public RentedCar(Car car, Customer customer, ZonedDateTime startDate, ZonedDateTime plannedDateOfReturn) {
         this.car = car;
         this.customer = customer;
-        this.dateOfRent = dateOfRent;
-        this.plannedDateOfReturn=plannedDateOfReturn;
+        this.startDate = startDate;
+        this.endDate = plannedDateOfReturn;
     }
 }

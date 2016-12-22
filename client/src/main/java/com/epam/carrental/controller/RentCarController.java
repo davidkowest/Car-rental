@@ -46,7 +46,7 @@ public class RentCarController {
     public void save(RentedCarDTO rentedCarDTO) {
         inBackgroundWorker.execute(
                 () -> rentReturnService.rentCarForCustomer(rentedCarDTO),
-                () -> refreshTableView(rentedCarDTO.getCar().getRentalClass(),rentedCarDTO.getPlannedDateOfReturn()),
+                () -> refreshTableView(rentedCarDTO.getCar().getRentalClass(), rentedCarDTO.getEndDate()),
                 e -> messageView.showErrorMessage(e.getCause().getMessage()));
     }
 

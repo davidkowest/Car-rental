@@ -1,26 +1,25 @@
 package com.epam.carrental.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RentedCarDTO implements Serializable {
+public class RentedCarDTO implements CarUsageDTO, Serializable {
 
     private CarDTO car;
     private CustomerDTO customer;
-    private ZonedDateTime dateOfRent;
-    private ZonedDateTime plannedDateOfReturn;
+    private ZonedDateTime startDate;
+    private ZonedDateTime endDate;
 
-    public RentedCarDTO(CarDTO car, CustomerDTO customer) {
+    public RentedCarDTO(CarDTO car, CustomerDTO customer, ZonedDateTime plannedDateOfReturn) {
         this.car = car;
         this.customer = customer;
-    }
-
-    public RentedCarDTO(CarDTO car, CustomerDTO customer,ZonedDateTime plannedDateOfReturn) {
-        this(car,customer);
-        this.plannedDateOfReturn=plannedDateOfReturn;
+        this.endDate = plannedDateOfReturn;
     }
 }

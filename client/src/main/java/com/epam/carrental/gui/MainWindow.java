@@ -39,6 +39,9 @@ public class MainWindow {
     @Autowired
     private ScheduleChartView scheduleChartView;
 
+    @Autowired
+    private TableTabView statisticsView;
+
     @PostConstruct
     @SuppressWarnings("unused")
     public void init() {
@@ -58,7 +61,8 @@ public class MainWindow {
         jTabbedPane.addTab("Rental history", null, rentalHistoryView.initView(), "Rental history");
         jTabbedPane.addTab("Rental classes", null, rentalClassView.initView(), "Rental classes");
         jTabbedPane.addTab("Available to book", null, bookCarView.initView(), "Available to book");
-        jTabbedPane.addTab("Schedule chart", null,scheduleChartView.initView(), "Schedule chart");
+        jTabbedPane.addTab("Schedule chart", null, scheduleChartView.initView(), "Schedule chart");
+        jTabbedPane.addTab("Statistics", null, statisticsView.initView(), "Statistics");
         mainFrame.add(jTabbedPane);
         mainFrame.pack();
         //set component relativeTo null so that window will be shown in the center of the screen

@@ -15,12 +15,12 @@ public class ZonedDateTimeGeneratorTest {
     public void testGeneratedTime(String start, long timeMin, long timeMax) {
         //arrange
         ZonedDateTimeGenerator generator = new ZonedDateTimeGenerator();
-        generator.timeMin = timeMin;
-        generator.timeMax = timeMax;
+        generator.rentalTimeMin = timeMin;
+        generator.rentalTimeMax = timeMax;
 
         //act
         ZonedDateTime startTime = ZonedDateTime.parse(start);
-        ZonedDateTime time = generator.getTimeAfter(startTime);
+        ZonedDateTime time = generator.getEndTimeAfter(startTime);
 
         //assert
         assertTrue(time.isAfter(startTime), "Found time: "+time+ "is not after StartTime: "+startTime);

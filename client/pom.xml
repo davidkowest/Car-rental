@@ -32,7 +32,6 @@
     <properties>
         <swingx.version>1.6.1</swingx.version>
         <sandbox.schedule.version>0.1</sandbox.schedule.version>
-        <guava.version>20.0</guava.version>
     </properties>
 
     <dependencies>
@@ -84,7 +83,6 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 </project>

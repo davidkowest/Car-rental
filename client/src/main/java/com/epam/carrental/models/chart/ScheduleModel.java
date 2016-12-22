@@ -51,6 +51,7 @@ public class ScheduleModel extends AbstractScheduleModel<CarResource, CarUsage> 
             this.end = carUsage.getEnd();
         }
         assigments.put(car, carUsage);
+        fireDataChanged(true, true, true);
     }
 
     private void putAll(Multimap<CarResource, CarUsage> toAssign) {

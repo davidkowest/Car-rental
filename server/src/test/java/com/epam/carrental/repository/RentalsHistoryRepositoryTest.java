@@ -17,10 +17,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @ContextConfiguration(classes = {DatabaseConfig.class})
-public class RentedCarHistoryRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
+public class RentalsHistoryRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Autowired
-    private RentedCarHistoryRepository rentedCarHistoryRepository;
+    private RentalsHistoryRepository rentalsHistoryRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -50,11 +50,11 @@ public class RentedCarHistoryRepositoryTest extends AbstractTransactionalTestNGS
         ZonedDateTime returningDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 18, 10, 0), ZoneId.of("Europe/Warsaw"));
 
         RentedCarHistory firstHistory = new RentedCarHistory(car, customer, rentingDate, returningDate);
-        rentedCarHistoryRepository.save(firstHistory);
+        rentalsHistoryRepository.save(firstHistory);
 
         //act
         RentedCarHistory secondHistory = new RentedCarHistory(car, customer, rentingDate, returningDate);
-        rentedCarHistoryRepository.save(secondHistory);
+        rentalsHistoryRepository.save(secondHistory);
 
 
     }
@@ -68,7 +68,7 @@ public class RentedCarHistoryRepositoryTest extends AbstractTransactionalTestNGS
         ZonedDateTime returningDate = ZonedDateTime.of(LocalDateTime.of(2016, 10, 19, 9, 0), ZoneId.of("Europe/Warsaw"));
         //act
         RentedCarHistory rentedCarHistory = new RentedCarHistory(car, customer, rentingDate, returningDate);
-        rentedCarHistoryRepository.save(rentedCarHistory);
+        rentalsHistoryRepository.save(rentedCarHistory);
 
     }
 

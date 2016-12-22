@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Component
 @Conditional(GenerateCondition.class)
@@ -17,6 +18,8 @@ public class DataGenerator {
 
     @Autowired
     ClassGenerator classGenerator;
+    @Autowired
+    RentalClassService rentalClassService;
     @Autowired
     private CarGenerator carGenerator;
     @Autowired
@@ -32,8 +35,6 @@ public class DataGenerator {
     private CarService carService;
     @Autowired
     private CustomerService customerService;
-    @Autowired
-    RentalClassService rentalClassService;
     @Autowired
     private RentReturnService rentReturnService;
     @Autowired
@@ -74,15 +75,16 @@ public class DataGenerator {
     private void generateAndSaveRentalHistory() {
 
         for (CarDTO car : availableCars) {
-            ZonedDateTime beginTime = ZonedDateTime.parse(timeInitial);
+            ZonedDateTime startTime = ZonedDateTime.parse(timeInitial);
             ZonedDateTime endTime = ZonedDateTime.parse(timeEnd);
 
-            while (beginTime.isBefore(endTime)) {
-                ZonedDateTime generatedBeginTime = zonedDateTimeGenerator.getTimeAfter(beginTime);
-                ZonedDateTime generatedEndTime = zonedDateTimeGenerator.getTimeAfter(generatedBeginTime);
+            while (startTime.isBefore(endTime)) {
+                ZonedDateTime generatedStartTime = zonedDateTimeGenerator.getStartTimeAfter(startTime);
+                ZonedDateTime generatedEndTime = zonedDateTimeGenerator.getEndTimeAfter(generatedStartTime);
 
-                if (randomNumberGenerator.generateWithin(0, 2) == 0 && generatedBeginTime.isBefore(ZonedDateTime.now())) { // lottery "Book or Rent" && logic "rentals only before today"
-                    RentedCarDTO rentedCarDTO = new RentedCarDTO(car, getRandomCustomer(), generatedBeginTime, generatedEndTime);
+                Random random = new Random();
+                if (random.nextBoolean() && generatedStartTime.isBefore(ZonedDateTime.now())) { // lottery "Book or Rent" && logic "rentals only before today"
+                    RentedCarDTO rentedCarDTO = new RentedCarDTO(car, getRandomCustomer(), generatedStartTime, generatedEndTime);
                     rentCar(rentedCarDTO);
                     RentedCarDTO rentedCarFromDB = findCurrentlyRentedCar(car);
 
@@ -90,9 +92,9 @@ public class DataGenerator {
                         returnCar(rentedCarFromDB, generatedEndTime);
                     }
                 } else {
-                    bookCar(car, generatedBeginTime, generatedEndTime);
+                    bookCar(car, generatedStartTime, generatedEndTime);
                 }
-                beginTime = generatedEndTime;
+                startTime = generatedEndTime;
 
             }
         }
@@ -105,7 +107,7 @@ public class DataGenerator {
     }
 
     private void rentCar(RentedCarDTO rentedCarDTO) {
-        currentTimeUtil.setCurrentTime(rentedCarDTO.getDateOfRent());
+        currentTimeUtil.setCurrentTime(rentedCarDTO.getStartDate());
         rentReturnService.rentCarForCustomer(rentedCarDTO);
     }
 

@@ -5,7 +5,7 @@ import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
 import com.epam.carrental.entity.RentalClass;
 import com.epam.carrental.entity.RentedCarHistory;
-import com.epam.carrental.repository.RentedCarHistoryRepository;
+import com.epam.carrental.repository.RentalsHistoryRepository;
 import org.easymock.EasyMock;
 import org.modelmapper.ModelMapper;
 import org.testng.Assert;
@@ -21,24 +21,24 @@ import static org.easymock.EasyMock.*;
 
 public class RentalHistoryServiceTest {
 
-    private RentedCarHistoryRepository rentedCarHistoryRepositoryMock;
+    private RentalsHistoryRepository rentalsHistoryRepositoryMock;
     private RentalsHistoryService rentalsHistoryService;
     private ModelMapper modelMapper = new ModelMapper();
 
     @BeforeMethod
     public void setUp() {
         RentalsHistoryServiceImpl rentalsHistoryServiceImp = new RentalsHistoryServiceImpl();
-        this.rentedCarHistoryRepositoryMock = createStrictMock(RentedCarHistoryRepository.class);
+        this.rentalsHistoryRepositoryMock = createStrictMock(RentalsHistoryRepository.class);
         rentalsHistoryServiceImp.modelMapper = modelMapper;
-        rentalsHistoryServiceImp.rentedCarHistoryRepository = rentedCarHistoryRepositoryMock;
+        rentalsHistoryServiceImp.rentalsHistoryRepository = rentalsHistoryRepositoryMock;
         this.rentalsHistoryService = rentalsHistoryServiceImp;
     }
 
     @Test(dataProvider = "provideRentedHistories")
     public void testFindByDateOfRentAndDateOfReturn(List<RentedCarHistory> histories, int expectedSize) throws Exception {
         //arrange
-        EasyMock.expect(rentedCarHistoryRepositoryMock.findAll()).andReturn(histories);
-        replay(rentedCarHistoryRepositoryMock);
+        EasyMock.expect(rentalsHistoryRepositoryMock.findAll()).andReturn(histories);
+        replay(rentalsHistoryRepositoryMock);
         ZonedDateTime dateOfRent = getTime("2015-01-10T10:00:00Z");
         ZonedDateTime dateOfReturn = getTime("2015-03-25T10:00:00Z");
 
@@ -46,7 +46,7 @@ public class RentalHistoryServiceTest {
         List<RentedCarHistoryDTO> resultRentedCarHistoryList = rentalsHistoryService.findByDateOfRentAndDateOfReturn(dateOfRent, dateOfReturn);
 
         //assert
-        verify(rentedCarHistoryRepositoryMock);
+        verify(rentalsHistoryRepositoryMock);
         Assert.assertEquals(resultRentedCarHistoryList.size(), expectedSize);
     }
 

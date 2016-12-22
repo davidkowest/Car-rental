@@ -60,7 +60,7 @@ public class BookCarServiceImpl implements BookCarService {
 
         List<Car> rentedCars = rentedCarRepository.findAll()
                 .stream()
-                .filter(rentedCar -> rentedCar.getPlannedDateOfReturn().isAfter(startDate))
+                .filter(rentedCar -> rentedCar.getEndDate().isAfter(startDate))
                 .map(RentedCar::getCar)
                 .collect(Collectors.toList());
 

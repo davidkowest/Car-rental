@@ -1,6 +1,7 @@
 package com.epam.carrental.services;
 
 import com.epam.carrental.data_generator.CurrentTimeUtil;
+import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.entity.Car;
 import com.epam.carrental.entity.Customer;
@@ -8,7 +9,7 @@ import com.epam.carrental.entity.RentedCar;
 import com.epam.carrental.entity.RentedCarHistory;
 import com.epam.carrental.repository.CarRepository;
 import com.epam.carrental.repository.CustomerRepository;
-import com.epam.carrental.repository.RentedCarHistoryRepository;
+import com.epam.carrental.repository.RentalsHistoryRepository;
 import com.epam.carrental.repository.RentedCarRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -29,21 +31,30 @@ public class RentReturnServiceImpl implements RentReturnService {
     @Autowired
     RentedCarRepository rentedCarRepository;
     @Autowired
-    RentedCarHistoryRepository rentedCarHistoryRepository;
+    RentalsHistoryRepository rentalsHistoryRepository;
     @Autowired
     ModelMapper modelMapper;
     @Autowired
     CurrentTimeUtil currentTimeUtil;
+    @Autowired
+    CurrentRentalsService currentRentalsService;
 
     @Override
     @Transactional
-    public  void rentCarForCustomer(RentedCarDTO rentedCarDTO) {
+    public void rentCarForCustomer(RentedCarDTO rentedCarDTO) {
 
         Car car = carRepository.findByRegistrationNumber(rentedCarDTO.getCar().getRegistrationNumber());
         Customer customer = customerRepository.findByEmail(rentedCarDTO.getCustomer().getEmail());
-        ZonedDateTime currentDateTime=currentTimeUtil.getCurrentTime();
+        ZonedDateTime currentDateTime = currentTimeUtil.getCurrentTime();
 
-        RentedCar rentedCar = new RentedCar(car, customer,currentDateTime,rentedCarDTO.getPlannedDateOfReturn());
+        RentedCar rentedCar = new RentedCar(car, customer, currentDateTime, rentedCarDTO.getEndDate());
+
+        List<CarDTO> avaiableCars = currentRentalsService.findAvailableToRent(rentedCarDTO.getCar().getRentalClass(), rentedCarDTO.getEndDate());
+        if (!avaiableCars.contains(rentedCarDTO.getCar())) {
+            throw new IllegalArgumentException("This car is not available for this period");
+        }
+
+
 //// TODO: For demo concurrent modifications purpose only
 //        try {
 //            Thread.sleep(5000);
@@ -67,15 +78,15 @@ public class RentReturnServiceImpl implements RentReturnService {
             throw new IllegalArgumentException(rentedCarDTO.getCustomer()+"does not exist in DB");
         }
 
-        RentedCar rentedCar = rentedCarRepository.findByCarAndCustomerAndDateOfRent(car, customer, rentedCarDTO.getDateOfRent());
+        RentedCar rentedCar = rentedCarRepository.findByCarAndCustomerAndDateOfRent(car, customer, rentedCarDTO.getStartDate());
 
         ZonedDateTime dateOfReturn=currentTimeUtil.getCurrentTime();
         RentedCarHistory rentedCarHistory = modelMapper.map(rentedCar, RentedCarHistory.class);
-        rentedCarHistory.setDateOfReturn(dateOfReturn);
+        rentedCarHistory.setEndDate(dateOfReturn);
 
         rentedCarHistory.setId(null);
 
-        rentedCarHistoryRepository.save(rentedCarHistory);
+        rentalsHistoryRepository.save(rentedCarHistory);
         rentedCarRepository.deleteByCar(car);
     }
 }

@@ -10,7 +10,7 @@ import com.epam.carrental.models.table.AbstractSwingTableModel;
 import com.epam.carrental.models.table.UpdatableListComboBoxModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
+import javax.swing.*;
 
 @org.springframework.stereotype.Component
 public class BookCarView extends TableTabView {
@@ -31,15 +31,14 @@ public class BookCarView extends TableTabView {
         super(availableToBookCarTableModel);
     }
 
-    @SuppressWarnings("unused")
-    @PostConstruct
-    protected void prepareToolBar() {
-
+    @Override
+    public JPanel initView() {
+        super.initView();
         addButtonToToolBar("Refresh table", () -> bookCarController.refreshTableView(dateFromPicker.getDateTime(), dateToPicker.getDateTime(), updatableListComboBoxModel.getSelectedItem()));
         addButtonToToolBar("Book a car", () -> bookCarController.handleUserInput(getSelectedRow(), dateFromPicker.getDateTime(), dateToPicker.getDateTime()));
-
-        addComponentToToolBar(prepareComboBox(updatableListComboBoxModel,new RentalClassRenderer(),rentalClassComboBoxListener));
-        addTimePickerToToolBar("Date from:", dateFromPicker.getComponent());
-        addTimePickerToToolBar("Date to:", dateToPicker.getComponent());
+        addComponentToToolBar(prepareComboBox(updatableListComboBoxModel, new RentalClassRenderer(), rentalClassComboBoxListener));
+        addPickerToToolBar("Date from:", dateFromPicker.getComponent());
+        addPickerToToolBar("Date to:", dateToPicker.getComponent());
+        return jPanel;
     }
 }

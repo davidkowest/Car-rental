@@ -12,8 +12,8 @@ public class RentedCarTableModel extends AbstractSwingTableModel<RentedCarDTO> {
         this.columnAndActionMap.put("Car model",rentedCarDTO -> rentedCarDTO.getCar().getModel());
         this.columnAndActionMap.put("Name",rentedCarDTO -> rentedCarDTO.getCustomer().getName());
         this.columnAndActionMap.put("Email",rentedCarDTO -> rentedCarDTO.getCustomer().getEmail());
-        this.columnAndActionMap.put("Date of rent", RentedCarDTO::getDateOfRent);
-        this.columnAndActionMap.put("Planned return date", RentedCarDTO::getPlannedDateOfReturn);
+        this.columnAndActionMap.put("Date of rent", RentedCarDTO::getStartDate);
+        this.columnAndActionMap.put("Planned return date", RentedCarDTO::getEndDate);
     }
 }
 

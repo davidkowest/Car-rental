@@ -41,8 +41,7 @@ public abstract class AbstractSwingTableModel<DTO> extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Function<DTO, Object> function=this.columnAndActionMap.values().stream().skip(columnIndex).findFirst().get();
-        return function.apply(data.get(rowIndex));
+        return this.columnAndActionMap.values().stream().skip(columnIndex).findFirst().orElse(null).apply(data.get(rowIndex));
     }
 
     public DTO getModel(int rowIndex) {

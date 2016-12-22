@@ -27,10 +27,10 @@ public class ScheduleDataConverter {
     private Multimap<CarResource, CarUsage> convertBookedCars(List<BookedCarDTO> bookedCarDTOS) {
         Multimap<CarResource, CarUsage> assignments = ArrayListMultimap.create();
 
-        bookedCarDTOS.stream()
+        bookedCarDTOS
                 .forEach(bookedCarDTO -> assignments.put(
-                        new CarResource(convertCar(bookedCarDTO.getCar())),
-                        new CarUsage(bookedCarDTO.getStartDate(), bookedCarDTO.getEndDate(), convertCustomer(bookedCarDTO.getCustomer()), CarState.BOOKED))
+                        new CarResource(bookedCarDTO.getCar()),
+                        new CarUsage<BookedCarDTO>(bookedCarDTO, CarState.BOOKED))
                 );
 
         return assignments;
@@ -39,10 +39,10 @@ public class ScheduleDataConverter {
     private Multimap<CarResource, CarUsage> convertRentedHistory(List<RentedCarHistoryDTO> rentedCarHistoryDTOS) {
         Multimap<CarResource, CarUsage> assignments = ArrayListMultimap.create();
 
-        rentedCarHistoryDTOS.stream()
+        rentedCarHistoryDTOS
                 .forEach(rentedCarHistoryDTO -> assignments.put(
-                        new CarResource(convertCar(rentedCarHistoryDTO.getCar())),
-                        new CarUsage(rentedCarHistoryDTO.getDateOfRent(), rentedCarHistoryDTO.getDateOfReturn(), convertCustomer(rentedCarHistoryDTO.getCustomer()), CarState.HISTORY))
+                        new CarResource(rentedCarHistoryDTO.getCar()),
+                        new CarUsage<RentedCarHistoryDTO>(rentedCarHistoryDTO, CarState.HISTORY))
                 );
 
         return assignments;
@@ -51,20 +51,12 @@ public class ScheduleDataConverter {
     private Multimap<CarResource, CarUsage> convertCurrentRentals(List<RentedCarDTO> currentRentals) {
         Multimap<CarResource, CarUsage> assignments = ArrayListMultimap.create();
 
-        currentRentals.stream()
+        currentRentals
                 .forEach(currentRentalDTO -> assignments.put(
-                        new CarResource(convertCar(currentRentalDTO.getCar())),
-                        new CarUsage(currentRentalDTO.getDateOfRent(), currentRentalDTO.getPlannedDateOfReturn(), convertCustomer(currentRentalDTO.getCustomer()), CarState.RENTED))
+                        new CarResource(currentRentalDTO.getCar()),
+                        new CarUsage<RentedCarDTO>(currentRentalDTO, CarState.RENTED))
                 );
 
         return assignments;
-    }
-
-    private String convertCustomer(CustomerDTO customerDTO) {
-        return customerDTO.getName();
-    }
-
-    private String convertCar(CarDTO carDTO) {
-        return carDTO.getRegistrationNumber() + ", " + carDTO.getModel();
     }
 }

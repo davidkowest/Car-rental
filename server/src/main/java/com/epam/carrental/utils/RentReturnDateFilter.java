@@ -16,7 +16,7 @@ public class RentReturnDateFilter implements Predicate<RentedCarHistory> {
 
     @Override
     public boolean test(RentedCarHistory rentedCarHistory) {
-        return rentedCarHistory.getDateOfRent().isBefore(dateOfReturn) && rentedCarHistory.getDateOfReturn().isAfter(dateOfRent);
+        return rentedCarHistory.getStartDate().isBefore(dateOfReturn) && rentedCarHistory.getEndDate().isAfter(dateOfRent);
     }
 
 

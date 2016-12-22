@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface RentedCarHistoryRepository extends CrudRepository<RentedCarHistory, Long> {
+public interface RentalsHistoryRepository extends CrudRepository<RentedCarHistory, Long> {
 
     @Override
     List<RentedCarHistory> findAll();

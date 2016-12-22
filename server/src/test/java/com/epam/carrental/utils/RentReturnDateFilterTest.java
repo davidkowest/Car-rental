@@ -25,7 +25,7 @@ public class RentReturnDateFilterTest {
         boolean rentedCarHistoryPredicate = rentReturnDateFilter.test(history);
 
         //assert
-        assertEquals(rentedCarHistoryPredicate,expected, "Test history with dateOfRent:  "+ history.getDateOfRent()+ "and dateOfReturn: "+history.getDateOfReturn());
+        assertEquals(rentedCarHistoryPredicate, expected, "Test history with startDate:  " + history.getStartDate() + "and endDate: " + history.getEndDate());
     }
 
     @DataProvider

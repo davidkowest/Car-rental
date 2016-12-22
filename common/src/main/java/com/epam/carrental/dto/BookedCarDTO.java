@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class BookedCarDTO implements Serializable {
+public class BookedCarDTO implements CarUsageDTO, Serializable {
 
     private CarDTO car;
     private CustomerDTO customer;

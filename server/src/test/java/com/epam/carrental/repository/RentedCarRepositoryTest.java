@@ -61,7 +61,7 @@ public class RentedCarRepositoryTest extends AbstractTransactionalTestNGSpringCo
         rentedCarRepository.save(rentedCar);
 
         //assert
-        ZonedDateTime resultDate = rentedCarRepository.findAll().get(0).getDateOfRent().withZoneSameInstant(ZoneId.of("Europe/Warsaw"));
+        ZonedDateTime resultDate = rentedCarRepository.findAll().get(0).getStartDate().withZoneSameInstant(ZoneId.of("Europe/Warsaw"));
         assertEquals(resultDate, expectedPolandRentingDate);
     }
 
@@ -84,7 +84,7 @@ public class RentedCarRepositoryTest extends AbstractTransactionalTestNGSpringCo
     }
 
     @Test
-    public void findByCarAndCustomerAndDateOfRentTest(){
+    public void findByCarAndCustomerAndDateOfRentTest() {
         //arrange
         Car car = carRepository.findByRegistrationNumber("KR12345");
         Customer customer = customerRepository.findByEmail("tom.cruse@wp.pl");

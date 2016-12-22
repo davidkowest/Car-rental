@@ -6,7 +6,7 @@ import com.epam.carrental.gui.utils.DateTimeAdapter;
 import com.epam.carrental.models.table.AbstractSwingTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
+import javax.swing.*;
 
 @org.springframework.stereotype.Component
 public class RentalHistoryView extends TableTabView {
@@ -22,11 +22,13 @@ public class RentalHistoryView extends TableTabView {
         super(rentedCarHistoryTableModel);
     }
 
-    @PostConstruct
-    protected void prepareView() {
-        addTimePickerToToolBar("Date from:", dateFromPicker.getComponent());
-        addTimePickerToToolBar("Date to:", dateToPicker.getComponent());
-        addButtonToToolBar("Filter",() ->rentalHistoryController.filter(dateFromPicker.getDateTime(), dateToPicker.getDateTime() ));
+    @Override
+    public JPanel initView() {
+        super.initView();
+        addPickerToToolBar("Date from:", dateFromPicker.getComponent());
+        addPickerToToolBar("Date to:", dateToPicker.getComponent());
+        addButtonToToolBar("Filter", () -> rentalHistoryController.filter(dateFromPicker.getDateTime(), dateToPicker.getDateTime()));
+        return jPanel;
     }
 
 }

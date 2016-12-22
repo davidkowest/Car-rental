@@ -7,8 +7,8 @@ import org.springframework.context.annotation.*;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter;
 
 @Configuration
-@PropertySource({"classpath:application.properties","classpath:dataGenerator.properties"})
-@ComponentScan (basePackages = {"com.epam.carrental"})
+@PropertySource({"classpath:application.properties", "classpath:dataGenerator.properties"})
+@ComponentScan(basePackages = {"com.epam.carrental"})
 @EnableAspectJAutoProxy
 public class ServicesConfig {
 
@@ -38,6 +38,9 @@ public class ServicesConfig {
 
     @Autowired
     ChartService chartService;
+
+    @Autowired
+    HistoryStatisticsService historyStatisticsService;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -85,7 +88,12 @@ public class ServicesConfig {
         return serviceExporter(chartService, ChartService.class);
     }
 
-    public SimpleHttpInvokerServiceExporter serviceExporter(Object service,Class<?> serviceInterface) {
+    @Bean
+    public SimpleHttpInvokerServiceExporter historyStatisticsExporter() {
+        return serviceExporter(historyStatisticsService, HistoryStatisticsService.class);
+    }
+
+    public SimpleHttpInvokerServiceExporter serviceExporter(Object service, Class<?> serviceInterface) {
         SimpleHttpInvokerServiceExporter exporter = new CustomSimpleHttpInvokerServiceExporter();
         exporter.setService(service);
         exporter.setServiceInterface(serviceInterface);

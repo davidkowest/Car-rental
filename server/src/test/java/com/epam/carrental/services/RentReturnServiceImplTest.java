@@ -7,7 +7,7 @@ import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.entity.*;
 import com.epam.carrental.repository.CarRepository;
 import com.epam.carrental.repository.CustomerRepository;
-import com.epam.carrental.repository.RentedCarHistoryRepository;
+import com.epam.carrental.repository.RentalsHistoryRepository;
 import com.epam.carrental.repository.RentedCarRepository;
 import org.easymock.EasyMock;
 import org.modelmapper.ModelMapper;
@@ -26,7 +26,7 @@ public class RentReturnServiceImplTest {
     private CarRepository carRepositoryMock;
     private CustomerRepository customerRepositoryMock;
     private RentedCarRepository rentedCarRepositoryMock;
-    private RentedCarHistoryRepository rentedCarHistoryRepositoryMock;
+    private RentalsHistoryRepository rentalsHistoryRepositoryMock;
     private CurrentTimeUtil currentTimeUtilMock;
     private RentReturnService rentReturnService;
     private CurrentRentalsService currentRentalsServiceMock;
@@ -46,7 +46,7 @@ public class RentReturnServiceImplTest {
         this.carRepositoryMock = createStrictMock(CarRepository.class);
         this.customerRepositoryMock = createStrictMock(CustomerRepository.class);
         this.rentedCarRepositoryMock = createStrictMock(RentedCarRepository.class);
-        this.rentedCarHistoryRepositoryMock = createStrictMock(RentedCarHistoryRepository.class);
+        this.rentalsHistoryRepositoryMock = createStrictMock(RentalsHistoryRepository.class);
         this.currentTimeUtilMock = createStrictMock(CurrentTimeUtil.class);
         this.currentRentalsServiceMock = createStrictMock(CurrentRentalsService.class);
 
@@ -55,8 +55,9 @@ public class RentReturnServiceImplTest {
         rentReturnServiceImpl.carRepository = carRepositoryMock;
         rentReturnServiceImpl.customerRepository = customerRepositoryMock;
         rentReturnServiceImpl.rentedCarRepository = rentedCarRepositoryMock;
-        rentReturnServiceImpl.rentedCarHistoryRepository = rentedCarHistoryRepositoryMock;
+        rentReturnServiceImpl.rentalsHistoryRepository = rentalsHistoryRepositoryMock;
         rentReturnServiceImpl.currentTimeUtil = currentTimeUtilMock;
+        rentReturnServiceImpl.currentRentalsService = currentRentalsServiceMock;
 
         this.rentReturnService = rentReturnServiceImpl;
     }
@@ -73,8 +74,8 @@ public class RentReturnServiceImplTest {
         EasyMock.expect(customerRepositoryMock.findByEmail(getCustomerDTO().getEmail())).andReturn(customer);
         EasyMock.expect(currentTimeUtilMock.getCurrentTime()).andReturn(dateOfRent);
         EasyMock.expect(rentedCarRepositoryMock.save(rentedCar)).andReturn(rentedCar);
-        EasyMock.expect(currentRentalsServiceMock.findAvailableToRent(rentedCarDTO.getCar().getRentalClass(),plannedReturnDate)).andReturn(Collections.singletonList(getCarDTO()));
-        replay(rentedCarRepositoryMock, carRepositoryMock, customerRepositoryMock, currentTimeUtilMock,currentRentalsServiceMock);
+        EasyMock.expect(currentRentalsServiceMock.findAvailableToRent(rentedCarDTO.getCar().getRentalClass(), plannedReturnDate)).andReturn(Collections.singletonList(getCarDTO()));
+        replay(rentedCarRepositoryMock, carRepositoryMock, customerRepositoryMock, currentTimeUtilMock, currentRentalsServiceMock);
 
         //act
         rentReturnService.rentCarForCustomer(rentedCarDTO);
@@ -103,14 +104,14 @@ public class RentReturnServiceImplTest {
         rentedCarRepositoryMock.deleteByCar(car);
         EasyMock.expectLastCall();
 
-        EasyMock.expect(rentedCarHistoryRepositoryMock.save(rentedCarHistory)).andReturn(rentedCarHistory);
-        replay(rentedCarHistoryRepositoryMock,carRepositoryMock,customerRepositoryMock,currentTimeUtilMock,rentedCarRepositoryMock);
+        EasyMock.expect(rentalsHistoryRepositoryMock.save(rentedCarHistory)).andReturn(rentedCarHistory);
+        replay(rentalsHistoryRepositoryMock, carRepositoryMock, customerRepositoryMock, currentTimeUtilMock, rentedCarRepositoryMock);
 
         //act
         rentReturnService.returnRentedCar(rentedCarDTO);
 
         //assert
-        verify(rentedCarHistoryRepositoryMock);
+        verify(rentalsHistoryRepositoryMock);
         verify(rentedCarRepositoryMock);
         verify(carRepositoryMock);
         verify(customerRepositoryMock);

@@ -2,7 +2,7 @@ package com.epam.carrental.services;
 
 
 import com.epam.carrental.dto.RentedCarHistoryDTO;
-import com.epam.carrental.repository.RentedCarHistoryRepository;
+import com.epam.carrental.repository.RentalsHistoryRepository;
 import com.epam.carrental.utils.RentReturnDateFilter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class RentalsHistoryServiceImpl implements RentalsHistoryService {
 
     @Autowired
-    RentedCarHistoryRepository rentedCarHistoryRepository;
+    RentalsHistoryRepository rentalsHistoryRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -28,7 +28,7 @@ public class RentalsHistoryServiceImpl implements RentalsHistoryService {
 
         RentReturnDateFilter rentReturnDateFilter = new RentReturnDateFilter(dateOfRent, dateOfReturn);
 
-        return rentedCarHistoryRepository.findAll().stream()
+        return rentalsHistoryRepository.findAll().stream()
                 .filter(rentReturnDateFilter)
                 .map(rentedCarHistory -> modelMapper.map(rentedCarHistory, RentedCarHistoryDTO.class))
                 .collect(Collectors.toList());
@@ -38,6 +38,6 @@ public class RentalsHistoryServiceImpl implements RentalsHistoryService {
     public List<RentedCarHistoryDTO> findAll() {
         Type listType = new TypeToken<List<RentedCarHistoryDTO>>() {
         }.getType();
-        return modelMapper.map(rentedCarHistoryRepository.findAll(),listType);
+        return modelMapper.map(rentalsHistoryRepository.findAll(), listType);
     }
 }

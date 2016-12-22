@@ -17,7 +17,7 @@ public interface RentedCarRepository extends CrudRepository<RentedCar, Long> {
 
     default RentedCar findByCarAndCustomerAndDateOfRent(Car car, Customer customer, ZonedDateTime dateOfRent) {
         return findAll().stream().filter(rentedCar -> rentedCar.getCar().equals(car) && rentedCar.getCustomer().equals(customer)
-                && rentedCar.getDateOfRent().equals(dateOfRent)).findFirst().orElse(null);
+                && rentedCar.getStartDate().equals(dateOfRent)).findFirst().orElse(null);
     }
 }
 

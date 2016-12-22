@@ -11,9 +11,9 @@ import java.time.ZonedDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames ={ "car_id", "customer_id","dateOfRent","dateOfReturn" })})
-@Check(constraints = "dateOfReturn > dateOfRent")
-public class RentedCarHistory  {
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"car_id", "customer_id", "startDate", "endDate"})})
+@Check(constraints = "endDate > startDate")
+public class RentedCarHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,13 +25,13 @@ public class RentedCarHistory  {
     @ManyToOne
     private Customer customer;
 
-    private ZonedDateTime dateOfRent;
-    private ZonedDateTime dateOfReturn;
+    private ZonedDateTime startDate;
+    private ZonedDateTime endDate;
 
     public RentedCarHistory(Car car, Customer customer, ZonedDateTime dateOfRent, ZonedDateTime dateOfReturn) {
         this.car = car;
         this.customer = customer;
-        this.dateOfRent = dateOfRent;
-        this.dateOfReturn = dateOfReturn;
+        this.startDate = dateOfRent;
+        this.endDate = dateOfReturn;
     }
 }
