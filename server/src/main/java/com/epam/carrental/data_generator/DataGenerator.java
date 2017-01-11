@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Random;
 
 @Component
 @Conditional(GenerateCondition.class)
@@ -82,8 +81,7 @@ public class DataGenerator {
                 ZonedDateTime generatedStartTime = zonedDateTimeGenerator.getStartTimeAfter(startTime);
                 ZonedDateTime generatedEndTime = zonedDateTimeGenerator.getEndTimeAfter(generatedStartTime);
 
-                Random random = new Random();
-                if (random.nextBoolean() && generatedStartTime.isBefore(ZonedDateTime.now())) { // lottery "Book or Rent" && logic "rentals only before today"
+                if (generatedStartTime.isBefore(ZonedDateTime.now())) { // "rentals only before today"
                     RentedCarDTO rentedCarDTO = new RentedCarDTO(car, getRandomCustomer(), generatedStartTime, generatedEndTime);
                     rentCar(rentedCarDTO);
                     RentedCarDTO rentedCarFromDB = findCurrentlyRentedCar(car);

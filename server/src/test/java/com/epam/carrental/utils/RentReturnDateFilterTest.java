@@ -1,9 +1,10 @@
 package com.epam.carrental.utils;
 
-import com.epam.carrental.entity.Car;
-import com.epam.carrental.entity.Customer;
-import com.epam.carrental.entity.RentalClass;
-import com.epam.carrental.entity.RentedCarHistory;
+import com.epam.carrental.cars.Car;
+import com.epam.carrental.customers.Customer;
+import com.epam.carrental.rentals.RentReturnDateFilter;
+import com.epam.carrental.rental_classes.RentalClass;
+import com.epam.carrental.rentals.history.RentedCarHistory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 

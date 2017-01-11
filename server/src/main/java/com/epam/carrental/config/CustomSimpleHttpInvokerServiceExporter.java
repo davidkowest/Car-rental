@@ -1,7 +1,7 @@
 package com.epam.carrental.config;
 
 import com.epam.carrental.settings.Headers;
-import com.epam.carrental.utils.Tenant;
+import com.epam.carrental.tenant.Tenant;
 import com.sun.net.httpserver.HttpExchange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter;

@@ -1,8 +1,8 @@
 package com.epam.carrental.gui;
 
-import com.epam.carrental.gui.view.views.impl.ScheduleChartView;
-import com.epam.carrental.gui.view.views.impl.TableTabView;
-import com.epam.carrental.gui.view.views.impl.TestConnectionView;
+import com.epam.carrental.chart.ScheduleChartView;
+import com.epam.carrental.gui.view.TableTabView;
+import com.epam.carrental.connection.TestConnectionView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

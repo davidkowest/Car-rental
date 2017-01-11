@@ -19,7 +19,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"com.epam.carrental.repository"})
+@EnableJpaRepositories(basePackages = {"com.epam.carrental"})
 @PropertySource("classpath:/database.properties")
 public class DatabaseConfig {
 
@@ -45,7 +45,7 @@ public class DatabaseConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setJpaVendorAdapter(adapter);
         entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.epam.carrental.entity");
+        entityManagerFactoryBean.setPackagesToScan("com.epam.carrental");
         entityManagerFactoryBean.setJpaDialect(jpaDialect());
 
         Properties properties = new Properties();
