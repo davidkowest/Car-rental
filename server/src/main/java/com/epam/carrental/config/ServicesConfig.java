@@ -7,7 +7,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter;
 
 @Configuration
-@PropertySource({"classpath:application.properties", "classpath:dataGenerator.properties"})
+@PropertySource({"classpath:services.properties", "classpath:dataGenerator.properties"})
 @ComponentScan(basePackages = {"com.epam.carrental"})
 @EnableAspectJAutoProxy
 public class ServicesConfig {

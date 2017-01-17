@@ -1,6 +1,5 @@
 package com.epam.carrental.cars;
 
-import com.epam.carrental.cars.Car;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

@@ -6,6 +6,7 @@ import com.epam.carrental.dto.RentalClassDTO;
 import com.epam.carrental.dto.RentedCarDTO;
 import com.epam.carrental.bookings.BookedCar;
 import com.epam.carrental.cars.Car;
+import com.epam.carrental.performance.PerformanceMonitor;
 import com.epam.carrental.rental_classes.RentalClass;
 import com.epam.carrental.bookings.BookedCarRepository;
 import com.epam.carrental.cars.CarRepository;
@@ -38,6 +39,7 @@ public class CurrentRentalsServiceImpl implements CurrentRentalsService {
     CurrentTimeUtil currentTimeUtil;
 
     @Override
+    @PerformanceMonitor
     public List<CarDTO> findAvailableToRent(RentalClassDTO rentalClassDTO, ZonedDateTime plannedDateOfReturn) {
 
         if (rentalClassDTO == null) {

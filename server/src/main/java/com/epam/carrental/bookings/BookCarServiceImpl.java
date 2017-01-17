@@ -8,11 +8,13 @@ import com.epam.carrental.customers.CustomerRepository;
 import com.epam.carrental.dto.BookedCarDTO;
 import com.epam.carrental.dto.CarDTO;
 import com.epam.carrental.dto.RentalClassDTO;
-import com.epam.carrental.rentals.RentedCarRepository;
+import com.epam.carrental.performance.PerformanceMonitor;
 import com.epam.carrental.rental_classes.RentalClass;
 import com.epam.carrental.rental_classes.RentalClassRepository;
 import com.epam.carrental.rentals.RentedCar;
+import com.epam.carrental.rentals.RentedCarRepository;
 import com.epam.carrental.services.BookCarService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class BookCarServiceImpl implements BookCarService {
 
     @Autowired
@@ -58,8 +61,8 @@ public class BookCarServiceImpl implements BookCarService {
     }
 
     @Override
+    @PerformanceMonitor
     public List<CarDTO> findAvailableToBook(ZonedDateTime startDate, ZonedDateTime endDate, RentalClassDTO rentalClassDTO) {
-
         if (rentalClassDTO == null) {
             throw new IllegalArgumentException("Rental class should be specified before");
         }

@@ -11,7 +11,7 @@ import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
 import org.springframework.remoting.httpinvoker.SimpleHttpInvokerRequestExecutor;
 
 @Configuration
-@PropertySource({"classpath:application.properties","labels.properties"})
+@PropertySource({"classpath:services.properties","labels.properties"})
 @ComponentScan(basePackages = {"com.epam.carrental"})
 public class HttpInvokerConfig {
 

@@ -2,3 +2,6 @@ workspace.xml
 */.idea/tasks.xml
 target
 hsqldbFile.*
+/logs/
+/server/logs/
+/client/logs/
