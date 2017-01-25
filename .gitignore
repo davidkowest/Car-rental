@@ -5,3 +5,4 @@ hsqldbFile.*
 /logs/
 /server/logs/
 /client/logs/
+/activemq-data/

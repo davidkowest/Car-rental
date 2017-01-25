@@ -1,6 +1,7 @@
 package com.epam.carrental.customers;
 
 import com.epam.carrental.dto.CustomerDTO;
+import com.epam.carrental.jms.DataChangedAspect;
 import com.epam.carrental.services.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -21,7 +22,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public  void create(CustomerDTO customerDTO) {
+    @DataChangedAspect
+    public void create(CustomerDTO customerDTO) {
         Customer existingCustomer = customerRepository.findByEmail(customerDTO.getEmail());
         if (existingCustomer != null) {
             throw new IllegalArgumentException(customerDTO + " exists in DB");

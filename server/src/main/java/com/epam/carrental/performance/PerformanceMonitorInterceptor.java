@@ -21,8 +21,8 @@ public class PerformanceMonitorInterceptor {
 
         StringBuilder messageArgsBuilder = new StringBuilder();
         Object[] args = pjp.getArgs();
-        for (int i = 0; i < args.length; i++) {
-            messageArgsBuilder.append(args[i].toString()+" ");
+        for (Object arg : args) {
+            messageArgsBuilder.append(arg.toString()).append(" ");
         }
         String messageArgs = messageArgsBuilder.toString();
 

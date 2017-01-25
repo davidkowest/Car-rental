@@ -39,14 +39,16 @@
     </properties>
   </component>
   <component name="EntryPointsManager">
-    <list size="7">
-      <item index="0" class="java.lang.String" itemvalue="org.aspectj.lang.annotation.Aspect" />
-      <item index="1" class="java.lang.String" itemvalue="org.aspectj.lang.annotation.Before" />
-      <item index="2" class="java.lang.String" itemvalue="org.springframework.beans.factory.annotation.Autowired" />
-      <item index="3" class="java.lang.String" itemvalue="org.springframework.beans.factory.annotation.Value" />
-      <item index="4" class="java.lang.String" itemvalue="org.springframework.context.annotation.Bean" />
-      <item index="5" class="java.lang.String" itemvalue="org.springframework.context.annotation.Configuration" />
-      <item index="6" class="java.lang.String" itemvalue="org.springframework.stereotype.Component" />
+    <entry_points version="2.0" />
+    <list size="8">
+      <item index="0" class="java.lang.String" itemvalue="org.aspectj.lang.annotation.AfterReturning" />
+      <item index="1" class="java.lang.String" itemvalue="org.aspectj.lang.annotation.Aspect" />
+      <item index="2" class="java.lang.String" itemvalue="org.aspectj.lang.annotation.Before" />
+      <item index="3" class="java.lang.String" itemvalue="org.springframework.beans.factory.annotation.Autowired" />
+      <item index="4" class="java.lang.String" itemvalue="org.springframework.beans.factory.annotation.Value" />
+      <item index="5" class="java.lang.String" itemvalue="org.springframework.context.annotation.Bean" />
+      <item index="6" class="java.lang.String" itemvalue="org.springframework.context.annotation.Configuration" />
+      <item index="7" class="java.lang.String" itemvalue="org.springframework.stereotype.Component" />
     </list>
   </component>
   <component name="MavenProjectsManager">
@@ -56,7 +58,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="masterDetails">

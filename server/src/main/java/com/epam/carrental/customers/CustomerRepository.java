@@ -1,6 +1,5 @@
 package com.epam.carrental.customers;
 
-import com.epam.carrental.customers.Customer;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

@@ -13,6 +13,8 @@
     <properties>
         <logback.version>1.1.7</logback.version>
         <slf4j.version>1.7.21</slf4j.version>
+        <javax.jms.version>2.0.1</javax.jms.version>
+        <activemq.version>5.7.0</activemq.version>
     </properties>
 
     <dependencies>
@@ -30,6 +32,23 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- JMS -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.jms</groupId>
+            <artifactId>javax.jms-api</artifactId>
+            <version>${javax.jms.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-core</artifactId>
+            <version>${activemq.version}</version>
         </dependency>
     </dependencies>
 </project>

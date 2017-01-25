@@ -1,9 +1,6 @@
 package com.epam.carrental.rental_classes;
 
 import com.epam.carrental.dto.RentalClassDTO;
-import com.epam.carrental.rental_classes.RentalClass;
-import com.epam.carrental.rental_classes.RentalClassRepository;
-import com.epam.carrental.rental_classes.RentalClassServiceImpl;
 import com.epam.carrental.services.RentalClassService;
 import org.easymock.EasyMock;
 import org.modelmapper.ModelMapper;

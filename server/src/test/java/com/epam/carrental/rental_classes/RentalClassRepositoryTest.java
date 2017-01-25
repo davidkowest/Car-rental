@@ -1,8 +1,6 @@
 package com.epam.carrental.rental_classes;
 
 import com.epam.carrental.config.DatabaseConfig;
-import com.epam.carrental.rental_classes.RentalClass;
-import com.epam.carrental.rental_classes.RentalClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;

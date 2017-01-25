@@ -6,8 +6,6 @@ import com.epam.carrental.cars.CarRepository;
 import com.epam.carrental.config.DatabaseConfig;
 import com.epam.carrental.customers.Customer;
 import com.epam.carrental.customers.CustomerRepository;
-import com.epam.carrental.rentals.RentedCar;
-import com.epam.carrental.rentals.RentedCarRepository;
 import com.epam.carrental.rental_classes.RentalClass;
 import com.epam.carrental.rental_classes.RentalClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;

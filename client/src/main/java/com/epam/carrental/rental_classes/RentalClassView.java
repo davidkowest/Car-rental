@@ -1,8 +1,8 @@
 package com.epam.carrental.rental_classes;
 
 
-import com.epam.carrental.gui.view.TableTabView;
 import com.epam.carrental.gui.models.AbstractSwingTableModel;
+import com.epam.carrental.gui.view.TableTabView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

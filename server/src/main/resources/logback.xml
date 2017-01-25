@@ -24,16 +24,15 @@
         </encoder>
     </appender>
 
-    <logger name="org.hibernate.type" level="INFO" />
-    <logger name="org.hibernate" level="INFO" >
-        <appender-ref ref="dailyRollingFileAppender"/>
-        <appender-ref ref="consoleAppender" />
-    </logger>
+    <logger name="org.springframework.jms" level="DEBUG" />
+    <!--<logger name="org.springframework.orm.jpa" level="DEBUG" />-->
+    <!--<logger name="org.springframework.transaction" level="DEBUG" />-->
+    <!--<logger name="org.hibernate.engine.transaction.internal.jta.JtaTransaction" level="DEBUG" />-->
+    <!--<logger name="org.hibernate.engine.transaction.internal.jdbc.JdbcTransaction" level="DEBUG" />-->
 
     <logger name="com.epam.carrental" additivity="false">
         <level value="DEBUG" />
         <appender-ref ref="dailyRollingFileAppender"/>
-        <appender-ref ref="consoleAppender" />
     </logger>
 
     <root>
