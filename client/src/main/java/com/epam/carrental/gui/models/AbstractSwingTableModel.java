@@ -52,5 +52,8 @@ public abstract class AbstractSwingTableModel<DTO> extends AbstractTableModel {
         setData(dtoList);
         fireTableDataChanged();
     }
-
+    public void addRowAndRefreshTable(DTO dto){
+        data.add(dto);
+        fireTableDataChanged();
+    }
 }

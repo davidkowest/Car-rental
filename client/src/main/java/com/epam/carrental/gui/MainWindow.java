@@ -1,16 +1,22 @@
 package com.epam.carrental.gui;
 
 import com.epam.carrental.chart.ScheduleChartView;
-import com.epam.carrental.gui.view.TableTabView;
 import com.epam.carrental.connection.TestConnectionView;
+import com.epam.carrental.gui.view.TableTabView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 @Component
 public class MainWindow {
+
+    @Autowired
+    ConfigurableApplicationContext applicationContext;
 
     @Autowired
     private TestConnectionView testConnectionView;
@@ -68,5 +74,14 @@ public class MainWindow {
         //set component relativeTo null so that window will be shown in the center of the screen
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
+        mainFrame.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                e.getWindow().dispose();
+                applicationContext.close();
+            }
+        });
     }
 }

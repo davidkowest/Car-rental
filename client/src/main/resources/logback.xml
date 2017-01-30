@@ -26,8 +26,9 @@
 
 
     <logger name="com.epam.carrental" additivity="false">
-        <level value="DEBUG" />
+        <level value="INFO" />
         <appender-ref ref="dailyRollingFileAppender"/>
+        <appender-ref ref="consoleAppender" />
     </logger>
 
     <root>
