@@ -6,3 +6,4 @@ hsqldbFile.*
 /server/logs/
 /client/logs/
 /activemq-data/
+*.iml
